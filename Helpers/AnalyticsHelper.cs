@@ -8,6 +8,7 @@ namespace LearningSystem.Helpers
     // no user ID, IP address, browser details or tracking cookie (see Privacy.aspx).
     public static class AnalyticsHelper
     {
+        private static readonly Random Cleanup = new Random();
         public static void RecordView(string pagePath, string role)
         {
             if (String.IsNullOrEmpty(pagePath)) return;
@@ -17,6 +18,9 @@ namespace LearningSystem.Helpers
             {
                 DatabaseHelper.ExecuteNonQuery("INSERT dbo.PageView (PagePath, ViewerRole) VALUES (@path, @role)",
                     new[] { new SqlParameter("@path", SqlDbType.NVarChar, 200) { Value = path }, new SqlParameter("@role", SqlDbType.NVarChar, 7) { Value = viewer } });
+                // About once in every 200 views, remove records older than 12 months (see Privacy.aspx).
+                if (Cleanup.Next(200) == 0)
+                    DatabaseHelper.ExecuteNonQuery("DELETE FROM dbo.PageView WHERE ViewedAt < DATEADD(month, -12, SYSUTCDATETIME())", null);
             }
             catch (SqlException)
             {

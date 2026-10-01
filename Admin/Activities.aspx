@@ -1,7 +1,6 @@
 <%@ Page Title="Activity oversight" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Activities.aspx.cs" Inherits="LearningSystem.Admin.Activities" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-<h1>Activity oversight</h1>
-<p>All activities across courses. Content with submitted attempts cannot be deleted. Use Unpublish to hide it while keeping results.</p>
+<div class="page-header"><div><h1>All activities</h1><p class="intro">Every quiz, game, scenario, self-assessment and discussion. Activities with attempts cannot be deleted; unpublish them instead.</p></div></div>
 <section class="filter-bar" aria-label="Filter activities">
 <asp:Label ID="lblType" runat="server" AssociatedControlID="ddlType" Text="Activity type" />
 <asp:DropDownList ID="ddlType" runat="server"><asp:ListItem Value="">All types</asp:ListItem><asp:ListItem>Quiz</asp:ListItem><asp:ListItem>SelfAssessment</asp:ListItem><asp:ListItem>Discussion</asp:ListItem><asp:ListItem>Game</asp:ListItem><asp:ListItem>Scenario</asp:ListItem></asp:DropDownList>

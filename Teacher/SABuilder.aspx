@@ -1,12 +1,12 @@
 <%@ Page Title="Self-assessment builder" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="SABuilder.aspx.cs" Inherits="LearningSystem.Teacher.SABuilder" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-<h1>Self-assessment builder</h1>
-<asp:Label ID="lblLock" runat="server" Visible="false" Text="Attempts exist. Statements and structural ordering are locked; title, description and publication remain editable." />
+<div class="page-header"><div class="activity-header"><%= LearningSystem.Helpers.UiHelper.TypeMark("SelfAssessment") %><div><p class="eyebrow">Course builder</p><h1>Self-assessment builder</h1></div></div></div>
+<asp:Label ID="lblLock" runat="server" Visible="false" CssClass="lock-note" Text="Attempts exist. Statements and structural ordering are locked; title, description and publication remain editable." />
 <section class="form-card"><h2>Settings</h2>
 <asp:ValidationSummary ID="vsSettings" runat="server" ValidationGroup="Settings" />
 <div class="field"><asp:Label ID="lblTitle" runat="server" AssociatedControlID="txtTitle" Text="Title" /><asp:TextBox ID="txtTitle" runat="server" MaxLength="100" />
 <asp:RequiredFieldValidator ID="rfvTitle" runat="server" ControlToValidate="txtTitle" ValidationGroup="Settings" ErrorMessage="Enter a title." />
-<asp:RegularExpressionValidator ID="revTitle" runat="server" ControlToValidate="txtTitle" ValidationGroup="Settings" ValidationExpression="^[\s\S]{3,100}$" ErrorMessage="Title must be 3–100 characters." /></div>
+<asp:RegularExpressionValidator ID="revTitle" runat="server" ControlToValidate="txtTitle" ValidationGroup="Settings" ValidationExpression="^[\s\S]{3,100}$" ErrorMessage="Title must be 3 to 100 characters." /></div>
 <div class="field"><asp:Label ID="lblDescription" runat="server" AssociatedControlID="txtDescription" Text="Description (optional)" /><asp:TextBox ID="txtDescription" runat="server" TextMode="MultiLine" MaxLength="1000" />
 <asp:RegularExpressionValidator ID="revDescription" runat="server" ControlToValidate="txtDescription" ValidationGroup="Settings" ValidationExpression="^[\s\S]{0,1000}$" ErrorMessage="Description must be at most 1000 characters." /></div>
 <div class="field"><asp:Label ID="lblOrder" runat="server" AssociatedControlID="txtOrder" Text="Activity order" /><asp:TextBox ID="txtOrder" runat="server" TextMode="Number" />
@@ -22,7 +22,7 @@
 <asp:Panel ID="pnlStatementForm" runat="server" CssClass="form-card"><h3>Add / edit statement</h3>
 <asp:ValidationSummary ID="vsStatement" runat="server" ValidationGroup="Statement" />
 <div class="field"><asp:Label ID="lblStatement" runat="server" AssociatedControlID="txtStatement" Text="Statement" /><asp:TextBox ID="txtStatement" runat="server" MaxLength="200" />
-<asp:RequiredFieldValidator ID="rfvStatement" runat="server" ControlToValidate="txtStatement" ValidationGroup="Statement" ErrorMessage="Enter a statement." /><asp:RegularExpressionValidator ID="revStatement" runat="server" ControlToValidate="txtStatement" ValidationGroup="Statement" ValidationExpression="^[\s\S]{5,200}$" ErrorMessage="Statement must be 5–200 characters." /></div>
+<asp:RequiredFieldValidator ID="rfvStatement" runat="server" ControlToValidate="txtStatement" ValidationGroup="Statement" ErrorMessage="Enter a statement." /><asp:RegularExpressionValidator ID="revStatement" runat="server" ControlToValidate="txtStatement" ValidationGroup="Statement" ValidationExpression="^[\s\S]{5,200}$" ErrorMessage="Statement must be 5 to 200 characters." /></div>
 <div class="field"><asp:Label ID="lblStatementOrder" runat="server" AssociatedControlID="txtStatementOrder" Text="Statement order" /><asp:TextBox ID="txtStatementOrder" runat="server" TextMode="Number" />
 <asp:RequiredFieldValidator ID="rfvStatementOrder" runat="server" ControlToValidate="txtStatementOrder" ValidationGroup="Statement" ErrorMessage="Enter a statement order." /><asp:RangeValidator ID="rvStatementOrder" runat="server" ControlToValidate="txtStatementOrder" ValidationGroup="Statement" Type="Integer" MinimumValue="1" MaximumValue="2147483647" ErrorMessage="Statement order must be a positive integer." /></div>
 <div class="actions"><asp:Button ID="btnSaveStatement" runat="server" Text="Save statement" ValidationGroup="Statement" OnClick="SaveStatement" /><asp:Button ID="btnCancelStatement" runat="server" Text="Cancel statement edit" CausesValidation="false" OnClick="CancelStatement" /></div></asp:Panel></asp:Panel>

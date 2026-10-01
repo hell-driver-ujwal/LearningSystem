@@ -19,7 +19,7 @@ namespace LearningSystem.Member
                     if (users.Rows.Count != 1) { Response.Redirect("~/Account/Logout.aspx"); return; }
                     txtFullName.Text = (string)users.Rows[0]["FullName"];
                     txtEmail.Text = (string)users.Rows[0]["Email"];
-                    litDetails.Text = (string)users.Rows[0]["Role"] + " · " + (string)users.Rows[0]["Status"];
+                    litDetails.Text = "Account type: " + UiHelper.RoleLabel((string)users.Rows[0]["Role"]) + ". Status: " + (string)users.Rows[0]["Status"] + ".";
                 }
                 catch (SqlException) { Response.Redirect("~/Error.aspx"); }
             }

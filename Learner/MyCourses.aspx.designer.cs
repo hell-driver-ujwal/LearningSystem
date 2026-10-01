@@ -2,7 +2,7 @@ namespace LearningSystem.Learner
 {
     public partial class MyCourses
     {
-        protected global::System.Web.UI.WebControls.Content BodyContent;
-        protected global::System.Web.UI.WebControls.GridView gvCourses;
+        protected global::System.Web.UI.WebControls.Label lblEmpty;
+        protected global::System.Web.UI.WebControls.Repeater rptCourses;
     }
 }

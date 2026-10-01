@@ -73,11 +73,11 @@ WHERE "+scope+" AND (@course=0 OR c.CourseID=@course) AND (@activity=0 OR a.Acti
             {
                 int count=(int)row["RatingCount"];if(count==0)return "No confidence ratings recorded";
                 decimal average=(decimal)row["RatingTotal"]/count;
-                return "Confidence: "+SelfAssessmentHelper.Display(average)+" / 5 — "+SelfAssessmentHelper.Level(average);
+                return "Confidence: "+SelfAssessmentHelper.Display(average)+" / 5 ("+SelfAssessmentHelper.Level(average)+")";
             }
-            if(type=="Scenario")return Convert.ToString(row["Outcome"])+" — "+Convert.ToString(row["EndingText"]);
-            string score=row.IsNull("ScorePercent") ? "No score recorded" : ((decimal)row["ScorePercent"]).ToString("F2",CultureInfo.InvariantCulture)+"%";
-            if(type=="Game" && !row.IsNull("TimeTakenSeconds"))score+=" · "+row["TimeTakenSeconds"]+" seconds";
+            if(type=="Scenario")return Convert.ToString(row["Outcome"])+": "+Convert.ToString(row["EndingText"]);
+            string score=row.IsNull("ScorePercent") ? "No score recorded" : ((decimal)row["ScorePercent"]).ToString("0.##",CultureInfo.InvariantCulture)+"%";
+            if(type=="Game" && !row.IsNull("TimeTakenSeconds"))score+=" in "+row["TimeTakenSeconds"]+" seconds";
             return score;
         }
         internal static DataTable ScoreSummary(bool teacher,int course,int activity)

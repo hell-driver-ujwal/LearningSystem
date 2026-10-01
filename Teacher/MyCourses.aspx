@@ -1,7 +1,6 @@
 <%@ Page Title="My courses" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="MyCourses.aspx.cs" Inherits="LearningSystem.Teacher.MyCourses" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-<h1>My courses</h1>
-<p><a href="CourseEdit.aspx">Create course</a></p>
+<div class="page-header"><div><h1>My courses</h1><p class="intro">Build, publish and track every course you author. Courses with learner attempts are unpublished rather than deleted.</p></div><a class="button" href="CourseEdit.aspx">Create a course</a></div>
 <div class="table-scroll" role="region" aria-label="Your courses" tabindex="0"><asp:GridView ID="gvCourses" runat="server" AutoGenerateColumns="false" Caption="Your courses" UseAccessibleHeader="true" EmptyDataText="No courses yet. Create your first course." OnRowCommand="CourseCommand">
 <Columns>
 <asp:BoundField DataField="Title" HeaderText="Course" HtmlEncode="true" />

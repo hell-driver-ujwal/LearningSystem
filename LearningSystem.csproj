@@ -80,10 +80,13 @@
     <Content Include="Media.ashx" />
     <Content Include="NotFound.aspx" />
     <Content Include="Preview.aspx" />
+    <Content Include="Privacy.aspx" />
     <Content Include="Site.Master" />
     <Content Include="SiteMap.aspx" />
+    <Content Include="Terms.aspx" />
     <Content Include="Web.config" />
     <Content Include="favicon.ico" />
+    <Content Include="site.webmanifest" />
     <Content Include="Account\AdminLogin.aspx" />
     <Content Include="Account\Login.aspx" />
     <Content Include="Account\Logout.aspx" />
@@ -91,6 +94,7 @@
     <Content Include="Account\StudentLogin.aspx" />
     <Content Include="Account\TeacherLogin.aspx" />
     <Content Include="Admin\Activities.aspx" />
+    <Content Include="Admin\Analytics.aspx" />
     <Content Include="Admin\Courses.aspx" />
     <Content Include="Admin\Dashboard.aspx" />
     <Content Include="Admin\FAQ.aspx" />
@@ -100,6 +104,11 @@
     <Content Include="Admin\TeacherApplications.aspx" />
     <Content Include="Admin\UserEdit.aspx" />
     <Content Include="Admin\Users.aspx" />
+    <Content Include="Assets\icons\apple-touch-icon.png" />
+    <Content Include="Assets\icons\favicon.svg" />
+    <Content Include="Assets\icons\icon-192.png" />
+    <Content Include="Assets\icons\icon-512.png" />
+    <Content Include="Assets\images\social-card.png" />
     <Content Include="Assets\images\subjects\artificial-intelligence.jpg" />
     <Content Include="Assets\images\subjects\business.jpg" />
     <Content Include="Assets\images\subjects\cybersecurity.jpg" />
@@ -291,6 +300,13 @@
     <Compile Include="Preview.aspx.designer.cs">
       <DependentUpon>Preview.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Privacy.aspx.cs">
+      <DependentUpon>Privacy.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Privacy.aspx.designer.cs">
+      <DependentUpon>Privacy.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -304,6 +320,13 @@
     </Compile>
     <Compile Include="SiteMap.aspx.designer.cs">
       <DependentUpon>SiteMap.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Terms.aspx.cs">
+      <DependentUpon>Terms.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Terms.aspx.designer.cs">
+      <DependentUpon>Terms.aspx</DependentUpon>
     </Compile>
     <Compile Include="Account\AdminLogin.aspx.cs">
       <DependentUpon>AdminLogin.aspx</DependentUpon>
@@ -353,6 +376,13 @@
     </Compile>
     <Compile Include="Admin\Activities.aspx.designer.cs">
       <DependentUpon>Activities.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Analytics.aspx.cs">
+      <DependentUpon>Analytics.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\Analytics.aspx.designer.cs">
+      <DependentUpon>Analytics.aspx</DependentUpon>
     </Compile>
     <Compile Include="Admin\Courses.aspx.cs">
       <DependentUpon>Courses.aspx</DependentUpon>
@@ -433,6 +463,7 @@
     <Compile Include="Helpers\DatabaseHelper.cs" />
     <Compile Include="Helpers\DeleteHelper.cs" />
     <Compile Include="Helpers\DiscussionHelper.cs" />
+    <Compile Include="Helpers\EngagementHelper.cs" />
     <Compile Include="Helpers\EsewaHelper.cs" />
     <Compile Include="Helpers\GameContentHelper.cs" />
     <Compile Include="Helpers\GameHelper.cs" />
@@ -450,6 +481,7 @@
     <Compile Include="Helpers\ScenarioHelper.cs" />
     <Compile Include="Helpers\ScenarioPlayHelper.cs" />
     <Compile Include="Helpers\SelfAssessmentHelper.cs" />
+    <Compile Include="Helpers\SeoHandlers.cs" />
     <Compile Include="Helpers\UiHelper.cs" />
     <Compile Include="Helpers\UploadHelper.cs" />
     <Compile Include="Helpers\ValidationResult.cs" />
@@ -750,12 +782,4 @@
     <Error Condition="!Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
 </Project>
-
-
-
-
-
-
-
-
 

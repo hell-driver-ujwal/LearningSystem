@@ -85,8 +85,8 @@ small { font-size: .875rem; }
 .primary-nav a:hover, .account-nav a:hover { color: var(--navy); background: var(--navy-tint); }
 .primary-nav a[aria-current="page"], .workspace-nav a[aria-current="page"] { color: var(--navy); background: var(--navy-tint); }
 .header-search { flex: 1; max-width: 360px; margin-left: auto; position: relative; }
-.header-search input { width: 100%; min-height: 42px; padding: 8px 12px 8px 38px; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--paper); font: inherit; font-size: .97rem; color: var(--ink); }
-.header-search input:focus { background: var(--card); border-color: var(--navy); }
+.header-search input[type=search] { width: 100%; min-height: 42px; padding: 8px 12px 8px 38px; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--paper); font: inherit; font-size: .97rem; color: var(--ink); }
+.header-search input[type=search]:focus { background: var(--card); border-color: var(--navy); }
 .header-search .icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
 .account-nav { display: flex; align-items: center; gap: 6px; flex: none; }
 .account-nav .button { padding: 8px 16px; min-height: 40px; }
@@ -224,7 +224,7 @@ a.aspNetDisabled { pointer-events: none; color: var(--muted); }
 .hero-points li { display: flex; gap: 10px; align-items: flex-start; margin: 0; color: var(--ink-soft); }
 .hero-points .icon { color: var(--green); margin-top: 3px; }
 .hero-media { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 10px; box-shadow: var(--shadow-lift); margin: 0; }
-.hero-media video { display: block; width: 100%; border-radius: 9px; background: #0f1c2d; aspect-ratio: 16 / 9; }
+.hero-media video { display: block; width: 100%; height: auto; border-radius: 9px; background: #0f1c2d; aspect-ratio: 16 / 9; }
 .hero-media figcaption { padding: 10px 6px 4px; font-size: .9rem; color: var(--muted); }
 .facts { display: flex; flex-wrap: wrap; gap: 10px 28px; padding: 18px 0 0; margin: 26px 0 0; border-top: 1px solid var(--line); list-style: none; padding-left: 0; }
 .facts li { margin: 0; color: var(--muted); font-size: .95rem; }
@@ -681,3 +681,9 @@ legend { font-family: var(--serif); font-weight: 650; font-size: 1.1rem; padding
     body { background: #fff; }
     .page-shell { padding: 0; }
 }
+
+/* ---------- Lecturer card ---------- */
+.lecturer-card { display: flex; gap: 14px; align-items: center; max-width: 460px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 16px 18px; box-shadow: var(--shadow); }
+.avatar.large { width: 52px; height: 52px; font-size: 1.3rem; }
+.lesson-layout:not(:has(.lesson-sidebar)) { grid-template-columns: minmax(0, 1fr); max-width: 980px; }
+.mono-input { font-family: var(--mono); font-size: .92rem; }

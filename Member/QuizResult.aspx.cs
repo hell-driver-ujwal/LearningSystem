@@ -18,8 +18,8 @@ namespace LearningSystem.Member
             DataRow attempt=attempts.Rows[0];int activity=(int)attempt["ActivityID"];
             DataRow a=ActivityHelper.Find(activity);
             if(CurrentUserHelper.GetRole()=="Learner" && !ActivityHelper.Published(a)){Response.Redirect("~/NotFound.aspx");return;}
-            litTitle.Text=attempt["Title"]+" — Result";
-            litDate.Text=((DateTime)attempt["SubmittedAt"]).ToString("yyyy-MM-dd HH:mm:ss")+" UTC; time taken: "+attempt["TimeTakenSeconds"]+" seconds";
+            litTitle.Text=Convert.ToString(attempt["Title"]);Title=litTitle.Text+" result";
+            litDate.Text="Submitted "+((DateTime)attempt["SubmittedAt"]).ToString("d MMMM yyyy, HH:mm",System.Globalization.CultureInfo.InvariantCulture)+" UTC. Time taken: "+UiHelper.Plural(Convert.ToInt32(attempt["TimeTakenSeconds"])/60,"minute")+" "+(Convert.ToInt32(attempt["TimeTakenSeconds"])%60)+" seconds.";
             var chosen=new Dictionary<int,int?>();
             foreach(DataRow answer in DatabaseHelper.ExecuteTable("SELECT QuestionID,SelectedOptionID FROM dbo.QuizAnswer WHERE AttemptID=@id",ActivityHelper.ID(id)).Rows)chosen.Add((int)answer["QuestionID"],answer.IsNull("SelectedOptionID") ? (int?)null : (int)answer["SelectedOptionID"]);
             litReview.Text=QuizHelper.Review(QuizHelper.Questions(activity),chosen,(decimal)attempt["ScorePercent"]);

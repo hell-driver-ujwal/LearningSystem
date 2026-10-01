@@ -126,7 +126,7 @@ namespace LearningSystem.Helpers
                 {"success_url",EsewaHelper.Setting("HttpsOrigin").TrimEnd('/')+"/Payment/EsewaSuccess.aspx"},
                 {"failure_url",EsewaHelper.Setting("HttpsOrigin").TrimEnd('/')+"/Payment/EsewaFailure.aspx?transaction_uuid="+uuid}
             };
-            var html=new StringBuilder("<form class=\"payment-form\" method=\"post\" action=\""+HttpUtility.HtmlAttributeEncode(EsewaHelper.Setting("EsewaFormUrl"))+"\"><p class=\"sandbox-notice\">eSewa Sandbox — Test Payment · NPR "+amount+"</p>");
+            var html=new StringBuilder("<form class=\"payment-form\" method=\"post\" action=\""+HttpUtility.HtmlAttributeEncode(EsewaHelper.Setting("EsewaFormUrl"))+"\"><p class=\"sandbox-notice\">eSewa sandbox test payment: NPR "+amount+"</p>");
             foreach(var field in fields) html.Append("<input type=\"hidden\" name=\"").Append(field.Key).Append("\" value=\"").Append(HttpUtility.HtmlAttributeEncode(field.Value)).Append("\" />");
             html.Append("<button type=\"submit\">Continue to eSewa sandbox</button> <a class=\"button secondary\" href=\"").Append(CourseHelper.Url("~/CourseDetails.aspx?id="+payment["CourseID"])).Append("\">Cancel</a></form>");
             return html.ToString();

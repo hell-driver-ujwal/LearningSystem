@@ -62,7 +62,7 @@ namespace LearningSystem.Helpers
             DataTable rows=DatabaseHelper.ExecuteTable(c,t,"SELECT q.QuestionID,COUNT(o.OptionID) AS Options,SUM(CASE WHEN o.IsCorrect=1 THEN 1 ELSE 0 END) AS Correct FROM dbo.QuizQuestion q LEFT JOIN dbo.QuizOption o ON o.QuestionID=q.QuestionID WHERE q.ActivityID=@id GROUP BY q.QuestionID",ActivityHelper.ID(id));
             bool valid=rows.Rows.Count>0;
             foreach(DataRow row in rows.Rows) if((int)row["Options"]<2 || (int)row["Options"]>6 || (int)row["Correct"]!=1)valid=false;
-            return new ValidationResult {IsValid=valid,Message="A published quiz needs at least one question, with 2–6 distinct options and exactly one correct option per question."};
+            return new ValidationResult {IsValid=valid,Message="A published quiz needs at least one question, with 2 to 6 distinct options and exactly one correct option per question."};
         }
         public static ValidationResult CheckDiscussion(int activityID)
         {

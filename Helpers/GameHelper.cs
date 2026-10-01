@@ -185,7 +185,7 @@ namespace LearningSystem.Helpers
                 else if(template=="Scramble")
                 {
                     value=value.Trim();
-                    if(value.Length>0 && !System.Text.RegularExpressions.Regex.IsMatch(value,"^[A-Za-z]{3,15}$"))throw new InvalidOperationException("Scramble answers must contain 3–15 letters only.");
+                    if(value.Length>0 && !System.Text.RegularExpressions.Regex.IsMatch(value,"^[A-Za-z]{3,15}$"))throw new InvalidOperationException("Scramble answers must contain 3 to 15 letters only.");
                     if(String.Equals(value,Convert.ToString(item["ItemText"]).Trim(),StringComparison.OrdinalIgnoreCase))correct++;
                 }
                 else

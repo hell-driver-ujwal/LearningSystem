@@ -49,6 +49,20 @@ namespace LearningSystem
                 CompleteRequest();
             }
         }
+        // Users only ever see the friendly Error page. The technical details go to a private
+        // log in App_Data (never served to the browser) so the team can find and fix the problem.
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            Exception error = Server.GetLastError();
+            if (error == null) return;
+            try
+            {
+                string line = DateTime.UtcNow.ToString("s") + " UTC " + Request.HttpMethod + " " + Request.Url.AbsolutePath + Environment.NewLine + error + Environment.NewLine + Environment.NewLine;
+                System.IO.File.AppendAllText(Server.MapPath("~/App_Data/ErrorLog.txt"), line);
+            }
+            catch (System.IO.IOException) { }
+            catch (UnauthorizedAccessException) { }
+        }
         protected void Application_EndRequest(object sender, EventArgs e)
         {
             // Wrong roles need Access Denied, rather than another Login redirect.

@@ -152,24 +152,32 @@ namespace LearningSystem.Helpers
         }
         internal static string Review(DataTable questions,Dictionary<int,int?> chosen,decimal percent)
         {
-            StringBuilder html=new StringBuilder("<h2>Score: "+percent.ToString("0.##",System.Globalization.CultureInfo.InvariantCulture)+"%</h2>");
-            int last=0;
+            StringBuilder list=new StringBuilder("<ol class=\"answer-review\">");
+            int last=0,questionCount=0,rightCount=0;
             foreach(DataRow q in questions.Rows)
             {
                 int question=(int)q["QuestionID"];
                 if(last!=question)
                 {
-                    if(last!=0)html.Append("</ul></section>");last=question;
+                    if(last!=0)list.Append("</ul></li>");last=question;questionCount++;
                     int? selected;chosen.TryGetValue(question,out selected);
                     bool right=false;foreach(DataRow option in questions.Rows)if((int)option["QuestionID"]==question && !option.IsNull("OptionID") && selected==(int)option["OptionID"] && (bool)option["IsCorrect"])right=true;
-                    html.Append("<section class=\"topic-card\"><h3>").Append(CourseHelper.Encode(q["QuestionText"])).Append("</h3><p>").Append(right ? "Correct" : selected.HasValue ? "Wrong" : "Unanswered — wrong").Append("; marks: ").Append(right ? q["Marks"].ToString() : "0").Append('/').Append(q["Marks"]).Append("</p><ul>");
+                    if(right)rightCount++;
+                    list.Append("<li class=\"").Append(right ? "right" : "wrong").Append("\"><h3>").Append(CourseHelper.Encode(q["QuestionText"])).Append("</h3><p><strong>")
+                        .Append(right ? "Correct" : selected.HasValue ? "Not quite" : "Not answered").Append("</strong>, ").Append(right ? q["Marks"].ToString() : "0").Append(" of ").Append(q["Marks"]).Append(q["Marks"].ToString()=="1" ? " mark" : " marks").Append("</p><ul>");
                 }
-                html.Append("<li>").Append(CourseHelper.Encode(q["OptionText"]));
-                if(!q.IsNull("OptionID") && chosen.ContainsKey(question) && chosen[question]==(int)q["OptionID"])html.Append(" — your answer");
-                if(!q.IsNull("IsCorrect") && (bool)q["IsCorrect"])html.Append(" — correct answer");
-                html.Append("</li>");
+                bool mine=!q.IsNull("OptionID") && chosen.ContainsKey(question) && chosen[question]==(int)q["OptionID"];
+                bool correct=!q.IsNull("IsCorrect") && (bool)q["IsCorrect"];
+                list.Append("<li>").Append(CourseHelper.Encode(q["OptionText"]));
+                if(mine)list.Append(" <span class=\"chip").Append(correct ? " green" : " accent").Append("\">Your answer</span>");
+                if(correct)list.Append(" <span class=\"chip green\">Correct answer</span>");
+                list.Append("</li>");
             }
-            if(last!=0)html.Append("</ul></section>");return html.ToString();
+            if(last!=0)list.Append("</ul></li>");
+            list.Append("</ol>");
+            string value=percent.ToString("0.##",System.Globalization.CultureInfo.InvariantCulture);
+            string message=percent>=80m ? "Excellent work. You have a strong grasp of this topic." : percent>=50m ? "Good effort. Review the questions below, then try again to improve your score." : "Keep going. Re-read the lesson, then use the review below before your next try.";
+            return "<section class=\"result-panel\" aria-label=\"Your score\"><div class=\"score-ring\" style=\"--value:"+value+"\"><span>"+value+"%</span></div><div><h2>"+rightCount+" of "+questionCount+" questions correct</h2><p>"+message+"</p></div></section><h2>Answer review</h2>"+list;
         }
     }
 }

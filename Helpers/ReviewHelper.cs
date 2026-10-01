@@ -24,7 +24,7 @@ namespace LearningSystem.Helpers
         {
             AccessHelper.RequireRole(new[] { "Learner" });
             comment=comment.Trim();
-            if(rating<1 || rating>5 || comment.Length<10 || comment.Length>1000) throw new ArgumentException("Rating must be 1–5 and comment 10–1000 characters.");
+            if(rating<1 || rating>5 || comment.Length<10 || comment.Length>1000) throw new ArgumentException("Rating must be 1 to 5 and comment 10 to 1000 characters.");
             int user=CurrentUserHelper.GetUserID().Value;
             using(SqlConnection c=DatabaseHelper.OpenConnection())
             using(SqlTransaction t=c.BeginTransaction(IsolationLevel.Serializable))

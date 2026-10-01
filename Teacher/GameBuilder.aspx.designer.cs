@@ -53,5 +53,9 @@ namespace LearningSystem.Teacher
         protected global::System.Web.UI.WebControls.Button btnCancelItem;
         protected global::System.Web.UI.WebControls.Panel pnlResults;
         protected global::System.Web.UI.WebControls.GridView gvResults;
+        protected global::System.Web.UI.WebControls.Panel pnlItemText;
+        protected global::System.Web.UI.WebControls.Panel pnlTruth;
+        protected global::System.Web.UI.WebControls.Label lblTruth;
+        protected global::System.Web.UI.WebControls.DropDownList ddlTruth;
     }
 }

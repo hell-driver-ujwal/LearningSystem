@@ -17,7 +17,7 @@ namespace LearningSystem
             {
                 // Real counts from the database, never hard-coded marketing numbers.
                 litCourseCount.Text = Convert.ToString(DatabaseHelper.ExecuteScalar("SELECT COUNT(*) FROM dbo.Course WHERE Status='Published'", null));
-                litLecturerCount.Text = Convert.ToString(DatabaseHelper.ExecuteScalar("SELECT COUNT(DISTINCT TeacherID) FROM dbo.Course WHERE Status='Published'", null));
+                litLecturerCount.Text = Convert.ToString(DatabaseHelper.ExecuteScalar("SELECT COUNT(DISTINCT c.TeacherID) FROM dbo.Course c JOIN dbo.[User] u ON u.UserID=c.TeacherID WHERE c.Status='Published' AND u.Role='Teacher'", null));
                 litActivityCount.Text = Convert.ToString(DatabaseHelper.ExecuteScalar("SELECT COUNT(*) FROM dbo.Activity a JOIN dbo.Topic t ON t.TopicID=a.TopicID JOIN dbo.Course c ON c.CourseID=t.CourseID WHERE a.Status='Published' AND c.Status='Published'", null));
                 DataTable subjects = DatabaseHelper.ExecuteTable("SELECT s.SubjectID,s.SubjectName,COUNT(c.CourseID) AS CourseCount FROM dbo.Subject s LEFT JOIN dbo.Course c ON c.SubjectID=s.SubjectID AND c.Status='Published' GROUP BY s.SubjectID,s.SubjectName ORDER BY s.SubjectID", null);
                 rptSubjects.DataSource = subjects; rptSubjects.DataBind(); lblNoSubjects.Visible = subjects.Rows.Count == 0;

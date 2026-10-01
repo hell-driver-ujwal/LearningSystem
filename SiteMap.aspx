@@ -1,5 +1,5 @@
-<%@ Page Title="Site map" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="SiteMap.aspx.cs" Inherits="LearningSystem.SiteMapPage" %>
+<%@ Page Title="Site map" MetaDescription="Every main page on Inkwell in one list." Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="SiteMap.aspx.cs" Inherits="LearningSystem.SiteMapPage" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-<h1>Site map</h1><p>Browse public pages and the pages available to your account. Open a course to reach its lessons, activities and editing pages.</p>
-<asp:Literal ID="litLinks" runat="server" />
+<div class="page-header"><div><h1>Site map</h1><p class="intro">The main pages of Inkwell. Open a course to reach its lessons and activities.</p></div></div>
+<div class="cards"><asp:Literal ID="litLinks" runat="server" /></div>
 </asp:Content>

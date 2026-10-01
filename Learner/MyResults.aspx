@@ -1,5 +1,5 @@
 <%@ Page Title="My results" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="MyResults.aspx.cs" Inherits="LearningSystem.Learner.MyResults" %>
-<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server"><h1>My results</h1>
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server"><div class="page-header"><div><h1>My results</h1><p class="intro">Every quiz, game, self-assessment and scenario you have submitted, newest first.</p></div></div>
 <section class="form-card"><h2>Filter results</h2><asp:ValidationSummary ID="vsFilters" runat="server" ValidationGroup="Filter" />
 <div class="field"><asp:Label ID="lblCourse" runat="server" AssociatedControlID="ddlCourse" Text="Course" /><asp:DropDownList ID="ddlCourse" runat="server" AutoPostBack="true" OnSelectedIndexChanged="CourseChanged" /></div>
 <div class="field"><asp:Label ID="lblActivity" runat="server" AssociatedControlID="ddlActivity" Text="Activity" /><asp:DropDownList ID="ddlActivity" runat="server" /></div>

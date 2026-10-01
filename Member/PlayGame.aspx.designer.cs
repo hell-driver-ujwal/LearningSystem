@@ -25,6 +25,9 @@ namespace LearningSystem.Member
         protected global::System.Web.UI.WebControls.Panel pnlHistory;
         protected global::System.Web.UI.WebControls.Literal litBest;
         protected global::System.Web.UI.WebControls.GridView gvHistory;
+        protected global::System.Web.UI.WebControls.Panel pnlStart;
+        protected global::System.Web.UI.WebControls.Literal litHowTo;
+        protected global::System.Web.UI.WebControls.Literal litRing;
     }
 }
 

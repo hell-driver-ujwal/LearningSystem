@@ -32,7 +32,7 @@ namespace LearningSystem.Helpers
         }
         internal static void CheckText(string value, int min, int max, string name)
         {
-            if (value == null || value.Length < min || value.Length > max) throw new InvalidOperationException(name + " must contain " + min + "–" + max + " characters.");
+            if (value == null || value.Length < min || value.Length > max) throw new InvalidOperationException(name + " must contain " + min + " to " + max + " characters.");
         }
         internal static int Save(int id, int topicID, string type, string title, string description, int order, int minutes, int attempts, bool closed, string status)
         {
@@ -83,7 +83,7 @@ namespace LearningSystem.Helpers
                 else
                 {
                     CheckText(text,5,500,"Question");
-                    if(marks<1 || marks>10 || order<1 || options.Length<2 || options.Length>6 || correct<0 || correct>=options.Length) throw new InvalidOperationException("Provide 2–6 options, exactly one correct option, marks 1–10 and a positive order.");
+                    if(marks<1 || marks>10 || order<1 || options.Length<2 || options.Length>6 || correct<0 || correct>=options.Length) throw new InvalidOperationException("Provide 2 to 6 options, exactly one correct option, marks 1 to 10 and a positive order.");
                     for(int i=0;i<options.Length;i++)
                     {
                         CheckText(options[i],1,200,"Option");

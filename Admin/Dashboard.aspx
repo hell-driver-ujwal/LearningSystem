@@ -1,21 +1,26 @@
-<%@ Page Title="Admin Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="LearningSystem.Admin.Dashboard" %>
+<%@ Page Title="Admin dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="LearningSystem.Admin.Dashboard" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-<h1>Admin Dashboard</h1>
-<p class="intro">Account, course and learning activity counts across the system.</p>
-<div class="cards">
-<section class="card"><h2>Applications</h2><p class="stat"><asp:Literal ID="litPending" runat="server" Mode="Encode" /></p><a href="TeacherApplications.aspx">Review pending teachers</a></section>
-<section class="card"><h2>Submitted attempts</h2><p class="stat"><asp:Literal ID="litAttempts" runat="server" Mode="Encode" /></p><p>Total across all activity types.</p></section>
+<div class="page-header">
+    <div><h1>Admin dashboard</h1><p class="intro">An overview of accounts, courses and learning activity across Inkwell.</p></div>
+    <div class="actions" style="margin:0"><a class="button" href="../Teacher/CourseEdit.aspx">Create a course</a><a class="button secondary" href="UserEdit.aspx">Add a user</a></div>
 </div>
-<div class="cards">
-<section><h2>Users by role</h2>
-<div class="table-scroll" role="region" aria-label="User counts, including inactive accounts" tabindex="0"><asp:GridView ID="gvRoles" runat="server" AutoGenerateColumns="false" Caption="User counts, including inactive accounts" UseAccessibleHeader="true" EmptyDataText="No users found."><Columns>
-<asp:BoundField DataField="Role" HeaderText="Role" /><asp:BoundField DataField="UserCount" HeaderText="Users" />
-</Columns></asp:GridView></div></section>
-<section><h2>Courses per subject</h2>
-<div class="table-scroll" role="region" aria-label="Course counts, including drafts" tabindex="0"><asp:GridView ID="gvSubjects" runat="server" AutoGenerateColumns="false" Caption="Course counts, including drafts" UseAccessibleHeader="true" EmptyDataText="No subjects yet."><Columns>
-<asp:BoundField DataField="SubjectName" HeaderText="Subject" HtmlEncode="true" /><asp:BoundField DataField="CourseCount" HeaderText="Courses" />
-</Columns></asp:GridView></div></section>
+<div class="stat-grid">
+    <section class="stat-card"><span class="label"><%= LearningSystem.Helpers.UiHelper.Icon("users") %>Active learners</span><p class="value"><asp:Literal ID="litLearners" runat="server" Mode="Encode" /></p><a href="Users.aspx">Manage users</a></section>
+    <section class="stat-card"><span class="label"><%= LearningSystem.Helpers.UiHelper.Icon("user") %>Active lecturers</span><p class="value"><asp:Literal ID="litLecturers" runat="server" Mode="Encode" /></p><a href="TeacherApplications.aspx"><asp:Literal ID="litPending" runat="server" Mode="Encode" /> waiting for approval</a></section>
+    <section class="stat-card"><span class="label"><%= LearningSystem.Helpers.UiHelper.Icon("layers") %>Published courses</span><p class="value"><asp:Literal ID="litCourses" runat="server" Mode="Encode" /></p><a href="Courses.aspx">Course oversight</a></section>
+    <section class="stat-card"><span class="label"><%= LearningSystem.Helpers.UiHelper.Icon("check-circle") %>Submitted attempts</span><p class="value"><asp:Literal ID="litAttempts" runat="server" Mode="Encode" /></p><a href="Activities.aspx">All activities</a></section>
+    <section class="stat-card"><span class="label"><%= LearningSystem.Helpers.UiHelper.Icon("mail") %>Unread messages</span><p class="value"><asp:Literal ID="litUnread" runat="server" Mode="Encode" /></p><a href="Messages.aspx">Open inbox</a></section>
+    <section class="stat-card"><span class="label"><%= LearningSystem.Helpers.UiHelper.Icon("eye") %>Page views today</span><p class="value"><asp:Literal ID="litViews" runat="server" Mode="Encode" /></p><a href="Analytics.aspx">View analytics</a></section>
 </div>
-<section class="form-card"><h2>Inbox</h2><p><asp:Literal ID="litUnread" runat="server" Mode="Encode" /> unread messages</p><a href="Messages.aspx">Open messages</a></section><h2>Charts</h2><asp:Literal ID="litCharts" runat="server" /><script src="../Scripts/charts.js" defer></script></asp:Content>
-
-
+<div class="two-col section">
+    <section aria-labelledby="roles-title"><h2 id="roles-title">Users by role</h2>
+        <div class="table-scroll" role="region" aria-label="User counts, including inactive accounts" tabindex="0"><asp:GridView ID="gvRoles" runat="server" AutoGenerateColumns="false" Caption="All accounts, including inactive ones" UseAccessibleHeader="true" EmptyDataText="No users found."><Columns><asp:BoundField DataField="Role" HeaderText="Role" /><asp:BoundField DataField="UserCount" HeaderText="Accounts" /></Columns></asp:GridView></div></section>
+    <section aria-labelledby="subjects-title"><h2 id="subjects-title">Courses per subject</h2>
+        <div class="table-scroll" role="region" aria-label="Course counts, including drafts" tabindex="0"><asp:GridView ID="gvSubjects" runat="server" AutoGenerateColumns="false" Caption="Courses per subject, including drafts" UseAccessibleHeader="true" EmptyDataText="No subjects yet."><Columns><asp:BoundField DataField="SubjectName" HeaderText="Subject" HtmlEncode="true" /><asp:BoundField DataField="CourseCount" HeaderText="Courses" /></Columns></asp:GridView></div></section>
+</div>
+<section aria-labelledby="charts-title"><h2 id="charts-title">Charts</h2><div class="two-col"><asp:Literal ID="litCharts" runat="server" /></div></section>
+<section class="section" aria-labelledby="recent-title"><h2 id="recent-title">Newest accounts</h2>
+    <div class="table-scroll" role="region" aria-label="Five newest accounts" tabindex="0"><asp:GridView ID="gvRecent" runat="server" AutoGenerateColumns="false" Caption="Five newest accounts" UseAccessibleHeader="true" EmptyDataText="No accounts yet."><Columns><asp:BoundField DataField="FullName" HeaderText="Name" HtmlEncode="true" /><asp:BoundField DataField="Role" HeaderText="Role" /><asp:BoundField DataField="Status" HeaderText="Status" /><asp:BoundField DataField="CreatedDate" HeaderText="Joined (UTC)" DataFormatString="{0:d MMM yyyy}" /></Columns></asp:GridView></div>
+</section>
+<script src="../Scripts/charts.js" defer></script>
+</asp:Content>

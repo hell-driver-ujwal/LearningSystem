@@ -51,8 +51,8 @@ namespace LearningSystem.Helpers
                 string status = (string)user["Status"];
                 if (status != "Active")
                 {
-                    message = status == "Pending" ? "Your teacher application is pending approval."
-                        : status == "Rejected" ? "Your teacher application was rejected. Please contact the administrator."
+                    message = status == "Pending" ? "Your lecturer application is still being reviewed. You can log in once it is approved."
+                        : status == "Rejected" ? "Your lecturer application was not approved. Please contact us if you have questions."
                         : "Your account has been deactivated. Please contact the administrator.";
                     return 0;
                 }

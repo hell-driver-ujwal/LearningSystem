@@ -8,3 +8,4 @@ packages/
 App_Data/FileCleanup.log
 
 App_Data/PaymentSettings.config
+App_Data/ErrorLog.txt

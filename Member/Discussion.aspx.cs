@@ -19,7 +19,7 @@ namespace LearningSystem.Member
             if(Request.QueryString["preview"]!=null && !preview){Response.Redirect("~/NotFound.aspx");return;}
             activity=ActivityHelper.Require(activityID,"Discussion",preview);
             litTitle.Text=Convert.ToString(activity["Title"]);litPrompt.Text=Convert.ToString(activity["Description"]);
-            litStatus.Text=(bool)activity["IsClosed"] ? "Closed — read only. Authorized moderation remains available outside preview." : "Open discussion";
+            litStatus.Text=(bool)activity["IsClosed"] ? "This discussion is closed. You can read the posts, but new posts and replies are switched off." : "This discussion is open. Post your answer, then reply to at least one classmate.";
             ((SiteMaster)Master).Breadcrumb=BreadcrumbHelper.ForActivity(activityID);pnlPreview.Visible=preview;
             lnkBack.NavigateUrl=ActivityHelper.Back(activity);lnkExit.NavigateUrl=lnkBack.NavigateUrl;
             if(!IsPostBack){ViewState["SaveToken"]=CurrentUserHelper.CreateEditToken();BindPosts();}
@@ -27,8 +27,15 @@ namespace LearningSystem.Member
         }
         private void BindPosts()
         {
-            DataTable posts=DatabaseHelper.ExecuteTable("SELECT p.*,u.FullName FROM dbo.DiscussionPost p JOIN dbo.[User] u ON u.UserID=p.UserID WHERE p.ActivityID=@id ORDER BY ISNULL(p.ParentPostID,p.PostID),CASE WHEN p.ParentPostID IS NULL THEN 0 ELSE 1 END,p.PostedDate,p.PostID",ActivityHelper.ID(activityID));
+            DataTable posts=DatabaseHelper.ExecuteTable("SELECT p.*,u.FullName,u.Role FROM dbo.DiscussionPost p JOIN dbo.[User] u ON u.UserID=p.UserID WHERE p.ActivityID=@id ORDER BY ISNULL(p.ParentPostID,p.PostID),CASE WHEN p.ParentPostID IS NULL THEN 0 ELSE 1 END,p.PostedDate,p.PostID",ActivityHelper.ID(activityID));
             lblEmpty.Visible=posts.Rows.Count==0;rptPosts.DataSource=posts;rptPosts.DataBind();
+            litCount.Text=posts.Rows.Count==0 ? "Posts" : UiHelper.Plural(posts.Rows.Count,"post and reply","posts and replies");
+        }
+        // Marks the course author so learners can spot the lecturer's comments.
+        protected string AuthorTag(object userID,object role)
+        {
+            if(Convert.ToInt32(userID)==(int)activity["TeacherID"])return "<span class=\"role-tag\">Lecturer</span>";
+            return (string)role=="Admin" ? "<span class=\"role-tag\">Inkwell team</span>" : "";
         }
         protected void BindPost(object sender,RepeaterItemEventArgs e)
         {
@@ -53,7 +60,7 @@ namespace LearningSystem.Member
             else if(e.CommandName=="ReplyPost")
             {
                 if(!AccessHelper.CanWriteDiscussion(user,activityID) || !rows.Rows[0].IsNull("ParentPostID")){Response.Redirect("~/AccessDenied.aspx");return;}
-                ReplyTo=id;Editing=0;txtContent.Text="";litEditor.Text="Reply to "+id;pnlEditor.Visible=true;
+                ReplyTo=id;Editing=0;txtContent.Text="";litEditor.Text="Reply to "+Convert.ToString(DatabaseHelper.ExecuteScalar("SELECT u.FullName FROM dbo.DiscussionPost p JOIN dbo.[User] u ON u.UserID=p.UserID WHERE p.PostID=@id",ActivityHelper.ID(id)));pnlEditor.Visible=true;
             }
             else if(e.CommandName=="RemovePost")
             {
@@ -74,7 +81,7 @@ namespace LearningSystem.Member
             try
             {
                 DiscussionHelper.Save(activityID,Editing,ReplyTo,txtContent.Text.Trim());
-                CurrentUserHelper.CompleteEdit(ViewState["SaveToken"]);MessageHelper.SetSuccess("Post saved.");Response.Redirect("Discussion.aspx?id="+activityID);
+                CurrentUserHelper.CompleteEdit(ViewState["SaveToken"]);MessageHelper.SetSuccess("Your post is published.");Response.Redirect("Discussion.aspx?id="+activityID);
             }
             catch(UnauthorizedAccessException){Response.Redirect("~/AccessDenied.aspx");}
             catch(InvalidOperationException ex){MessageHelper.SetError(ex.Message);}

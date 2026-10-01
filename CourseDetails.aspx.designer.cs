@@ -3,14 +3,23 @@ namespace LearningSystem
     public partial class CourseDetails
     {
         protected global::System.Web.UI.WebControls.Content BodyContent;
+        protected global::System.Web.UI.WebControls.Literal litSubject;
         protected global::System.Web.UI.WebControls.Literal litTitle;
-        protected global::System.Web.UI.WebControls.Image imgCover;
         protected global::System.Web.UI.WebControls.Literal litDescription;
+        protected global::System.Web.UI.WebControls.Literal litFacts;
         protected global::System.Web.UI.WebControls.Literal litMetadata;
+        protected global::System.Web.UI.WebControls.Literal litPractice;
+        protected global::System.Web.UI.WebControls.Image imgCover;
+        protected global::System.Web.UI.WebControls.Literal litPrice;
         protected global::System.Web.UI.WebControls.Button btnEnrol;
         protected global::System.Web.UI.WebControls.HyperLink lnkLogin;
+        protected global::System.Web.UI.WebControls.HyperLink lnkJoin;
         protected global::System.Web.UI.WebControls.HyperLink lnkStudy;
+        protected global::System.Web.UI.WebControls.Literal litEnrolNote;
+        protected global::System.Web.UI.WebControls.Literal litIncludes;
+        protected global::System.Web.UI.WebControls.Literal litContentSummary;
         protected global::System.Web.UI.WebControls.PlaceHolder phOutline;
+        protected global::System.Web.UI.WebControls.Literal litLecturer;
         protected global::System.Web.UI.WebControls.Literal litRating;
         protected global::System.Web.UI.WebControls.Label lblNoReviews;
         protected global::System.Web.UI.WebControls.Repeater rptReviews;
