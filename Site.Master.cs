@@ -54,7 +54,8 @@ namespace LearningSystem
                 Response.Cache.SetCacheability(HttpCacheability.NoCache);
                 Response.Cache.SetNoStore();
             }
-            Page.ViewStateUserKey = Session.SessionID;
+            // Error pages shown through customErrors run without session state.
+            if (Context.Session != null) Page.ViewStateUserKey = Session.SessionID;
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -91,7 +92,7 @@ namespace LearningSystem
                 phAccount.Controls.Add(new HyperLink { Text = "Join for free", NavigateUrl = "~/Account/Register.aspx", CssClass = "button" });
                 return;
             }
-            string name = Convert.ToString(Session["FullName"]);
+            string name = Context.Session == null ? CurrentUserHelper.GetFullName() : Convert.ToString(Session["FullName"]);
             phAccount.Controls.Add(new LiteralControl("<a class=\"user-chip\" href=\"" + ResolveUrl("~/Member/Profile.aspx") + "\" title=\"My profile\"><span class=\"avatar\" aria-hidden=\"true\">"
                 + HttpUtility.HtmlEncode(UiHelper.Initial(name)) + "</span><span><span class=\"name\">" + HttpUtility.HtmlEncode(name)
                 + "</span><span class=\"role-label\">" + HttpUtility.HtmlEncode(UiHelper.RoleLabel(role)) + "</span></span></a>"));

@@ -92,14 +92,15 @@
         </asp:Panel>
     </header>
 
-    <form id="frmSite" runat="server">
-        <main id="main-content" class="page-shell<%: MainClass %>" tabindex="-1">
+    <%-- main wraps both forms, so the separate eSewa payment form is also inside the main landmark. --%>
+    <main id="main-content" class="page-shell<%: MainClass %>" tabindex="-1">
+        <form id="frmSite" runat="server">
             <nav id="navBreadcrumb" runat="server" class="breadcrumb" aria-label="Breadcrumb"><asp:PlaceHolder ID="phBreadcrumb" runat="server" /></nav>
             <asp:Panel ID="pnlMessage" runat="server" Visible="false" role="status" aria-live="polite"><asp:Literal ID="litMessage" runat="server" Mode="Encode" /></asp:Panel>
             <asp:ContentPlaceHolder ID="MainContent" runat="server" />
-        </main>
-    </form>
-    <asp:ContentPlaceHolder ID="OutsideFormContent" runat="server" />
+        </form>
+        <asp:ContentPlaceHolder ID="OutsideFormContent" runat="server" />
+    </main>
 
     <footer class="site-footer">
         <div class="footer-inner">

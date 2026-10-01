@@ -22,7 +22,7 @@
             <track kind="captions" src="Assets/video/inkwell-intro.vtt" srclang="en" label="English" />
             Your browser cannot play this video. The tour shows how to choose a course, study a lesson and practise with a game.
         </video>
-        <figcaption>One-minute tour: choosing a course, studying a lesson and practising with a game.</figcaption>
+        <figcaption>A short tour: finding a course, studying a lesson, practising and tracking your progress. Captions available.</figcaption>
     </figure>
 </section>
 

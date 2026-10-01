@@ -118,6 +118,9 @@
     <Content Include="Assets\images\subjects\programming.jpg" />
     <Content Include="Assets\images\subjects\science.jpg" />
     <Content Include="Assets\images\subjects\study-skills.jpg" />
+    <Content Include="Assets\video\inkwell-intro-poster.jpg" />
+    <Content Include="Assets\video\inkwell-intro.mp4" />
+    <Content Include="Assets\video\inkwell-intro.vtt" />
     <Content Include="Fonts\OFL-SourceCodePro.txt" />
     <Content Include="Fonts\OFL-SourceSans3.txt" />
     <Content Include="Fonts\OFL-SourceSerif4.txt" />
@@ -173,7 +176,6 @@
     <Content Include="Uploads\Documents\3ff3c1df-fc5a-51c9-847d-3a8e45a1cd4e.pdf" />
     <Content Include="Uploads\Documents\47bd851f-4cc1-5dd4-9b0c-cc48bb2d4dd4.pdf" />
     <Content Include="Uploads\Documents\8621a9f5-a094-5dfe-9ebd-8bd1d10cecc5.pdf" />
-    <Content Include="Uploads\Documents\881740b0-d0bb-4399-b254-b70a8c6240cf.pdf" />
     <Content Include="Uploads\Documents\b7b0d129-28c6-5e81-b141-bf32f4939329.pdf" />
     <Content Include="Uploads\Documents\e28a1c83-920c-5aa0-8c4f-d05bc0cf807e.pdf" />
     <Content Include="Uploads\Images\0a0ffd5b-8171-5886-b894-e5e27fadf87a.jpg" />
@@ -181,10 +183,6 @@
     <Content Include="Uploads\Images\14277d15-a3d4-56e0-9eb7-60f126d0309c.png" />
     <Content Include="Uploads\Images\1fe110f0-a203-51f9-8d1e-6323bab43ebe.jpg" />
     <Content Include="Uploads\Images\35850e79-14b8-51df-a665-5ded21493007.png" />
-    <Content Include="Uploads\Images\35f96cb1-24e5-4556-85de-d4b3f5adce01.png" />
-    <Content Include="Uploads\Images\35f96cb1-24e5-4556-85de-d4b3f5adce02.png" />
-    <Content Include="Uploads\Images\35f96cb1-24e5-4556-85de-d4b3f5adce03.png" />
-    <Content Include="Uploads\Images\35f96cb1-24e5-4556-85de-d4b3f5adce04.png" />
     <Content Include="Uploads\Images\36003b97-f67a-5a56-9ed5-6dbb9c4c5328.jpg" />
     <Content Include="Uploads\Images\36c32c46-fbd5-5ef0-9f88-3892f97844a7.jpg" />
     <Content Include="Uploads\Images\37545d6e-d700-5f7e-b72f-e603ad70f65d.png" />
@@ -196,7 +194,6 @@
     <Content Include="Uploads\Images\601e7fb6-428d-5823-b737-639d17897990.jpg" />
     <Content Include="Uploads\Images\6ccb6a0d-0cc4-534a-9d4b-b6a9bd215708.jpg" />
     <Content Include="Uploads\Images\716194fa-688d-5ac3-bef9-5e85ee71437a.jpg" />
-    <Content Include="Uploads\Images\72018ac5-ff66-488a-87b7-28bdcb226c61.png" />
     <Content Include="Uploads\Images\7561f0b7-cb6e-513e-8206-92861a183ee1.png" />
     <Content Include="Uploads\Images\8ef3649a-ccaa-56c2-a43f-bf4310d4665a.png" />
     <Content Include="Uploads\Images\969b5db5-9cf1-5683-9cb1-753b52629fee.jpg" />
@@ -211,6 +208,8 @@
     <Content Include="Uploads\Images\e7fc4d7f-4012-5769-9ac9-64cac2ab3011.jpg" />
     <Content Include="Uploads\Images\eea71a25-e697-5729-a3ac-a61511063f0a.jpg" />
     <Content Include="Uploads\Images\f3130ade-494e-5492-8b51-11ad4def76ff.jpg" />
+    <Content Include="Uploads\Video\04e13c6b-2ec7-5db6-bfca-d79f9e855b5c.mp4" />
+    <Content Include="Uploads\Video\04e13c6b-2ec7-5db6-bfca-d79f9e855b5c.vtt" />
     <Content Include="Uploads\Video\93fed5ca-8bc9-549c-b695-15c1942745fd.mp4" />
     <Content Include="Uploads\Video\93fed5ca-8bc9-549c-b695-15c1942745fd.vtt" />
     <Content Include="Uploads\Video\d6622506-b8cc-58a0-9c23-6ba00314264d.mp4" />
@@ -706,6 +705,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="AGENTS.md" />
+    <None Include="README.md" />
     <None Include="Database\CreateDatabase.sql" />
     <None Include="Database\GenerateDemoHashes.ps1" />
     <None Include="Database\Phase15PaymentUpgrade.sql" />
@@ -782,4 +782,3 @@
     <Error Condition="!Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
 </Project>
-

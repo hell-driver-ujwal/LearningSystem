@@ -48,6 +48,7 @@
 
 /* ---------- Base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: 90px; }
 body { margin: 0; color: var(--ink); background: var(--paper); font: 400 1.0625rem/1.65 var(--sans); text-rendering: optimizeLegibility; }
 img, video, iframe, svg { max-width: 100%; }
@@ -687,3 +688,5 @@ legend { font-family: var(--serif); font-weight: 650; font-size: 1.1rem; padding
 .avatar.large { width: 52px; height: 52px; font-size: 1.3rem; }
 .lesson-layout:not(:has(.lesson-sidebar)) { grid-template-columns: minmax(0, 1fr); max-width: 980px; }
 .mono-input { font-family: var(--mono); font-size: .92rem; }
+@media (max-width: 960px) { .lesson-layout > .lesson-sidebar { order: 2; } }
+@media (max-width: 760px) { .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } .stat-card { padding: 14px; } .stat-card .value { font-size: 1.6rem; } }

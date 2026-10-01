@@ -98,3 +98,25 @@ Phase 16 — 1 October 2026. These instructions are **not recorded passes**. Fin
 - [ ] Record remaining real assets/contact/report diagrams. O10/O14: **INTENTIONALLY DEFERRED — Phase 14 skipped by team decision**.
 
 Use PHASE16-AUDIT.md for findings and source evidence. The team must separately record execution results; do not mark unperformed checks PASS.
+
+## Phase 17 checks (Inkwell redesign)
+
+Run the database script first, then sign in with the accounts in Database/README.md (password Password123).
+
+| # | Steps | Expected |
+| --- | --- | --- |
+| 1 | As a visitor, open Home | Hero, intro video with captions, 8 subjects with images, 6 newest courses, real counts, FAQ preview |
+| 2 | Courses: search "python"; choose Price "Free only"; Sort "Title A to Z" | Matching courses only; URL keeps the filters; Clear filters resets |
+| 3 | Open a course; choose a lesson marked Free preview | Preview opens without logging in; other lessons are not links |
+| 4 | Register: leave the Terms box unticked | Blocked with "Please agree to the Terms of use"; ticking it creates the account |
+| 5 | Register with ?as=lecturer, then log in as that account | Lecturer application is pre-selected; log in is refused until approved |
+| 6 | Learner anita.karki: Dashboard | Streak, week strip, counts, continue learning, course progress, recent results |
+| 7 | Open "Code lab: your first page", change the h1 text, choose Run code, then Reset | Result updates beside the code; Reset restores the original |
+| 8 | Play each game type (Matching, Memory, Word scramble, Sort, Flashcards, Fill in the blank, True or false, Put in order) and submit | Score ring and saved result; progress updates |
+| 9 | Take a quiz leaving one question blank | Warning before submitting; result page shows the answer review |
+| 10 | Admin: My courses, open "Time Management for Students", add a game of type Fill in the blank with a sentence that has no ___ | Rejected with "exactly one blank" message |
+| 11 | Admin: Analytics after browsing a few pages | Views per day, by visitor type and top pages |
+| 12 | Visit /robots.txt and /sitemap.xml | Robots blocks private folders; sitemap lists public pages and every published course |
+| 13 | Visit /DoesNotExist.aspx | Custom 404 page with links, HTTP status 404 |
+| 14 | Learner opens Learner/Certificate.aspx?id=16 and chooses Print | Landscape certificate only, without menus |
+| 15 | Resize to a phone width | Menu button, stacked layout, no sideways scrolling except the workspace tab bar |

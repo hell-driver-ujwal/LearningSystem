@@ -54,7 +54,8 @@ namespace LearningSystem
         protected void Application_Error(object sender, EventArgs e)
         {
             Exception error = Server.GetLastError();
-            if (error == null) return;
+            // Missing pages are normal (the custom 404 page handles them), so they are not logged.
+            if (error == null || (error is HttpException && ((HttpException)error).GetHttpCode() == 404)) return;
             try
             {
                 string line = DateTime.UtcNow.ToString("s") + " UTC " + Request.HttpMethod + " " + Request.Url.AbsolutePath + Environment.NewLine + error + Environment.NewLine + Environment.NewLine;
