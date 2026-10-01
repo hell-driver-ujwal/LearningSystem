@@ -31,24 +31,7 @@ sqllocaldb create MSSQLLocalDB -s
 
 ## Demo accounts
 
-Every account uses the password **Password123**. The `.test` email addresses are reserved for testing and never receive mail.
-
-| Role | Name | Email | Notes |
-| --- | --- | --- | --- |
-| Admin | Sanjana Shrestha | admin@inkwell.test | Also authors 4 courses |
-| Lecturer | Asha Sharma | asha.sharma@inkwell.test | HTML and CSS, JavaScript (paid), Digital Safety |
-| Lecturer | Daniel Tan | daniel.tan@inkwell.test | Small Business, Personal Finance (paid) |
-| Lecturer | Maya Rai | maya.rai@inkwell.test | Cells, Chemistry, Ecosystems (draft) |
-| Lecturer | Rohan Karki | rohan.karki@inkwell.test | Algebra, Statistics (paid) |
-| Lecturer | Elena Costa | elena.costa@inkwell.test | Academic Writing, Presenting |
-| Lecturer | Bikash Thapa | bikash.thapa@inkwell.test | Python, AI Foundations, Network Security |
-| Lecturer (pending) | Ravi Thapa | ravi.thapa@inkwell.test | Application waiting for approval |
-| Learner | Anita Karki | anita.karki@inkwell.test | Most active: current learning streak and one completed course (certificate ready) |
-| Learner | Ben Lee | ben.lee@inkwell.test | |
-| Learner | Chandra Gurung | chandra.gurung@inkwell.test | |
-| Learner | Dina Wong | dina.wong@inkwell.test | |
-
-Lecturers use the **Lecturer log in** page, learners the **Learner log in** page and the admin the **Administrator log in** page (all linked from `Account/Login.aspx`).
+The demo log-ins (one administrator, six lecturers, one pending applicant and four learners) are listed in `docs/DEMO_CREDENTIALS.md`, which is for the team only.
 
 Password hashes use PBKDF2 (`Rfc2898DeriveBytes`, SHA-256, 100,000 iterations, a random 16-byte salt per account, 32-byte hash) stored as `PBKDF2$100000$<salt>$<hash>`. `GenerateDemoHashes.ps1` produces hashes in exactly this format if you need new ones.
 

@@ -544,18 +544,18 @@ CREATE INDEX [IX_PageView_ViewedAt] ON dbo.[PageView] ([ViewedAt]);
 -- Demo accounts. Every password is Password123 (PBKDF2, see GenerateDemoHashes.ps1).
 SET IDENTITY_INSERT dbo.[User] ON;
 INSERT dbo.[User] ([UserID], [FullName], [Email], [PasswordHash], [Role], [Status], [ApplicationReason], [CreatedDate]) VALUES
-    (1, N'Sanjana Shrestha', N'admin@inkwell.test', N'PBKDF2$100000$8OMc8FxrkNPn1Eiz920SZw==$vCIo3/fmd6Qf6mOqLlBHQ9IrcSL7rzBr62BMr9/tfiQ=', N'Admin', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -75, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
-    (2, N'Asha Sharma', N'asha.sharma@inkwell.test', N'PBKDF2$100000$LL2IDtYvDfpb+CSq3OWWpw==$qggjA9fC/PXw4f5+JbOCmEDP+o78A15v8DnfsacJvzY=', N'Teacher', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -75, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
-    (3, N'Daniel Tan', N'daniel.tan@inkwell.test', N'PBKDF2$100000$MKBj4G0mKoXjHiSuVvEQdA==$gBGRfNvwn3G7egnAPThTfwKBUcC7dbyM3ygJxZmysBs=', N'Teacher', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -75, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
-    (4, N'Maya Rai', N'maya.rai@inkwell.test', N'PBKDF2$100000$4YGUcpxPZisOM4w4MxzeUA==$fREhJ7qVJCsiyQJHAOhYpWPpfvBY1TCT0o0Y/Wxs8vk=', N'Teacher', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -75, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
-    (5, N'Rohan Karki', N'rohan.karki@inkwell.test', N'PBKDF2$100000$2Jek24PvTkjp+7bIrvZi0w==$9YH4P5rpt/OHXoryX3k8bsPwAQSJaIjj7FCD2Rm3rck=', N'Teacher', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -75, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
-    (6, N'Elena Costa', N'elena.costa@inkwell.test', N'PBKDF2$100000$fpkBAFPuZYJgFucUYdLrkA==$OuqXGtHWAyp98HomarqiYdGUNbRctt9EQy3v4eUoZXs=', N'Teacher', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -75, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
-    (7, N'Bikash Thapa', N'bikash.thapa@inkwell.test', N'PBKDF2$100000$1y0MzwcB3UlPkQmYlmVdow==$zcZyBUIRyC6KE+bBl0B2rZa+pmcqku7ZrPVx7K4flkI=', N'Teacher', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -75, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
-    (8, N'Ravi Thapa', N'ravi.thapa@inkwell.test', N'PBKDF2$100000$gbN2fG+EF20YOktwyQJumA==$jbGocP3wpgK7QNO6UP1BdmmaRzYI5f7YosjdGbrXwFQ=', N'Teacher', N'Pending', N'I teach A-level mathematics at a Kathmandu college and would like to publish a short course on probability with worked examples and practice games.', DATEADD(minute, 600, DATEADD(day, -75, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
-    (9, N'Anita Karki', N'anita.karki@inkwell.test', N'PBKDF2$100000$IKO0CO1XrwY7w2ov591x6w==$9uCMWluIjLFqQA/y1Ah8R0tX0oBIVxaXjoPOz4lKotU=', N'Learner', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -41, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
-    (10, N'Ben Lee', N'ben.lee@inkwell.test', N'PBKDF2$100000$2ss+HkAtIcunAzIdVE1CUg==$vcGoeBIdShzaM7vn9samEetMe8o3Hfy9eOgaI4jW4Fc=', N'Learner', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -40, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
-    (11, N'Chandra Gurung', N'chandra.gurung@inkwell.test', N'PBKDF2$100000$uounlUkBAayZEjAY5AiHmQ==$W0yC3gEYX4wwFmHoI9rtMpZKG740xymeNk+97ScvqNs=', N'Learner', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -39, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
-    (12, N'Dina Wong', N'dina.wong@inkwell.test', N'PBKDF2$100000$BRmgr0Uxbw7pCiz+1LpwHA==$J731SC9DoX+zRto+uPXKo8Q109Owjhkx37gUYE0V1qM=', N'Learner', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -38, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0)))));
+    (1, N'Sanjana Shrestha', N'admin@inkwell.test', N'PBKDF2$100000$xMO4n52r248ErhXEEAAm4A==$ID8RVU7qjwgxCU0Oop+HAkagt8ripbHCeKji/LIYvFM=', N'Admin', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -75, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
+    (2, N'Asha Sharma', N'asha.sharma@inkwell.test', N'PBKDF2$100000$GLdLlsIYDf2V2PcU6BkTfw==$CpbxqJgtdO93RJDA9YIFzp0HiW9DnId76j5eDuJjcI0=', N'Teacher', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -75, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
+    (3, N'Daniel Tan', N'daniel.tan@inkwell.test', N'PBKDF2$100000$mgMBxzkRh3JvoX4pO4oSOA==$mZ5zYRG/vNdM82gS3axmFdK4XfzD+yvYZEh1PKeQ5Hs=', N'Teacher', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -75, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
+    (4, N'Maya Rai', N'maya.rai@inkwell.test', N'PBKDF2$100000$2GeqVRlfSK0iXhllFNwIQw==$3iSbcVU7YxV9GmNIbbMvfbJUZ8Je6ve+91LLAX5vIWo=', N'Teacher', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -75, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
+    (5, N'Rohan Karki', N'rohan.karki@inkwell.test', N'PBKDF2$100000$asWNNpKT9B6loGmpWEP9yg==$5mkXLj1Uu2ovyW1x4KhVEd+B782QtZ+OdXm7+MMu8V0=', N'Teacher', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -75, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
+    (6, N'Elena Costa', N'elena.costa@inkwell.test', N'PBKDF2$100000$bJqCWcsljfsVyhsFdPIvUA==$OvlwQX2fUK6EZD1QK2H4k0xRbUkGvSisRnT6FQ9l04o=', N'Teacher', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -75, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
+    (7, N'Bikash Thapa', N'bikash.thapa@inkwell.test', N'PBKDF2$100000$LITYIhgGyN7IKOhAfBNEPw==$CIL8LIGWDdiU+kT6cluF4p/AtlwAKXIbOBR3+3FVFtY=', N'Teacher', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -75, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
+    (8, N'Ravi Thapa', N'ravi.thapa@inkwell.test', N'PBKDF2$100000$PyViGxQg7oWuA9CsI9VNOQ==$Vjydc+UFtetP9U/N0NDVV9xldr/UUnGDbofHJwEq0Pg=', N'Teacher', N'Pending', N'I teach A-level mathematics at a Kathmandu college and would like to publish a short course on probability with worked examples and practice games.', DATEADD(minute, 600, DATEADD(day, -75, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
+    (9, N'Anita Karki', N'anita.karki@inkwell.test', N'PBKDF2$100000$ILojeAUsP3fEQdeyxTjPSw==$XWe/Ifl1SS3BVknXtSbzcB2txHoIQ8N4M0PqpSr1/zw=', N'Learner', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -41, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
+    (10, N'Ben Lee', N'ben.lee@inkwell.test', N'PBKDF2$100000$6ieIFHG5iCVLC7T2lvthgA==$dwqZ6vwGTm8HjhJD7For/0akvdOYAcHFJhtAmsS/i+0=', N'Learner', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -40, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
+    (11, N'Chandra Gurung', N'chandra.gurung@inkwell.test', N'PBKDF2$100000$nvOYCByNC+NzT8kD/f9Yfw==$7xhoBA2jkgLo3+gbXnZmDLURs/9q9qMSw+h8Z+NuhmM=', N'Learner', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -39, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
+    (12, N'Dina Wong', N'dina.wong@inkwell.test', N'PBKDF2$100000$ZZ2z/wbuzg+AJjBJwCiLFQ==$9a+C40yoIZHgVQpdfeaUn0ROmzZem12pECydnqnhmdQ=', N'Learner', N'Active', NULL, DATEADD(minute, 600, DATEADD(day, -38, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0)))));
 SET IDENTITY_INSERT dbo.[User] OFF;
 
 SET IDENTITY_INSERT dbo.[Subject] ON;
@@ -594,10 +594,10 @@ INSERT dbo.[Course] ([CourseID], [TeacherID], [SubjectID], [Title], [Description
     (19, 1, 3, N'Using AI Tools Responsibly', N'Use AI chatbots and writing tools to support your learning without breaking academic rules. Write effective prompts, check AI output for errors, and understand when using AI counts as misconduct.', N'~/Uploads/Images/36c32c46-fbd5-5ef0-9f88-3892f97844a7.jpg', N'Published', 0, 0.00, DATEADD(minute, 600, DATEADD(day, -6, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0)))), DATEADD(minute, 600, DATEADD(day, -2, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0)))));
 SET IDENTITY_INSERT dbo.[Course] OFF;
 
--- Sandbox payments for the two paid courses that demo learners joined.
+-- Completed demo eSewa payments for the two paid courses that demo learners joined.
 INSERT dbo.[Payment] ([LearnerID], [CourseID], [TransactionUUID], [ProviderReference], [AmountNPR], [Status], [CreatedDate], [VerifiedDate]) VALUES
-    (9, 2, N'aa901729e7f25aaeabb4eab13cf20526', N'SANDBOX-01001', 499.00, N'Complete', DATEADD(minute, 540, DATEADD(day, -12, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0)))), DATEADD(minute, 542, DATEADD(day, -12, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
-    (12, 10, N'4806df8e7a9a5b4ca395587869c29cff', N'SANDBOX-01002', 399.00, N'Complete', DATEADD(minute, 540, DATEADD(day, -8, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0)))), DATEADD(minute, 542, DATEADD(day, -8, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0)))));
+    (9, 2, N'aa901729e7f25aaeabb4eab13cf20526', N'ESW-260915-1A2B3C01 (97XXXXXX08)', 499.00, N'Complete', DATEADD(minute, 540, DATEADD(day, -12, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0)))), DATEADD(minute, 542, DATEADD(day, -12, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0))))),
+    (12, 10, N'4806df8e7a9a5b4ca395587869c29cff', N'ESW-260915-1A2B3C02 (98XXXXXX41)', 399.00, N'Complete', DATEADD(minute, 540, DATEADD(day, -8, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0)))), DATEADD(minute, 542, DATEADD(day, -8, CAST(CAST(SYSUTCDATETIME() AS date) AS datetime2(0)))));
 
 SET IDENTITY_INSERT dbo.[Topic] ON;
 INSERT dbo.[Topic] ([TopicID], [CourseID], [Title], [SortOrder]) VALUES
@@ -1963,7 +1963,7 @@ INSERT dbo.[GameItem] ([ItemID], [ActivityID], [GroupID], [ItemText], [MatchText
     (110, 37, NULL, N'Bias', N'A systematic error that skews results'),
     (111, 37, NULL, N'Range', N'Largest value minus smallest value'),
     (112, 40, NULL, N'Point: Group projects build communication skills.', N'1'),
-    (113, 40, NULL, N'Evidence: In a 2023 survey, 68 percent of employers valued teamwork experience.', N'2'),
+    (113, 40, NULL, N'Evidence: NACE employer surveys list teamwork among the most wanted skills.', N'2'),
     (114, 40, NULL, N'Explain: Working in groups gives students practice in agreeing roles and deadlines.', N'3'),
     (115, 40, NULL, N'Link: These skills support the wider argument that coursework prepares students for work.', N'4'),
     (116, 41, NULL, N'(Sharma, 2022)', N'Paraphrasing one author'),

@@ -12,9 +12,9 @@ Inkwell is an ASP.NET Web Forms learning platform built for the APU module CT050
 | Sign-in | Forms Authentication with roles in the ticket; PBKDF2 password hashes |
 | Front end | HTML5, one external stylesheet (`Styles/site.css`), plain JavaScript in `Scripts/` |
 | Fonts | Source Serif 4, Source Sans 3 and Source Code Pro, bundled in `Fonts/` (SIL Open Font Licence) |
-| Payments | eSewa sandbox (test mode only) |
+| Payments | Built-in eSewa demo payment screen (no real money) |
 
-No CSS framework, JavaScript library or CDN is used, so the site works without internet access (except eSewa checkout and optional YouTube lessons).
+No CSS framework, JavaScript library or CDN is used, so the whole site, including checkout, works without internet access (only optional YouTube lessons need it).
 
 ## Run it locally
 
@@ -26,14 +26,7 @@ No CSS framework, JavaScript library or CDN is used, so the site works without i
    ```
 3. Press F5. The site opens at `https://localhost:44393/` (plain HTTP requests are redirected to HTTPS).
 
-Demo accounts (password `Password123` for all):
-
-| Role | Email |
-| --- | --- |
-| Administrator | admin@inkwell.test |
-| Lecturer | asha.sharma@inkwell.test (also daniel.tan, maya.rai, rohan.karki, elena.costa, bikash.thapa) |
-| Learner | anita.karki@inkwell.test (also ben.lee, chandra.gurung, dina.wong) |
-| Pending lecturer | ravi.thapa@inkwell.test (cannot log in until approved) |
+Demo log-ins and the demo eSewa payment steps are in `docs/DEMO_CREDENTIALS.md` (team only).
 
 ## Folder structure
 

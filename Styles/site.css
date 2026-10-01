@@ -690,3 +690,30 @@ legend { font-family: var(--serif); font-weight: 650; font-size: 1.1rem; padding
 .mono-input { font-family: var(--mono); font-size: .92rem; }
 @media (max-width: 960px) { .lesson-layout > .lesson-sidebar { order: 2; } }
 @media (max-width: 760px) { .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } .stat-card { padding: 14px; } .stat-card .value { font-size: 1.6rem; } }
+
+/* ---------- Checkout and the eSewa demo payment screens ---------- */
+.checkout-line { display: flex; gap: 14px; align-items: center; margin: 0 0 16px; }
+.checkout-cover { width: 120px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); }
+.checkout-total { margin: 8px 0 18px; }
+.checkout-total th { background: none; text-transform: none; letter-spacing: 0; font-size: .97rem; color: var(--ink-soft); font-weight: 500; }
+.checkout-total td { text-align: right; font-weight: 600; min-width: 0; }
+.checkout-total tr.total th, .checkout-total tr.total td { font-weight: 800; color: var(--ink); font-size: 1.1rem; border-top: 2px solid var(--line-strong); }
+.esewa-button, input.esewa-button { background: #41a124; border-color: #41a124; color: #fff; }
+.esewa-button:hover, input.esewa-button:hover { background: #33821b; border-color: #33821b; color: #fff; }
+.esewa-shell { max-width: 520px; margin: 8px auto 0; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow-lift); overflow: hidden; }
+.esewa-head { display: flex; justify-content: space-between; align-items: center; padding: 16px 22px; background: #41a124; color: #fff; }
+.esewa-logo { font-family: var(--sans); font-weight: 800; font-size: 1.6rem; letter-spacing: -.02em; }
+.esewa-logo span { color: #e8f6e2; }
+.esewa-tag { font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; background: rgba(255, 255, 255, .2); padding: 3px 9px; border-radius: 6px; }
+.esewa-merchant { display: grid; grid-template-columns: 1fr 1.4fr auto; gap: 12px; padding: 14px 22px; background: #f3faf0; border-bottom: 1px solid #d5ebcc; font-size: .93rem; }
+.esewa-amount strong { color: #2c6e18; font-size: 1.1rem; }
+.esewa-body { padding: 22px; }
+.esewa-body h2 { margin-top: 0; font-size: 1.25rem; }
+input.code-input { max-width: 160px; font-size: 1.5rem; letter-spacing: .5em; text-align: center; font-family: var(--mono); }
+.esewa-foot { margin: 0; padding: 12px 22px; font-size: .85rem; color: var(--muted); background: var(--paper); border-top: 1px solid var(--line); }
+.receipt { text-align: center; }
+.receipt .checkout-total { text-align: left; }
+.receipt .actions { justify-content: center; }
+.receipt-check { display: inline-grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: #41a124; color: #fff; margin-bottom: 8px; }
+.receipt-check .icon { width: 34px; height: 34px; stroke-width: 3; }
+@media (max-width: 560px) { .esewa-merchant { grid-template-columns: 1fr; } }

@@ -329,4 +329,4 @@ Requested by the team member on branch `sunil/dev`; decisions recorded in DECISI
 - [x] Privacy policy and Terms of use pages; registration requires accepting the terms.
 - [x] robots.txt and sitemap.xml generated from the database; canonical and Open Graph tags.
 - [x] First-party analytics (PageView table: page, role and time only) with an admin Analytics page.
-- [x] customErrors On with private error log; security headers; video captions served through Media.ashx.
+- [x] customErrors On with private error log; security headers; video captions served through Media.ashx.- [x] Demo eSewa payment screen (mobile number + 4-digit code, verified on the server) replaces the internet sandbox; paid courses open only after a verified payment.

@@ -793,3 +793,12 @@ Publish rules: Flashcards and TrueFalse at least 4 items; FillBlank and Sequence
 | ~/Courses.aspx | subjectId?, q?, price? (free or paid), sort? (title or popular) | Unknown values fall back to the default |
 | ~/Account/Register.aspx | as? (lecturer) | Pre-selects the lecturer application |
 | ~/Media.ashx | captions=1 with materialId | Serves the .vtt captions beside an authorised Video material |
+
+### Payment routes (replaces the Phase 15 eSewa sandbox routes)
+| URL | Parameters | Contract |
+| --- | --- | --- |
+| ~/Learner/Checkout.aspx | courseId | Active learner; paid, published course; creates a Pending payment with the current price, then opens the demo screen |
+| ~/Payment/EsewaDemo.aspx | paymentId | Payment must belong to the current learner and be Pending; mobile number then 4-digit code, checked on the server; 3 wrong codes set Failed; Cancel sets Canceled |
+| ~/Payment/EsewaSuccess.aspx | paymentId | Receipt for the current learner's Complete, verified payment |
+
+PaymentHelper public surface: Price, Enrol, CreatePending, Find(int), IsValidPhone, CodeMatches, MaskPhone, CompleteDemo, CloseDemo, History. EsewaHelper and Payment/EsewaFailure.aspx are removed.

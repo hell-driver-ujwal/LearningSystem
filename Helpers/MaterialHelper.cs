@@ -26,7 +26,7 @@ namespace LearningSystem.Helpers
             {
                 case "Text": html = "<div class=\"lesson-text\">" + LessonFormatter.ToHtml(Convert.ToString(row["TextContent"])) + "</div>"; break;
                 case "Code":
-                    // The code is only HTML-encoded into a textarea and run inside a sandboxed frame by Scripts/codelab.js.
+                    // The code is only HTML-encoded into a textarea and run inside a sandboxed frame by Scripts/site.js.
                     // The textarea has no name, so it is never posted back to the server.
                     html = "<div class=\"code-lab\" data-codelab=\"true\"><div class=\"code-lab-bar\"><span class=\"code-lab-label\">Try it yourself</span>"
                         + "<span class=\"code-lab-actions\"><button type=\"button\" class=\"button small\" data-run>Run code</button><button type=\"button\" class=\"button small secondary\" data-reset>Reset</button></span></div>"

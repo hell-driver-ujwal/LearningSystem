@@ -13,6 +13,15 @@
         });
     }
 
+    // ASP.NET validators hide their message as soon as a field loses focus. That moves the layout while the
+    // visitor is pressing a button, so the click can be lost. Waiting a moment lets the click finish first.
+    if (typeof window.ValidatorOnChange === "function") {
+        var updateValidators = window.ValidatorOnChange;
+        window.ValidatorOnChange = function (event) {
+            window.setTimeout(function () { updateValidators(event); }, 300);
+        };
+    }
+
     // Help page: filter FAQ questions as the visitor types.
     var filter = document.getElementById("faq-filter");
     if (filter) {

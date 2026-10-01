@@ -146,7 +146,7 @@
     <Content Include="Member\QuizResult.aspx" />
     <Content Include="Member\Scenario.aspx" />
     <Content Include="Member\SelfAssessment.aspx" />
-    <Content Include="Payment\EsewaFailure.aspx" />
+    <Content Include="Payment\EsewaDemo.aspx" />
     <Content Include="Payment\EsewaSuccess.aspx" />
     <Content Include="Scripts\charts.js" />
     <Content Include="Scripts\games.js" />
@@ -463,7 +463,6 @@
     <Compile Include="Helpers\DeleteHelper.cs" />
     <Compile Include="Helpers\DiscussionHelper.cs" />
     <Compile Include="Helpers\EngagementHelper.cs" />
-    <Compile Include="Helpers\EsewaHelper.cs" />
     <Compile Include="Helpers\GameContentHelper.cs" />
     <Compile Include="Helpers\GameHelper.cs" />
     <Compile Include="Helpers\LessonFormatter.cs" />
@@ -603,12 +602,12 @@
     <Compile Include="Member\SelfAssessment.aspx.designer.cs">
       <DependentUpon>SelfAssessment.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Payment\EsewaFailure.aspx.cs">
-      <DependentUpon>EsewaFailure.aspx</DependentUpon>
+    <Compile Include="Payment\EsewaDemo.aspx.cs">
+      <DependentUpon>EsewaDemo.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Payment\EsewaFailure.aspx.designer.cs">
-      <DependentUpon>EsewaFailure.aspx</DependentUpon>
+    <Compile Include="Payment\EsewaDemo.aspx.designer.cs">
+      <DependentUpon>EsewaDemo.aspx</DependentUpon>
     </Compile>
     <Compile Include="Payment\EsewaSuccess.aspx.cs">
       <DependentUpon>EsewaSuccess.aspx</DependentUpon>
@@ -713,6 +712,7 @@
     <None Include="docs\BLUEPRINT.md" />
     <None Include="docs\CONTRACTS.md" />
     <None Include="docs\DECISIONS.md" />
+    <None Include="docs\DEMO_CREDENTIALS.md" />
     <None Include="docs\EVIDENCE.md" />
     <None Include="docs\PHASE10-VERIFICATION.md" />
     <None Include="docs\PHASE11-VERIFICATION.md" />

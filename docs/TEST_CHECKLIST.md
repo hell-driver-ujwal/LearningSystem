@@ -120,3 +120,5 @@ Run the database script first, then sign in with the accounts in Database/README
 | 13 | Visit /DoesNotExist.aspx | Custom 404 page with links, HTTP status 404 |
 | 14 | Learner opens Learner/Certificate.aspx?id=16 and chooses Print | Landscape certificate only, without menus |
 | 15 | Resize to a phone width | Menu button, stacked layout, no sideways scrolling except the workspace tab bar |
+| 16 | As Ben Lee, open Personal Finance for Students, choose Buy with eSewa, Pay with eSewa; try a number starting 96, then a valid one; enter a wrong code, then the correct one (see docs/DEMO_CREDENTIALS.md) | 96 number rejected; wrong code shows attempts left; correct code shows the receipt and opens the course |
+| 17 | Before paying, open Learner/CourseHome.aspx?id=5 directly | Access denied; only the course page and free preview are available |
