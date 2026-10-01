@@ -34,12 +34,12 @@ Planning deliverables only: CONTRACTS.md, PROGRESS.md, QUESTIONS.md, DECISIONS.m
 - [x] ADM-01 — Admin login
 - [x] SYS-01 — Master layout
 - [x] SYS-02 — Role-based nav bar
-- [~] SYS-03 — Access checks (role, protected-page and teacher course/topic/material ownership checks complete; learner enrolment/material/public-preview access checks complete in Phase 5; quiz/discussion/self-assessment/game activity and result guards implemented through Phase 8; scenario guards remain for Phase 9)
+- [x] SYS-03 — Access checks implemented through custom Phase 15; Phase 16 source audit found no demonstrated ownership/enrolment bypass. Final runtime blocked.
 - [x] SYS-04 — Access-denied page
-- [x] SYS-05 — Friendly error pages
+- [~] SYS-05 — PARTIAL: friendly pages exist but Web.config customErrors="Off"; Phase 16 MUST FIX M01. No application fix authorized.
 - [x] SYS-06 — Success / error messages
 - [x] SYS-09 — Database connection
-- [~] SYS-13 — Breadcrumb (shared renderer plus teacher, learner and public course/material trails complete; Phase 6 adds activity/result trails; later pages remain)
+- [x] SYS-13 — Breadcrumbs implemented across current pages; source audited in Phase 16.
 - [x] SYS-17 — Folder access rules
 - [x] SYS-20 — Role setup
 
@@ -63,7 +63,7 @@ Planning deliverables only: CONTRACTS.md, PROGRESS.md, QUESTIONS.md, DECISIONS.m
 - [x] ADM-09 — Approve teacher
 - [x] ADM-10 — Reject teacher
 - [x] ADM-11 — Manage any activity (all types; discussion/preview navigation enabled in Phase 6)
-- [~] SYS-19 — Admin user/course/activity/subject and teacher-owned course/topic/material deletion complete and tested; Phase 5 leave removes only Enrolment transactionally; Phase 6 adds transactional post/reply removal; standalone scenario steps remain for their phase.
+- [x] SYS-19 — Transactional children-first deletion implemented including scenario steps and Tier B; Phase 16 source audited.
 
 ## Phase 4 — Courses & materials
 
@@ -92,7 +92,7 @@ Planning deliverables only: CONTRACTS.md, PROGRESS.md, QUESTIONS.md, DECISIONS.m
 2026-09-30: Q31 approved and recorded in DECISIONS.md/CONTRACTS.md, with the original question retained. Implemented public pages, published catalogue/search/filter/paging, enrolment and leave, learner dashboard/MyCourses/CourseHome, all six material viewers, completion, shared calculated progress, read-only owner/admin material previews and protected Media.ashx delivery. Build passed with 0 warnings and 0 errors after fixing one handler-name warning. The four approved smoke checks passed on the workspace application: published catalogue, learner enrol/lesson/complete (0% to 25%), visitor free preview/access protection, and teacher draft preview with unchanged learner-data counts. No database rebuild, test application copy or security-setting change. The smoke flow retained Enrolment (LearnerID 8, CourseID 2) and MaterialCompletion (LearnerID 8, MaterialID 4). See PHASE5-VERIFICATION.md for files, checks, manual steps and content gaps. Phase 6 has not started; verification stopped at the approved budget.
 
 - [~] PUB-01 — Home page implemented; real intro video/poster and subject images await team content (Q31).
-- [x] PUB-02 — About page
+- [~] PUB-02 — About content exists; actual contact details await team content (Phase 16 S01).
 - [x] PUB-03 — Browse subjects
 - [x] PUB-04 — Course catalogue
 - [x] PUB-05 — Search courses
@@ -198,7 +198,7 @@ Planning deliverables only: CONTRACTS.md, PROGRESS.md, QUESTIONS.md, DECISIONS.m
 - [x] GAM-14 — Game results (owner-only GameBuilder results delivered in Phase 8; runtime checking blocked)
 - [x] SIM-13 — Owner-only outcome summary delivered in Phase 9 by explicit request; broader summary checks remain manual.
 - [x] RES-01 — Own Quiz/SelfAssessment/Game/Scenario attempts, type-specific results, filters and paging.
-- [~] MyResults review-link portion — explicitly deferred until optional O5; core result-detail links are implemented. No review functionality added.
+- [x] MyResults review-link portion — implemented with O5 in Phase 13; confirmed by Phase 16 source review.
 - [x] RES-02 — Owned course/activity filters, attempts, score summaries and reused confidence/outcome summaries.
 - [x] RES-03 — Own course count, distinct currently enrolled learner count, recent owned attempts and shortcuts.
 - [x] RES-04 — Existing real core counts verified again in Phase 10 against SQL; optional charts remain CHT-02.
@@ -210,9 +210,9 @@ Planning deliverables only: CONTRACTS.md, PROGRESS.md, QUESTIONS.md, DECISIONS.m
 - [x] SYS-07 — Empty-state messages
 - [x] SYS-10 — Responsive CSS
 - [x] SYS-11 — Delete confirmation
-- [x] SYS-14 — Page necessities
+- [~] SYS-14 — Page necessities implemented; real footer contact details remain placeholders (S01).
 - [x] SYS-15 — Cancel button
-- [x] SYS-16 — Accessibility
+- [~] SYS-16 — Accessibility source reviewed; checkout payment form outside main landmark remains S03; rendered final checks blocked.
 
 ## Phase 12 — Optional Tier A
 
@@ -272,27 +272,29 @@ Planning deliverables only: CONTRACTS.md, PROGRESS.md, QUESTIONS.md, DECISIONS.m
 
 ## Phase 16 — Final Audit
 
-Re-audit every feature and all 17 rules below, verify traceability/manual blocked cases, and resolve any remaining gaps. No new feature IDs are introduced.
+2026-10-01: Audit documentation complete; no application/configuration/schema changes. Reviewed all 182 original feature IDs, Section 17, all 17 Section 18 rules, page/operation authorization, database script and custom Phase 15 separately. Full solution build succeeded with 0 warnings/0 errors. Final runtime/live-database checks were blocked by LocalDB process startup before fixtures or HTTP tests; no retries or security changes. Findings: 1 MUST FIX and 4 SHOULD FIX (documentation S02 corrected here; application fixes await approval). See PHASE16-AUDIT.md, refreshed EVIDENCE.md and click-by-click TEST_CHECKLIST.md. Source status is not runtime acceptance. Tier C remains intentionally deferred; stopped after Phase 16.
 
 ## Section 18 — all 17 gap-check rules
 
-- [ ] Rule 1 — All four members use the same Visual Studio project type (a .csproj file means ASP.NET Web Application).
-- [ ] Rule 2 — A quiz attempt is created only on Submit; the start time is kept in the session.
-- [ ] Rule 3 — Courses, topics and activities with attempts cannot be deleted; unpublish instead.
-- [ ] Rule 4 — Once an activity has attempts, its content is locked (title and description stay editable).
-- [ ] Rule 5 — Deleting records with files also deletes the files from disk.
-- [ ] Rule 6 — Matching and Sort use tap-to-select, tap-to-place (no browser drag-and-drop).
-- [ ] Rule 7 — Inside a topic: materials first, then activities, each in its own order.
-- [ ] Rule 8 — A course can be published only with ≥1 topic holding ≥1 published item.
-- [ ] Rule 9 — Unpublished courses show as Currently unavailable in My Courses; results stay.
-- [ ] Rule 10 — Progress = items done ÷ published items. Material done = marked complete; quiz/self-assessment/game/scenario done = ≥1 submitted attempt; discussion done = ≥1 post.
-- [ ] Rule 11 — Redirect after every save; server rejects duplicate submissions.
-- [ ] Rule 12 — Admin accounts appear in Users with all actions disabled.
-- [ ] Rule 13 — Home shows the 6 newest published courses.
-- [ ] Rule 14 — Teachers see learner names only; only the admin sees emails.
-- [ ] Rule 15 — Game answers may be in the page (needed to play); the server re-checks scores.
-- [ ] Rule 16 — Search and catalogue show published items only.
-- [ ] Rule 17 — Code shared through Git; build folders and the .mdf file excluded; the SQL script is the shared database.
+Phase 16 marks below reflect source verification, not new runtime passes. Rules 1/17 remain partial because this checkout cannot prove every team member's workstation/Git practice. Detailed evidence and approved decision qualifications are in PHASE16-AUDIT.md.
+
+- [~] Rule 1 — All four members use the same Visual Studio project type (a .csproj file means ASP.NET Web Application).
+- [x] Rule 2 — A quiz attempt is created only on Submit; the start time is kept in the session.
+- [x] Rule 3 — Courses, topics and activities with attempts cannot be deleted; unpublish instead.
+- [x] Rule 4 — Once an activity has attempts, its content is locked (title and description stay editable).
+- [x] Rule 5 — Deleting records with files also deletes the files from disk.
+- [x] Rule 6 — Matching and Sort use tap-to-select, tap-to-place (no browser drag-and-drop).
+- [x] Rule 7 — Inside a topic: materials first, then activities, each in its own order.
+- [x] Rule 8 — A course can be published only with ≥1 topic holding ≥1 published item.
+- [x] Rule 9 — Unpublished courses show as Currently unavailable in My Courses; results stay.
+- [x] Rule 10 — Progress = items done ÷ published items. Material done = marked complete; quiz/self-assessment/game/scenario done = ≥1 submitted attempt; discussion done = ≥1 post.
+- [x] Rule 11 — Redirect after every save; server rejects duplicate submissions.
+- [x] Rule 12 — Admin accounts appear in Users with all actions disabled.
+- [x] Rule 13 — Home shows the 6 newest published courses.
+- [x] Rule 14 — Teachers see learner names only; only the admin sees emails.
+- [x] Rule 15 — Game answers may be in the page (needed to play); the server re-checks scores.
+- [x] Rule 16 — Search and catalogue show published items only.
+- [~] Rule 17 — Code shared through Git; build folders and the .mdf file excluded; the SQL script is the shared database.
 
 ## Review and manual verification
 
