@@ -1,12 +1,11 @@
 <%@ Page Title="Course oversight" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Courses.aspx.cs" Inherits="LearningSystem.Admin.Courses" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-<h1>Course oversight</h1>
-<p>All courses from every teacher. Content with submitted attempts cannot be deleted. Use Unpublish to hide it while keeping results.</p>
+<div class="page-header"><div><h1>All courses</h1><p class="intro">Every course from every lecturer. Content with learner attempts cannot be deleted; unpublish it to hide it and keep the results.</p></div><a class="button secondary" href="../Teacher/MyCourses.aspx">My authored courses</a></div>
 
 <div class="table-scroll" role="region" aria-label="Courses" tabindex="0"><asp:GridView ID="gvCourses" runat="server" AutoGenerateColumns="false" DataKeyNames="CourseID" Caption="Courses" UseAccessibleHeader="true" EmptyDataText="No courses found." OnRowCommand="Content_RowCommand" >
 <Columns>
 <asp:BoundField DataField="Title" HeaderText="Title" HtmlEncode="true" />
-<asp:BoundField DataField="SubjectName" HeaderText="Subject" HtmlEncode="true" /><asp:BoundField DataField="TeacherName" HeaderText="Teacher" HtmlEncode="true" />
+<asp:BoundField DataField="SubjectName" HeaderText="Subject" HtmlEncode="true" /><asp:BoundField DataField="TeacherName" HeaderText="Lecturer" HtmlEncode="true" />
 <asp:BoundField DataField="Status" HeaderText="Status" />
 <asp:BoundField DataField="AttemptCount" HeaderText="Attempts" />
 <asp:TemplateField HeaderText="Material previews"><ItemTemplate><details><summary>Preview materials</summary><%# PreviewLinks(Eval("CourseID")) %></details></ItemTemplate></asp:TemplateField>

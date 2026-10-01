@@ -13,7 +13,7 @@ namespace LearningSystem.Helpers
             DataTable users=DatabaseHelper.ExecuteTable(c,t,"SELECT Role FROM dbo.[User] WHERE UserID=@id AND Status='Active'",ActivityHelper.ID(user));
             if(users.Rows.Count!=1)return false;
             string role=(string)users.Rows[0]["Role"];
-            bool owner=role=="Teacher" && (int)a["TeacherID"]==user;
+            bool owner=(role=="Teacher" || role=="Admin") && (int)a["TeacherID"]==user;
             if(preview)return owner || role=="Admin";
             if(!ActivityHelper.Published(a))return false;
             if((string)a["ActivityType"]=="Discussion" && (owner || role=="Admin"))return true;
@@ -32,12 +32,15 @@ namespace LearningSystem.Helpers
             DataRow a=ActivityHelper.Find(activity,c,t);
             if((string)a["ActivityType"]!="Discussion")return false;
             string role=CurrentUserHelper.GetRole();
-            bool moderator=role=="Admin" || (role=="Teacher" && (int)a["TeacherID"]==user);
-            if(action=="Write")return !(bool)a["IsClosed"] && role!="Admin";
+            bool courseOwner=(int)a["TeacherID"]==user;
+            bool moderator=role=="Admin" || (role=="Teacher" && courseOwner);
+            // An admin only posts in discussions of courses the admin authored.
+            bool mayWrite=role!="Admin" || courseOwner;
+            if(action=="Write")return !(bool)a["IsClosed"] && mayWrite;
             DataTable posts=DatabaseHelper.ExecuteTable(c,t,"SELECT UserID FROM dbo.DiscussionPost WHERE PostID=@id AND ActivityID=@activity",new[] {new SqlParameter("@id",post),new SqlParameter("@activity",activity)});
             if(posts.Rows.Count!=1)return false;
             if(action=="Delete" && moderator)return true;
-            return !(bool)a["IsClosed"] && role!="Admin" && (int)posts.Rows[0]["UserID"]==user;
+            return !(bool)a["IsClosed"] && mayWrite && (int)posts.Rows[0]["UserID"]==user;
         }
         public static bool CanWriteDiscussion(int userID,int activityID) { using(var c=DatabaseHelper.OpenConnection())return DiscussionPermission(c,null,userID,activityID,0,"Write"); }
         private static bool PostPermission(int userID,int postID,string action)
@@ -59,7 +62,7 @@ namespace LearningSystem.Helpers
             DataTable rows=DatabaseHelper.ExecuteTable(c,t,"SELECT q.QuestionID,COUNT(o.OptionID) AS Options,SUM(CASE WHEN o.IsCorrect=1 THEN 1 ELSE 0 END) AS Correct FROM dbo.QuizQuestion q LEFT JOIN dbo.QuizOption o ON o.QuestionID=q.QuestionID WHERE q.ActivityID=@id GROUP BY q.QuestionID",ActivityHelper.ID(id));
             bool valid=rows.Rows.Count>0;
             foreach(DataRow row in rows.Rows) if((int)row["Options"]<2 || (int)row["Options"]>6 || (int)row["Correct"]!=1)valid=false;
-            return new ValidationResult {IsValid=valid,Message="A published quiz needs at least one question, with 2–6 distinct options and exactly one correct option per question."};
+            return new ValidationResult {IsValid=valid,Message="A published quiz needs at least one question, with 2 to 6 distinct options and exactly one correct option per question."};
         }
         public static ValidationResult CheckDiscussion(int activityID)
         {

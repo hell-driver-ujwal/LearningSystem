@@ -47,12 +47,12 @@ namespace LearningSystem.Helpers
             else if (kind == "Activity") { source += " JOIN dbo.Topic t ON t.CourseID=c.CourseID JOIN dbo.Activity a ON a.TopicID=t.TopicID"; predicate = "a.ActivityID=@id"; }
             else if (kind != "Course") return false;
             return Convert.ToInt32(DatabaseHelper.ExecuteScalar(connection, transaction,
-                "SELECT COUNT(*) FROM " + source + " JOIN dbo.[User] u ON u.UserID=c.TeacherID WHERE " + predicate + " AND c.TeacherID=@user AND u.Role='Teacher' AND u.Status='Active'",
+                "SELECT COUNT(*) FROM " + source + " JOIN dbo.[User] u ON u.UserID=c.TeacherID WHERE " + predicate + " AND c.TeacherID=@user AND u.Role IN ('Teacher','Admin') AND u.Status='Active'",
                 new[] { new SqlParameter("@id", id), new SqlParameter("@user", userID) })) == 1;
         }
         internal static void RequireOwner(SqlConnection connection, SqlTransaction transaction, int id, string kind)
         {
-            if (CurrentUserHelper.GetRole() != "Teacher" || !Owns(connection, transaction, CurrentUserHelper.GetUserID().GetValueOrDefault(), id, kind))
+            if (!CurrentUserHelper.IsAuthor() || !Owns(connection, transaction, CurrentUserHelper.GetUserID().GetValueOrDefault(), id, kind))
                 HttpContext.Current.Response.Redirect("~/AccessDenied.aspx");
         }
         internal static void TouchCourse(SqlConnection connection, SqlTransaction transaction, int courseID)

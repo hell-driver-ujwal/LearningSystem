@@ -33,7 +33,7 @@ namespace LearningSystem.Admin
             System.Text.StringBuilder html = new System.Text.StringBuilder("<ul>");
             foreach (DataRow row in materials.Rows)
                 html.Append("<li><a href=\"").Append(ResolveUrl("~/Member/Lesson.aspx?id=" + row["MaterialID"] + "&preview=1").Replace("&", "&amp;"))
-                    .Append("\">").Append(System.Web.HttpUtility.HtmlEncode((string)row["Title"])).Append("</a> — ")
+                    .Append("\">").Append(System.Web.HttpUtility.HtmlEncode((string)row["Title"])).Append("</a>: ")
                     .Append(System.Web.HttpUtility.HtmlEncode((string)row["Status"])).Append("</li>");
             return html.Append("</ul>").ToString();
         }

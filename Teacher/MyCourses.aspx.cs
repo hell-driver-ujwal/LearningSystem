@@ -10,7 +10,7 @@ namespace LearningSystem.Teacher
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            AccessHelper.RequireRole(new[] { "Teacher" });
+            AccessHelper.RequireRole(CurrentUserHelper.AuthorRoles);
             if (!IsPostBack)
             {
                 try

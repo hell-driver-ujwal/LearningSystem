@@ -1,7 +1,6 @@
 <%@ Page Title="Manage subjects" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Subjects.aspx.cs" Inherits="LearningSystem.Admin.Subjects" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-<h1>Manage subjects</h1>
-<p>Add and maintain the subjects used by courses.</p>
+<div class="page-header"><div><h1>Subjects</h1><p class="intro">Subjects group courses in the catalogue. A subject that is used by a course cannot be deleted.</p></div></div>
 <section class="form-card" aria-label="Subject details">
 <asp:ValidationSummary ID="vsForm" runat="server" ValidationGroup="Subject" CssClass="validation-summary" />
 <asp:HiddenField ID="hfSubjectID" runat="server" />
@@ -9,7 +8,7 @@
 <asp:Label ID="lblName" runat="server" AssociatedControlID="txtName" Text="Subject name" />
 <asp:TextBox ID="txtName" runat="server" MaxLength="50" />
 <asp:RequiredFieldValidator ID="rfvName" runat="server" ControlToValidate="txtName" ValidationGroup="Subject" ErrorMessage="Enter a subject name." Display="Dynamic" />
-<asp:RegularExpressionValidator ID="revName" runat="server" ControlToValidate="txtName" ValidationGroup="Subject" ValidationExpression="^[\s\S]{2,50}$" ErrorMessage="Use 2–50 characters for the name." Display="Dynamic" />
+<asp:RegularExpressionValidator ID="revName" runat="server" ControlToValidate="txtName" ValidationGroup="Subject" ValidationExpression="^[\s\S]{2,50}$" ErrorMessage="Use 2 to 50 characters for the name." Display="Dynamic" />
 </div>
 <div class="field">
 <asp:Label ID="lblDescription" runat="server" AssociatedControlID="txtDescription" Text="Description (optional)" />

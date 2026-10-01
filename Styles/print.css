@@ -1,5 +1,5 @@
-/* Print only the currently authorized certificate; eligibility is checked on each page request. */
-@page { size: landscape; margin: 20mm; }
-body, .page-shell { background: white; color: black; margin: 0; padding: 0; max-width: none; }
-.site-header, .site-footer, .breadcrumb, .skip-link, .message, .no-print { display: none !important; }
-.certificate { border: 3px solid #333; text-align: center; padding: 30px; box-shadow: none; break-inside: avoid; }
+/* Print only the certificate itself; eligibility is checked again on every page request. */
+@page { size: A4 landscape; margin: 12mm; }
+body, .page-shell { background: #fff; color: #000; margin: 0; padding: 0; max-width: none; }
+.site-header, .workspace-bar, .site-footer, .breadcrumb, .skip-link, .message, .no-print { display: none !important; }
+.certificate { box-shadow: none; margin: 0 auto; break-inside: avoid; -webkit-print-color-adjust: exact; print-color-adjust: exact; }

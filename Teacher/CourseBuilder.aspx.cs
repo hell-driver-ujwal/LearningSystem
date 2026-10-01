@@ -12,7 +12,7 @@ namespace LearningSystem.Teacher
         private int EditingTopic { get { return (int)(ViewState["EditingTopic"] ?? 0); } set { ViewState["EditingTopic"] = value; } }
         protected void Page_Load(object sender, EventArgs e)
         {
-            AccessHelper.RequireRole(new[] { "Teacher" });
+            AccessHelper.RequireRole(CurrentUserHelper.AuthorRoles);
             txtTitle.Text = txtTitle.Text.Trim(); txtOrder.Text = txtOrder.Text.Trim();
             try
             {
@@ -25,7 +25,7 @@ namespace LearningSystem.Teacher
                 {
                     ViewState["SaveToken"] = CurrentUserHelper.CreateEditToken();
                     DataRow course = DatabaseHelper.ExecuteTable("SELECT Title,Status FROM dbo.Course WHERE CourseID=@id", IdParameters(courseID)).Rows[0];
-                    litCourse.Text = course["Title"] + " — " + course["Status"];
+                    litCourse.Text = (string)course["Title"]; Title = "Course builder: " + course["Title"];
                     txtOrder.Text = Convert.ToString(DatabaseHelper.ExecuteScalar("SELECT ISNULL(MAX(SortOrder),0)+1 FROM dbo.Topic WHERE CourseID=@id", IdParameters(courseID)));
                     DataTable topics = DatabaseHelper.ExecuteTable("SELECT TopicID,Title,SortOrder FROM dbo.Topic WHERE CourseID=@id ORDER BY SortOrder,TopicID", IdParameters(courseID));
                     lblEmpty.Visible = topics.Rows.Count == 0; rptTopics.DataSource = topics; rptTopics.DataBind();

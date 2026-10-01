@@ -50,7 +50,7 @@ namespace LearningSystem.Helpers
             if ((string)users.Rows[0]["Role"] == "Admin") return Result(false, "Admin accounts cannot be changed or deleted.");
             if (Convert.ToInt32(DatabaseHelper.ExecuteScalar(connection, transaction,
                 "SELECT COUNT(*) FROM dbo.Course WITH (HOLDLOCK) WHERE TeacherID=@id", ID(userID))) > 0)
-                return Result(false, "This teacher owns courses and cannot be deleted.");
+                return Result(false, "This lecturer owns courses and cannot be deleted. Deactivate the account instead.");
             if (Convert.ToInt32(DatabaseHelper.ExecuteScalar(connection, transaction,
                 "SELECT COUNT(*) FROM dbo.Payment WITH (HOLDLOCK) WHERE LearnerID=@id", ID(userID))) > 0)
                 return Result(false, "Payment history must be retained. Deactivate this user instead.");

@@ -155,13 +155,37 @@ namespace LearningSystem.Helpers
                 answers.Add(answer.itemId,answer.value);
             }
             int correct=0;
+            var positions=new HashSet<int>();
             foreach(DataRow item in items.Rows)
             {
                 string value=answers[(int)item["ItemID"]];
-                if(template=="Scramble")
+                if(template=="Flashcards")
+                {
+                    // Flashcards are self-rated, like a self-assessment: "known" or "learning".
+                    if(value!="known" && value!="learning")throw new InvalidOperationException("Rate every flashcard as known or still learning.");
+                    if(value=="known")correct++;
+                }
+                else if(template=="FillBlank")
+                {
+                    if(value.Trim().Length>100)throw new InvalidOperationException("Each answer must be at most 100 characters.");
+                    if(Normalise(value)==Normalise(Convert.ToString(item["ItemText"])))correct++;
+                }
+                else if(template=="TrueFalse")
+                {
+                    // "Skip" is sent when the timer runs out before an answer is chosen.
+                    if(value!="True" && value!="False" && value!="Skip")throw new InvalidOperationException("Answer each statement with True or False.");
+                    if(value==Convert.ToString(item["ItemText"]))correct++;
+                }
+                else if(template=="Sequence")
+                {
+                    int position;
+                    if(!Int32.TryParse(value,NumberStyles.None,CultureInfo.InvariantCulture,out position) || position<1 || position>items.Rows.Count || !positions.Add(position))throw new InvalidOperationException("Give every step a different position.");
+                    if(position==Position(item["MatchText"]))correct++;
+                }
+                else if(template=="Scramble")
                 {
                     value=value.Trim();
-                    if(value.Length>0 && !System.Text.RegularExpressions.Regex.IsMatch(value,"^[A-Za-z]{3,15}$"))throw new InvalidOperationException("Scramble answers must contain 3–15 letters only.");
+                    if(value.Length>0 && !System.Text.RegularExpressions.Regex.IsMatch(value,"^[A-Za-z]{3,15}$"))throw new InvalidOperationException("Scramble answers must contain 3 to 15 letters only.");
                     if(String.Equals(value,Convert.ToString(item["ItemText"]).Trim(),StringComparison.OrdinalIgnoreCase))correct++;
                 }
                 else
@@ -181,6 +205,11 @@ namespace LearningSystem.Helpers
                 }
             }
             return Math.Round(correct*100m/items.Rows.Count,2,MidpointRounding.AwayFromZero);
+        }
+        // Compare typed answers fairly: ignore case, outer spaces and repeated inner spaces.
+        private static string Normalise(string value)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(value.Trim(),"\\s+"," ").ToLowerInvariant();
         }
         internal static GameRun Submit(int id,string token,GameResult result,bool preview)
         {
@@ -206,7 +235,17 @@ namespace LearningSystem.Helpers
         internal static string ClientData(int id)
         {
             DataRow a=ActivityHelper.Find(id);var items=new List<object>();var groups=new List<object>();
-            foreach(DataRow row in Items(id).Rows)items.Add(new {id=(int)row["ItemID"],text=(string)row["ItemText"],match=Convert.ToString(row["MatchText"])});
+            string template=(string)a["GameTemplate"];
+            DataTable rows=Items(id);
+            // Put in order: list steps alphabetically and never send the positions, so the page does not reveal the order.
+            if(template=="Sequence")rows.DefaultView.Sort="ItemText";
+            foreach(DataRowView view in rows.DefaultView)
+            {
+                DataRow row=view.Row;string text=(string)row["ItemText"],match=Convert.ToString(row["MatchText"]);
+                if(template=="Sequence")match="";
+                if(template=="FillBlank")text=""; // the typed answer is checked on the server
+                items.Add(new {id=(int)row["ItemID"],text=text,match=match});
+            }
             foreach(DataRow row in Groups(id).Rows)groups.Add(new {id=(int)row["GroupID"],name=(string)row["GroupName"]});
             return new JavaScriptSerializer().Serialize(new {template=(string)a["GameTemplate"],items=items,groups=groups});
         }

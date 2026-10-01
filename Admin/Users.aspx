@@ -1,20 +1,19 @@
 <%@ Page Title="Manage users" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Users.aspx.cs" Inherits="LearningSystem.Admin.Users" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-<h1>Manage users</h1>
-<p><a href="UserEdit.aspx" class="button">Create learner or teacher</a></p>
+<div class="page-header"><div><h1>Users</h1><p class="intro">Search, edit, deactivate or unlock learner and lecturer accounts.</p></div><a href="UserEdit.aspx" class="button">Add a learner or lecturer</a></div>
 <section class="filter-bar" aria-label="Filter users">
 <asp:ValidationSummary ID="vsSearch" runat="server" ValidationGroup="Search" CssClass="validation-summary" />
 <div class="field"><asp:Label ID="lblSearch" runat="server" AssociatedControlID="txtSearch" Text="Name or email" />
 <asp:TextBox ID="txtSearch" runat="server" TextMode="Search" MaxLength="50" />
 <asp:RegularExpressionValidator ID="revSearch" runat="server" ControlToValidate="txtSearch" ValidationGroup="Search" ValidationExpression="^[\s\S]{0,50}$" ErrorMessage="Search must be at most 50 characters." /></div>
 <div class="field"><asp:Label ID="lblRole" runat="server" AssociatedControlID="ddlRole" Text="Role" />
-<asp:DropDownList ID="ddlRole" runat="server"><asp:ListItem Value="">All roles</asp:ListItem><asp:ListItem>Learner</asp:ListItem><asp:ListItem>Teacher</asp:ListItem><asp:ListItem>Admin</asp:ListItem></asp:DropDownList></div>
+<asp:DropDownList ID="ddlRole" runat="server"><asp:ListItem Value="">All roles</asp:ListItem><asp:ListItem>Learner</asp:ListItem><asp:ListItem Value="Teacher">Lecturer</asp:ListItem><asp:ListItem>Admin</asp:ListItem></asp:DropDownList></div>
 <div class="field"><asp:Label ID="lblStatus" runat="server" AssociatedControlID="ddlStatus" Text="Status" />
 <asp:DropDownList ID="ddlStatus" runat="server"><asp:ListItem Value="">All statuses</asp:ListItem><asp:ListItem>Active</asp:ListItem><asp:ListItem>Deactivated</asp:ListItem><asp:ListItem>Pending</asp:ListItem><asp:ListItem>Rejected</asp:ListItem></asp:DropDownList></div>
 <asp:Button ID="btnSearch" runat="server" Text="Apply filters" ValidationGroup="Search" OnClick="btnSearch_Click" />
 <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false" OnClick="btnCancel_Click" CssClass="secondary" />
 </section>
-<p>Admin account actions are disabled. Review pending teachers on the <a href="TeacherApplications.aspx">applications page</a>.</p>
+<p>Admin account actions are disabled. Review new lecturers on the <a href="TeacherApplications.aspx">applications page</a>.</p>
 <div class="table-scroll" role="region" aria-label="Users" tabindex="0"><asp:GridView ID="gvUsers" runat="server" AutoGenerateColumns="false" DataKeyNames="UserID" Caption="Users" UseAccessibleHeader="true" EmptyDataText="No users match these filters." AllowPaging="true" PageSize="10" OnPageIndexChanging="gvUsers_PageIndexChanging" OnRowCommand="gvUsers_RowCommand">
 <Columns>
 <asp:BoundField DataField="FullName" HeaderText="Name" HtmlEncode="true" />

@@ -7,7 +7,43 @@ namespace LearningSystem.Helpers
 {
     public static partial class GameHelper
     {
-        internal static bool IsTemplate(string value) { return value=="Matching" || value=="Memory" || value=="Scramble" || value=="Sort"; }
+        internal static readonly string[] Templates = { "Matching", "Memory", "Scramble", "Sort", "Flashcards", "FillBlank", "TrueFalse", "Sequence" };
+        internal static bool IsTemplate(string value) { return Array.IndexOf(Templates, value) >= 0; }
+        // Friendly names shown to learners and lecturers; the database keeps the short template value.
+        internal static string TemplateName(string value)
+        {
+            switch (value)
+            {
+                case "Scramble": return "Word scramble";
+                case "Sort": return "Sort into groups";
+                case "FillBlank": return "Fill in the blank";
+                case "TrueFalse": return "True or false speed round";
+                case "Sequence": return "Put in order";
+                default: return value;
+            }
+        }
+        // Largest number of items each template can hold, so a game stays playable on a phone.
+        internal static int MaxItems(string template)
+        {
+            switch (template)
+            {
+                case "Memory": return 12;
+                case "Sequence": return 10;
+                case "FillBlank": return 15;
+                case "TrueFalse": return 20;
+                default: return 30;
+            }
+        }
+        internal static bool IsBlankSentence(string sentence)
+        {
+            int first = sentence.IndexOf("___", StringComparison.Ordinal);
+            return first >= 0 && sentence.IndexOf("___", first + 3, StringComparison.Ordinal) < 0;
+        }
+        internal static int Position(object value)
+        {
+            int position;
+            return Int32.TryParse(Convert.ToString(value), out position) ? position : 0;
+        }
         internal static DataTable Items(int id,SqlConnection c=null,SqlTransaction t=null)
         {
             const string sql="SELECT i.ItemID,i.ItemText,i.MatchText,i.GroupID,g.GroupName FROM dbo.GameItem i LEFT JOIN dbo.GameGroup g ON g.GroupID=i.GroupID WHERE i.ActivityID=@id ORDER BY i.ItemID";
@@ -67,15 +103,22 @@ namespace LearningSystem.Helpers
                 else
                 {
                     ActivityHelper.CheckText(text,1,100,"Item text");
-                    if(template=="Scramble" && !Regex.IsMatch(text,"^[A-Za-z]{3,15}$"))throw new InvalidOperationException("Scramble words must contain 3–15 letters (A–Z) only.");
-                    if(template!="Sort")ActivityHelper.CheckText(match,1,200,template=="Scramble" ? "Hint" : "Match text");
+                    if(template=="Scramble" && !Regex.IsMatch(text,"^[A-Za-z]{3,15}$"))throw new InvalidOperationException("Scramble words must contain 3 to 15 letters (A to Z) only.");
+                    if(template!="Sort")ActivityHelper.CheckText(match,1,200,template=="Scramble" ? "Hint" : template=="FillBlank" || template=="TrueFalse" ? "Sentence" : template=="Sequence" ? "Position" : "Match text");
                     if(template=="Sort" && Convert.ToInt32(DatabaseHelper.ExecuteScalar(c,t,"SELECT COUNT(*) FROM dbo.GameGroup WHERE GroupID=@group AND ActivityID=@id",new[] {new SqlParameter("@group",group),new SqlParameter("@id",activity)}))!=1)throw new InvalidOperationException("Choose a group belonging to this game.");
+                    if(template=="FillBlank" && !IsBlankSentence(match))throw new InvalidOperationException("The sentence must contain exactly one blank written as three underscores: ___");
+                    if(template=="TrueFalse" && text!="True" && text!="False")throw new InvalidOperationException("Choose True or False as the correct answer.");
+                    if(template=="Sequence" && (Position(match)<1 || Position(match)>MaxItems(template)))throw new InvalidOperationException("The position must be a whole number from 1 to "+MaxItems(template)+".");
+                    // True/False answers repeat by design, and two sentences may share an answer word.
+                    bool distinctText=template!="TrueFalse" && template!="FillBlank";
+                    bool distinctMatch=template!="Scramble" && template!="Sort" && template!="Flashcards";
                     foreach(DataRow other in items.Rows)
                     {
                         if((int)other["ItemID"]==item)continue;
-                        if(String.Equals(text,(string)other["ItemText"],StringComparison.OrdinalIgnoreCase) || ((template=="Matching" || template=="Memory") && String.Equals(match,Convert.ToString(other["MatchText"]),StringComparison.OrdinalIgnoreCase)))throw new InvalidOperationException("Item text and each pair's match text must be distinct within this game.");
+                        if(distinctText && String.Equals(text,(string)other["ItemText"],StringComparison.OrdinalIgnoreCase))throw new InvalidOperationException("Each item must be different from the others in this game.");
+                        if(distinctMatch && String.Equals(match,Convert.ToString(other["MatchText"]),StringComparison.OrdinalIgnoreCase))throw new InvalidOperationException(template=="Sequence" ? "Each step needs its own position." : "Each match, sentence or statement must be different from the others in this game.");
                     }
-                    if(template=="Memory" && item==0 && items.Rows.Count>=12)throw new InvalidOperationException("Memory supports at most 12 pairs.");
+                    if(item==0 && items.Rows.Count>=MaxItems(template))throw new InvalidOperationException(TemplateName(template)+" supports at most "+MaxItems(template)+" items.");
                     DatabaseHelper.ExecuteNonQuery(c,t,item==0 ? "INSERT dbo.GameItem(ActivityID,ItemText,MatchText,GroupID) VALUES(@id,@text,@match,@group)" : "UPDATE dbo.GameItem SET ItemText=@text,MatchText=@match,GroupID=@group WHERE ItemID=@item AND ActivityID=@id",new[] {new SqlParameter("@id",activity),new SqlParameter("@item",item),new SqlParameter("@text",text),new SqlParameter("@match",template=="Sort" ? (object)DBNull.Value : match),new SqlParameter("@group",template=="Sort" ? (object)group : DBNull.Value)});
                 }
                 if((string)a["Status"]=="Published")CheckPublished(c,t,activity);
@@ -130,7 +173,9 @@ namespace LearningSystem.Helpers
             valid=valid && GameHelper.IsTemplate(template);
             if(template=="Matching")valid=valid && items.Rows.Count>=4;
             if(template=="Memory")valid=valid && items.Rows.Count>=4 && items.Rows.Count<=12;
-            if(template=="Scramble")valid=valid && items.Rows.Count>=3;
+            if(template=="Scramble" || template=="FillBlank" || template=="Sequence")valid=valid && items.Rows.Count>=3;
+            if(template=="Flashcards" || template=="TrueFalse")valid=valid && items.Rows.Count>=4;
+            if(valid)valid=items.Rows.Count<=GameHelper.MaxItems(template);
             if(template=="Sort")
             {
                 valid=valid && groups.Rows.Count>=2 && groups.Rows.Count<=4;
@@ -140,13 +185,18 @@ namespace LearningSystem.Helpers
             foreach(DataRow item in items.Rows)
             {
                 string text=Convert.ToString(item["ItemText"]).Trim(),match=Convert.ToString(item["MatchText"]).Trim();
-                if(text.Length<1 || text.Length>100 || !texts.Add(text))valid=false;
+                bool distinctText=template!="TrueFalse" && template!="FillBlank";
+                if(text.Length<1 || text.Length>100 || (distinctText && !texts.Add(text)))valid=false;
                 if(template=="Sort") {if(item.IsNull("GroupID") || groups.Select("GroupID="+item["GroupID"]).Length!=1)valid=false;}
                 else if(match.Length<1 || match.Length>200)valid=false;
-                if((template=="Matching" || template=="Memory") && !matches.Add(match))valid=false;
+                if((template=="Matching" || template=="Memory" || template=="FillBlank" || template=="TrueFalse" || template=="Sequence") && !matches.Add(match))valid=false;
                 if(template=="Scramble" && !Regex.IsMatch(text,"^[A-Za-z]{3,15}$"))valid=false;
+                if(template=="FillBlank" && !GameHelper.IsBlankSentence(match))valid=false;
+                if(template=="TrueFalse" && text!="True" && text!="False")valid=false;
+                // Sequence positions must be exactly 1, 2, 3 ... with no gaps.
+                if(template=="Sequence" && (GameHelper.Position(match)<1 || GameHelper.Position(match)>items.Rows.Count))valid=false;
             }
-            return new ValidationResult {IsValid=valid,Message="Publish needs valid distinct items: Matching at least 4 pairs; Memory 4–12 pairs; Scramble at least 3 words with hints; Sort 2–4 groups with at least 2 items in each."};
+            return new ValidationResult {IsValid=valid,Message="Publish needs valid, distinct items: Matching at least 4 pairs; Memory 4 to 12 pairs; Word scramble at least 3 words with hints; Sort 2 to 4 groups with at least 2 items in each; Flashcards and True or false at least 4 items; Fill in the blank and Put in order at least 3 items, with positions numbered 1, 2, 3 without gaps."};
         }
     }
 }

@@ -14,7 +14,7 @@ namespace LearningSystem.Teacher
         private int EditingGroup {get{return (int)(ViewState["GroupID"]??0);}set{ViewState["GroupID"]=value;}}
         protected void Page_Load(object sender,EventArgs e)
         {
-            AccessHelper.RequireRole(new[] {"Teacher"});bool edit=Request.QueryString["id"]!=null;
+            AccessHelper.RequireRole(CurrentUserHelper.AuthorRoles);bool edit=Request.QueryString["id"]!=null;
             if(edit && Request.QueryString["topicId"]!=null){Response.Redirect("~/AccessDenied.aspx");return;}
             DataRow activity=null;
             if(edit)
@@ -32,8 +32,8 @@ namespace LearningSystem.Teacher
             pnlItems.Visible=edit;pnlGroups.Visible=edit && template=="Sort";pnlResults.Visible=edit;btnDelete.Visible=edit;lnkPreview.Visible=edit;
             lnkPreview.NavigateUrl="~/Member/PlayGame.aspx?id="+activityID+"&preview=1";
             pnlMatch.Visible=template!="Sort";pnlGroupChoice.Visible=template=="Sort";
-            lblItem.Text=template=="Scramble" ? "Word (3–15 letters)" : "Item / first side (1–100 characters)";
-            lblMatch.Text=template=="Scramble" ? "Hint (1–200 characters)" : "Matching second side (1–200 characters)";
+            pnlItemText.Visible=template!="TrueFalse";pnlTruth.Visible=template=="TrueFalse";
+            SetItemLabels();
             if(!IsPostBack)
             {
                 ViewState["SaveToken"]=CurrentUserHelper.CreateEditToken();
@@ -51,6 +51,21 @@ namespace LearningSystem.Teacher
                 else txtOrder.Text=Convert.ToString(DatabaseHelper.ExecuteScalar("SELECT ISNULL(MAX(SortOrder),0)+1 FROM dbo.Activity WHERE TopicID=@id",ActivityHelper.ID(topicID)));
             }
         }
+        // Each game type stores its two sides differently, so the field labels change with the template.
+        private void SetItemLabels()
+        {
+            switch(template)
+            {
+                case "Scramble": lblItem.Text="Word (3 to 15 letters, A to Z only)";lblMatch.Text="Hint shown to the learner (1 to 200 characters)";break;
+                case "Flashcards": lblItem.Text="Front of the card (1 to 100 characters)";lblMatch.Text="Back of the card (1 to 200 characters)";break;
+                case "FillBlank": lblItem.Text="Missing word or phrase (1 to 100 characters)";lblMatch.Text="Sentence with one blank written as ___ (1 to 200 characters)";break;
+                case "TrueFalse": lblMatch.Text="Statement (1 to 200 characters)";break;
+                case "Sequence": lblItem.Text="Step text (1 to 100 characters)";lblMatch.Text="Position in the correct order (1, 2, 3 ...)";break;
+                case "Sort": lblItem.Text="Item to sort (1 to 100 characters)";break;
+                default: lblItem.Text="First side of the pair (1 to 100 characters)";lblMatch.Text="Matching second side (1 to 200 characters)";break;
+            }
+        }
+        private string ItemText(){return template=="TrueFalse" ? ddlTruth.SelectedValue : txtItem.Text.Trim();}
         private bool FormAvailable()
         {
             if(CurrentUserHelper.CanSaveEdit(ViewState["SaveToken"]))return true;
@@ -75,17 +90,20 @@ namespace LearningSystem.Teacher
         }
         protected void ValidateItem(object sender,ServerValidateEventArgs e)
         {
-            string text=txtItem.Text.Trim(),match=txtMatch.Text.Trim();int group;
+            string text=ItemText(),match=txtMatch.Text.Trim();int group;
             e.IsValid=text.Length>=1 && text.Length<=100;
             if(template=="Scramble")e.IsValid=e.IsValid && System.Text.RegularExpressions.Regex.IsMatch(text,"^[A-Za-z]{3,15}$");
             if(template=="Sort")e.IsValid=e.IsValid && Int32.TryParse(ddlGroup.SelectedValue,out group) && group>0;
             else e.IsValid=e.IsValid && match.Length>=1 && match.Length<=200;
+            if(template=="FillBlank")e.IsValid=e.IsValid && GameHelper.IsBlankSentence(match);
+            if(template=="Sequence")e.IsValid=e.IsValid && GameHelper.Position(match)>=1 && GameHelper.Position(match)<=GameHelper.MaxItems(template);
+            if(!e.IsValid)cvItem.ErrorMessage=template=="FillBlank" ? "Write the sentence with exactly one blank as three underscores: ___" : template=="Sequence" ? "Enter the step's position as a whole number from 1 to 10." : template=="Scramble" ? "Scramble words must be 3 to 15 letters with no spaces." : "Fill in both fields within the character limits shown.";
         }
         protected void SaveItem(object sender,EventArgs e)
         {
             if(!Page.IsValid)return;
             if(!FormAvailable())return;
-            try{int group;Int32.TryParse(ddlGroup.SelectedValue,out group);GameHelper.SaveItem(activityID,EditingItem,txtItem.Text.Trim(),txtMatch.Text.Trim(),group,false);Saved("Game item saved.");}
+            try{int group;Int32.TryParse(ddlGroup.SelectedValue,out group);GameHelper.SaveItem(activityID,EditingItem,ItemText(),txtMatch.Text.Trim(),group,false);Saved("Game item saved.");}
             catch(UnauthorizedAccessException){Response.Redirect("~/AccessDenied.aspx");}
             catch(InvalidOperationException ex){MessageHelper.SetError(ex.Message);}
             catch(SqlException){MessageHelper.SetError("The item could not be saved. Please try again.");}
@@ -110,7 +128,7 @@ namespace LearningSystem.Teacher
                 if(ContentLockHelper.HasAttempts(activityID)){MessageHelper.SetError("Game items are locked after attempts.");return;}
                 if(e.CommandName=="EditItem")
                 {
-                    EditingItem=id;txtItem.Text=(string)rows[0]["ItemText"];txtMatch.Text=Convert.ToString(rows[0]["MatchText"]);
+                    EditingItem=id;txtItem.Text=(string)rows[0]["ItemText"];txtMatch.Text=Convert.ToString(rows[0]["MatchText"]);if(template=="TrueFalse")ddlTruth.SelectedValue=(string)rows[0]["ItemText"];
                     if(!rows[0].IsNull("GroupID"))ddlGroup.SelectedValue=rows[0]["GroupID"].ToString();
                 }
                 else if(e.CommandName=="DeleteItem"){GameHelper.SaveItem(activityID,id,"","",0,true);Saved("Item deleted.");}

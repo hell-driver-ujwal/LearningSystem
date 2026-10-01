@@ -12,6 +12,7 @@ namespace LearningSystem.Member
         protected global::System.Web.UI.WebControls.Literal litAverage;
         protected global::System.Web.UI.WebControls.Literal litLevel;
         protected global::System.Web.UI.WebControls.Literal litFeedback;
+        protected global::System.Web.UI.WebControls.Panel pnlResponses;
         protected global::System.Web.UI.WebControls.GridView gvResponses;
         protected global::System.Web.UI.WebControls.ValidationSummary vsRatings;
         protected global::System.Web.UI.WebControls.CustomValidator cvRatings;

@@ -19,10 +19,10 @@ namespace LearningSystem
             if (context.Request.HttpMethod != "GET" && context.Request.HttpMethod != "HEAD") { Fail(context, 405); return; }
             bool material = context.Request.QueryString["materialId"] != null;
             int id;
-            string previewValue = context.Request.QueryString["preview"], downloadValue = context.Request.QueryString["download"];
+            string previewValue = context.Request.QueryString["preview"], downloadValue = context.Request.QueryString["download"], captionsValue = context.Request.QueryString["captions"];
             if (material == (context.Request.QueryString["courseId"] != null) || !Int32.TryParse(context.Request.QueryString[material ? "materialId" : "courseId"], out id) || id < 1
-                || (previewValue != null && previewValue != "1") || (downloadValue != null && downloadValue != "1")) { Fail(context, 404); return; }
-            bool preview = previewValue == "1", download = downloadValue == "1";
+                || (previewValue != null && previewValue != "1") || (downloadValue != null && downloadValue != "1") || (captionsValue != null && captionsValue != "1")) { Fail(context, 404); return; }
+            bool preview = previewValue == "1", download = downloadValue == "1", captions = captionsValue == "1";
             try
             {
                 string path, type;
@@ -47,8 +47,10 @@ namespace LearningSystem
                     }
                     path = Convert.ToString(row["CoverImagePath"]); type = "Image";
                 }
-                if (String.IsNullOrEmpty(path) || (download && type != "PDF")) { Fail(context, 404); return; }
+                if (String.IsNullOrEmpty(path) || (download && type != "PDF") || (captions && type != "Video")) { Fail(context, 404); return; }
                 string physical = UploadHelper.GetValidatedPath(path);
+                // Captions sit beside the video with the same GUID name and a .vtt extension.
+                if (captions) { physical = Path.ChangeExtension(physical, ".vtt"); type = "Captions"; }
                 if (!File.Exists(physical)) { Fail(context, 404); return; }
                 string mime = Mime(type, Path.GetExtension(physical).ToLowerInvariant());
                 if (mime == null) { Fail(context, 404); return; }
@@ -72,6 +74,7 @@ namespace LearningSystem
             if (type == "PDF" && extension == ".pdf") return "application/pdf";
             if (type == "Video" && extension == ".mp4") return "video/mp4";
             if (type == "Audio" && extension == ".mp3") return "audio/mpeg";
+            if (type == "Captions" && extension == ".vtt") return "text/vtt";
             return null;
         }
         private static void SendFile(HttpContext context, string path)

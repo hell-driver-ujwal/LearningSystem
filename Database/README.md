@@ -1,127 +1,52 @@
-# Phase 1 database and demo data
+# Inkwell database and demo data
 
-## Run from a Visual Studio Developer Command Prompt (cmd.exe)
+`CreateDatabase.sql` rebuilds the whole `LearningSystem` database from scratch: it drops any existing copy, creates all 25 tables with their keys, checks and indexes, inserts the demo data, runs integrity checks and finally detaches the database so the web application can attach `App_Data\LearningSystem.mdf`.
 
-Prerequisites: SQL Server LocalDB (MSSQLLocalDB), sqlcmd, and an existing writable App_Data directory. Stop IIS Express and close database connections in Visual Studio/SSMS before rebuilding.
+**Running it destroys the existing database and all of its data.**
 
-**This command destroys the LearningSystem database and replaces all of its data.** It also replaces a database attached under another name when its primary file is the specified LearningSystem.mdf.
+## How to run it
 
-From the repository root:
+Prerequisites: SQL Server LocalDB (`MSSQLLocalDB`) and `sqlcmd`. Stop the website (IIS Express) and close any SSMS connections first.
+
+From the repository root in a Developer Command Prompt (cmd.exe):
 
 ```bat
 if not exist App_Data mkdir App_Data
-sqlcmd -S "(LocalDB)\MSSQLLocalDB" -E -b -l 15 -i Database\CreateDatabase.sql -v DataPath="%CD%\App_Data"
+sqlcmd -S "(LocalDB)\MSSQLLocalDB" -E -b -l 30 -i Database\CreateDatabase.sql -v DataPath="%CD%\App_Data"
 ```
 
-Run the same sqlcmd command a second time. Each successful run should return exit code 0, print "Phase 1 seed checks passed", and finish with "LearningSystem detached successfully." Use `echo %ERRORLEVEL%` immediately after each run to inspect the exit code.
-
-DataPath is the **absolute directory**, not the MDF filename. A trailing backslash is optional. It is a trusted sqlcmd substitution: do not use an untrusted path or a path containing an apostrophe. Keep both generated files together: LearningSystem.mdf and LearningSystem_log.ldf. Neither belongs in Git.
-
-For PowerShell with this repository's current path, use stop-parsing so sqlcmd receives the quotes around the path containing spaces:
+In PowerShell, call cmd so the path with spaces is passed correctly:
 
 ```powershell
-sqlcmd --% -S "(LocalDB)\MSSQLLocalDB" -E -b -l 15 -i Database/CreateDatabase.sql -v DataPath="C:\Users\Ujwal Chhetri\source\repos\LearningSystem\App_Data"
+cmd /c 'sqlcmd -S "(LocalDB)\MSSQLLocalDB" -E -b -l 30 -i Database\CreateDatabase.sql -v DataPath="%CD%\App_Data"'
 ```
 
-Change the literal path when using another checkout. The cmd.exe command above uses the current directory automatically.
+A successful run prints a summary row (12 users, 19 courses, 72 materials, 73 activities) followed by `LearningSystem detached successfully.` You can run it again at any time to reset the demo.
 
-The script first uses master, drops any existing target database, then checks for files left detached by the previous run. It attaches those files and drops that database so SQL Server removes its own files, then creates fresh files. It creates all tables, constraints, indexes and demo records in a transaction. Seed checks run before commit. Finally it returns to master and detaches the database. It never uses xp_cmdshell or shell file deletion.
+If LocalDB reports that the instance does not exist, create and start it once:
 
-The database inherits the instance's collation and checks that it is case-insensitive; it does not invent a project-specific collation. The output files are ready for the Phase 2 connection string:
-
-```text
-Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\LearningSystem.mdf;Integrated Security=True
+```bat
+sqllocaldb create MSSQLLocalDB -s
 ```
-
-Phase 1 does not change Web.config or implement login.
 
 ## Demo accounts
 
-All accounts use **Password123**. These are fictional demo identities and reserved example.test email addresses.
+The demo log-ins (one administrator, six lecturers, one pending applicant and four learners) are listed in `docs/DEMO_CREDENTIALS.md`, which is for the team only.
 
-| ID | Name | Email | Role | Status |
-| --- | --- | --- | --- | --- |
-| 1 | Demo Administrator | admin@example.test | Admin | Active |
-| 2 | Asha Sharma | asha.teacher@example.test | Teacher | Active |
-| 3 | Daniel Tan | daniel.teacher@example.test | Teacher | Active |
-| 4 | Maya Rai | maya.teacher@example.test | Teacher | Active |
-| 5 | Ravi Thapa | ravi.pending@example.test | Teacher | Pending |
-| 6 | Sara Lim | sara.rejected@example.test | Teacher | Rejected |
-| 7 | Anita Karki | anita.learner@example.test | Learner | Active |
-| 8 | Ben Lee | ben.learner@example.test | Learner | Active |
-| 9 | Chandra Gurung | chandra.learner@example.test | Learner | Active |
-| 10 | Dina Wong | dina.learner@example.test | Learner | Active |
-| 11 | Eshan Shah | eshan.learner@example.test | Learner | Active |
-| 12 | Farah Ali | farah.learner@example.test | Learner | Deactivated |
+Password hashes use PBKDF2 (`Rfc2898DeriveBytes`, SHA-256, 100,000 iterations, a random 16-byte salt per account, 32-byte hash) stored as `PBKDF2$100000$<salt>$<hash>`. `GenerateDemoHashes.ps1` produces hashes in exactly this format if you need new ones.
 
-Pending, Rejected and Deactivated accounts are data for later login-blocking tests; the Phase 1 starter application has no login implementation yet.
+## What the demo data contains
 
-## Password hash generation
+- **8 subjects:** Programming, Cybersecurity, Artificial Intelligence, Mathematics and Data, Business, Science, English and Communication, Study Skills.
+- **19 courses:** 14 written by the six lecturers (2 or 3 each) and 4 authored by the admin. "Introduction to Ecosystems" is a draft. Three courses are paid (NPR 299 to 499).
+- **72 lesson materials:** formatted readings, diagrams, PDF handouts, narrated MP3 audio, captioned MP4 video and interactive code labs.
+- **73 activities:** quizzes, self-assessments, discussions, branching scenarios and all eight game types (Matching, Memory, Word scramble, Sort, Flashcards, Fill in the blank, True or false, Put in order).
+- **Learner journeys:** enrolments, completed lessons, quiz and game attempts (including retakes), self-assessments, scenario outcomes, discussion posts with lecturer replies, bookmarks and two completed sandbox payments.
+- Activity dates are relative to the day the script is run, so dashboards and learning streaks look current.
+- Reviews and page analytics start empty on purpose: they are filled by real use, not invented.
 
-The committed seed hashes were generated by running:
+Media files live in `Uploads/` with GUID file names that match the `FilePath` and `CoverImagePath` values in the script. Keep the folder with the script when copying the project.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File Database/GenerateDemoHashes.ps1
-```
+## Integrity checks
 
-The small script uses .NET Rfc2898DeriveBytes with SHA256, 100,000 iterations, a cryptographically random 16-byte salt for each account and a 32-byte derived hash. It prints PBKDF2$100000$<base64 salt>$<base64 hash>. Each execution produces new random salts. It does not edit the SQL file. All 12 committed hashes were independently recomputed from their stored salts and verified against Password123. There is no login code to cross-check until Phase 2.
-
-## Educational seed coverage
-
-- IT: Relational Databases for Beginners and Digital Safety Essentials.
-- Business: Starting a Small Business.
-- Science: Cells and Scientific Enquiry, plus draft Introduction to Ecosystems.
-- Four published courses each have two topics and a mix of Text and Image materials. There are 13 materials total, including a draft lesson.
-- Four original educational PNG diagrams are committed in Uploads/Images with GUID filenames and meaningful database alt text. No internet connection is needed. The SQL rebuild preserves these assets; copy the whole repository when sharing. The script does not regenerate deleted image files.
-- Eight published activities: one quiz, one self-assessment, one discussion, Matching, Memory, Scramble, Sort, and one scenario.
-- The quiz has three questions with three options each. The self-assessment has three statements. Games have four Matching pairs, four Memory pairs, three Scramble words with hints, and two Sort groups with two items each.
-- The scenario has five steps, five choices and three reachable endings: Best, Acceptable and Poor.
-- Thirteen enrolments, nine material completions, four submitted attempts, six quiz answers, six self-assessment responses and four discussion posts (including two replies).
-- Quiz examples use all-correct (100%) and all-incorrect (0%) answers, avoiding an unapproved fractional rounding policy. Self-assessment scores/times/endings are NULL. No game scoring formula, scenario submission policy or self-assessment feedback threshold is invented.
-- Four FAQ entries support the later Help page. Review, ContactMessage and Bookmark tables exist but remain empty; their optional features are not implemented.
-
-Original diagrams:
-| File ending | Lesson |
-| --- | --- |
-| ce01.png | Enrolment connects Learner and Course keys |
-| ce02.png | Pause, inspect and verify suspicious messages |
-| ce03.png | Worked business break-even calculation |
-| ce04.png | Variables in a fair seedling investigation |
-
-Uploads/web.config allows static reads and removes executable handlers. Protected material delivery remains a later application concern under Q24; this does not implement lesson authorisation.
-
-## Manual database verification
-
-There are no Phase 1 feature pages to click through. To repeat verification:
-
-1. Run the rebuild command twice. Both runs must exit 0 and show the seed-check and detach messages. Confirm both files exist in App_Data.
-2. Connect SSMS to (LocalDB)\MSSQLLocalDB. Refresh Databases: LearningSystem should be absent after detach. To inspect it, right-click Databases, choose Attach, and select App_Data\LearningSystem.mdf.
-3. Expand Tables and confirm 23 dbo tables. Inspect dbo.User (12 rows), Course (five rows), Material (13 rows), Activity (eight rows), Attempt (four rows), and the seeded game/scenario child rows.
-4. Run `DBCC CHECKCONSTRAINTS WITH ALL_CONSTRAINTS;` in the attached database; it should return no violations.
-5. In a transaction, try inserting a duplicate User.Email (also try a different letter case), a duplicate Enrolment pair, and an SAResponse rating of 6. Each must be rejected by a unique/PK/CHECK constraint. Roll back each test.
-6. Try deleting SubjectID 1, UserID 2, or SimStep StepID 1 in a transaction. Their referenced course/start/choice records must block deletion through foreign keys. Roll back. Friendly blocked-delete messages and activity content locks belong to later C# phases; SQL does not implement those application rules.
-7. Inspect foreign keys: only Topic.CourseID, Material.TopicID, Activity.TopicID, QuizQuestion.ActivityID, QuizOption.QuestionID, SAStatement.ActivityID, GameGroup.ActivityID and GameItem.ActivityID cascade. All other 27 foreign keys use NO ACTION. Each FK has an index with that column first, including coverage from existing PK/unique indexes.
-8. Close inspection connections and rerun the rebuild command to restore the original demo and detach again. Check that LearningSystem is absent from sys.databases before starting the future web application.
-
-## Verification on 2026-09-28
-
-- Application solution build: passed using Visual Studio 18 MSBuild, Debug configuration, with no reported warnings/errors.
-- T-SQL parsed using the installed Microsoft ScriptDom TSql160Parser: zero syntax errors, 23 CREATE TABLE statements. This is syntax validation, not database execution.
-- Static checks: all seed required columns/defaults, NVARCHAR limits, PK/unique keys and FK references passed; the cascade graph has no cycles or multiple paths.
-- Password checks: all 12 hashes verified, with distinct 16-byte salts and 32-byte hashes.
-- Asset checks: all four seeded PNGs exist, are under 2 MB, and are included in the Web Application project.
-- **Two sqlcmd execution attempts failed**, each with exit code 1 and a connection/login timeout before any SQL batch executed. SqlLocalDB start MSSQLLocalDB also failed; its log reports a fatal server termination while opening master.mdf. These were the initial failed attempts; the successful follow-up verification is recorded below.
-
-Update 2026-09-29: LocalDB recovery succeeded after backing up and recreating MSSQLLocalDB without an explicit version argument. A stop/start test passed. Both database rebuilds exited 0, passed seed checks and detached successfully. Attachment using the .NET Framework application connection string passed, and DBCC CHECKCONSTRAINTS returned no violations. SYS-12 and SYS-18 are complete. Q10 scoring/formula/runtime questions remain open for later phases.
-
-
-2026-09-29 additional live verification: all 133 columns and 35 foreign keys match CONTRACTS.md. Duplicate email/enrolment, rating 6, and referenced subject/teacher/step/course deletes were rejected correctly. Draft course cascade passed; all test changes were rolled back and the database was detached.
-
-
-## Phase 15 non-destructive upgrade
-
-The application now has 24 tables. Course adds IsPaid BIT NOT NULL DEFAULT 0 and PriceNPR DECIMAL(10,2) NOT NULL DEFAULT 0, with a free/paid consistency CHECK. Payment records have unique TransactionUUID, positive AmountNPR, eSewa-only Provider, four status values, UTC dates and NO ACTION learner/course foreign keys. Existing records remain intact and all previous courses start Free. Payment-referenced users/courses are retained; deactivate/unpublish instead.
-
-Execute Phase15PaymentUpgrade.sql through a connection to the existing LearningSystem.mdf (same connection as Web.config), or select that attached database in SQL Server Object Explorer and execute the script. It must not run against master. The script is transactional and guards existing columns/objects, so it can safely be reapplied to the expected schema. It does not reset seed/demo data or detach the database. CreateDatabase.sql includes the same schema only for explicitly requested fresh rebuilds and remains destructive. Back up development data before intentional rebuilds.
-
-Sandbox configuration is documented in ../docs/PHASE15-PAYMENT-SETUP.md. No production credentials or payment seed claims are included.
+Before committing, the script stops with an error if any of these fail: table count, account mix (1 admin, 6 active lecturers, 1 pending, 4 learners), 4 to 5 admin-authored courses, 2 to 3 courses per lecturer, every activity type and game template published, a code lab exists, every quiz question has 2 to 6 options with exactly one correct, quiz and self-assessment answers belong to their attempt's activity, attempt fields match their activity type, learners only post in courses they are enrolled in, and paid enrolments have a completed payment.

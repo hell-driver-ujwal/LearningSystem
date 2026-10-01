@@ -33,9 +33,10 @@ namespace LearningSystem.Helpers
         }
         internal static BreadcrumbItem[] ForMaterial(System.Data.DataRow row, bool preview, bool publicPreview)
         {
-            string courseUrl = publicPreview ? "~/CourseDetails.aspx?id=" : preview ? (CurrentUserHelper.GetRole() == "Teacher" ? "~/Teacher/CourseBuilder.aspx?id=" : "~/CourseDetails.aspx?id=") : "~/Learner/CourseHome.aspx?id=";
-            // Admins exit draft preview to their oversight list, not a public draft URL.
-            if (preview && CurrentUserHelper.GetRole() == "Admin") courseUrl = "~/Admin/Courses.aspx";
+            bool owner = AccessHelper.IsOwnerOfCourse(CurrentUserHelper.GetUserID().GetValueOrDefault(), (int)row["CourseID"]);
+            string courseUrl = publicPreview ? "~/CourseDetails.aspx?id=" : preview ? (owner ? "~/Teacher/CourseBuilder.aspx?id=" : "~/CourseDetails.aspx?id=") : "~/Learner/CourseHome.aspx?id=";
+            // Admins exit another author's draft preview to their oversight list, not a public draft URL.
+            if (preview && !owner && CurrentUserHelper.GetRole() == "Admin") courseUrl = "~/Admin/Courses.aspx";
             else courseUrl += row["CourseID"];
             return new[] { new BreadcrumbItem { Text="Home", Url="~/Default.aspx" }, new BreadcrumbItem { Text=(string)row["CourseTitle"], Url=courseUrl },
                 new BreadcrumbItem { Text=(string)row["TopicTitle"], Url=courseUrl }, new BreadcrumbItem { Text=(string)row["Title"] } };

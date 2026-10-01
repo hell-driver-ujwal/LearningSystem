@@ -12,7 +12,12 @@ namespace LearningSystem.Account
         protected void Page_Load(object sender, EventArgs e)
         {
             if (CurrentUserHelper.IsAuthenticated()) Response.Redirect(CurrentUserHelper.GetDashboardUrl());
-            if (!IsPostBack) CaptchaHelper.Generate();
+            if (!IsPostBack)
+            {
+                CaptchaHelper.Generate();
+                // Links such as "Apply to teach" open the form with the lecturer option already chosen.
+                if (Request.QueryString["as"] == "lecturer") { ddlRole.SelectedValue = "Teacher"; Title = "Apply to teach"; }
+            }
             lblCaptcha.Text = CaptchaHelper.Question();
             txtFullName.Text = txtFullName.Text.Trim();
             txtEmail.Text = txtEmail.Text.Trim();
@@ -22,9 +27,9 @@ namespace LearningSystem.Account
         {
             args.IsValid = false;
             if (ddlRole.SelectedValue != "Learner" && ddlRole.SelectedValue != "Teacher")
-            { cvRegistration.ErrorMessage = "Choose Learner or Teacher."; return; }
+            { cvRegistration.ErrorMessage = "Choose a learner account or a lecturer application."; return; }
             if (ddlRole.SelectedValue == "Teacher" && (txtReason.Text.Length < 20 || txtReason.Text.Length > 500))
-            { cvRegistration.ErrorMessage = "Teacher applications need a reason of 20–500 characters."; return; }
+            { cvRegistration.ErrorMessage = "Lecturer applications need a description of 20 to 500 characters."; return; }
             try
             {
                 object count = DatabaseHelper.ExecuteScalar("SELECT COUNT(*) FROM dbo.[User] WHERE Email=@email",
@@ -33,6 +38,10 @@ namespace LearningSystem.Account
                 cvRegistration.ErrorMessage = "That email address is already registered.";
             }
             catch (SqlException) { cvRegistration.ErrorMessage = "Registration is unavailable. Please try again later."; }
+        }
+        protected void ValidateTerms(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = chkTerms.Checked;
         }
         protected void ValidateCaptcha(object source, ServerValidateEventArgs args)
         {
@@ -66,8 +75,8 @@ namespace LearningSystem.Account
                 return;
             }
             Session.Remove("RegisterCaptcha");
-            MessageHelper.SetSuccess(teacher ? "Your teacher application is pending approval. You can log in after an administrator approves it." : "Registration successful. Please log in.");
-            Response.Redirect(teacher ? "~/Default.aspx" : "~/Account/Login.aspx");
+            MessageHelper.SetSuccess(teacher ? "Thank you. Your lecturer application has been sent. You can log in once an administrator approves it." : "Your account is ready. Log in to start learning.");
+            Response.Redirect(teacher ? "~/Default.aspx" : "~/Account/StudentLogin.aspx");
         }
     }
 }

@@ -1,8 +1,7 @@
 <%@ Page Title="Teacher applications" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TeacherApplications.aspx.cs" Inherits="LearningSystem.Admin.TeacherApplications" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-<h1>Teacher applications</h1>
-<p>Approve or reject pending teacher applications. Only approval allows a teacher to log in.</p>
-<div class="table-scroll" role="region" aria-label="Pending teacher applications" tabindex="0"><asp:GridView ID="gvApplications" runat="server" AutoGenerateColumns="false" DataKeyNames="UserID" Caption="Pending teacher applications" UseAccessibleHeader="true" EmptyDataText="There are no pending teacher applications." OnRowCommand="gvApplications_RowCommand">
+<div class="page-header"><div><h1>Lecturer applications</h1><p class="intro">Approve or reject people who have applied to teach. Only approved lecturers can log in.</p></div></div>
+<div class="table-scroll" role="region" aria-label="Pending teacher applications" tabindex="0"><asp:GridView ID="gvApplications" runat="server" AutoGenerateColumns="false" DataKeyNames="UserID" Caption="Pending lecturer applications" UseAccessibleHeader="true" EmptyDataText="There are no applications waiting for review." OnRowCommand="gvApplications_RowCommand">
 <Columns>
 <asp:BoundField DataField="FullName" HeaderText="Name" HtmlEncode="true" />
 <asp:BoundField DataField="Email" HeaderText="Email" HtmlEncode="true" />

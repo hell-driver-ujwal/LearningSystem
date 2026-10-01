@@ -1,5 +1,5 @@
 <%@ Page Title="Enrolled learners" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="CourseLearners.aspx.cs" Inherits="LearningSystem.Teacher.CourseLearners" %>
-<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server"><h1>Enrolled learners</h1><p><asp:Literal ID="litCourse" runat="server" Mode="Encode" /></p>
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server"><div class="page-header"><div><h1>Enrolled learners</h1></div></div><p><asp:Literal ID="litCourse" runat="server" Mode="Encode" /></p>
 <div class="table-scroll" role="region" aria-label="Names of learners currently enrolled in this course" tabindex="0"><asp:GridView ID="gvLearners" runat="server" AutoGenerateColumns="false" Caption="Names of learners currently enrolled in this course" UseAccessibleHeader="true" EmptyDataText="No learners are enrolled yet."><Columns><asp:BoundField DataField="FullName" HeaderText="Learner name" HtmlEncode="true" /></Columns></asp:GridView></div>
 <div class="actions"><asp:HyperLink ID="lnkResults" runat="server" Text="Course results" /><asp:HyperLink ID="lnkBack" runat="server" Text="Back to course builder" /><a href="Dashboard.aspx">Dashboard</a></div></asp:Content>
 

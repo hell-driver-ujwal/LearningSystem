@@ -29,7 +29,7 @@ namespace LearningSystem.Member
             litTitle.Text=(string)activity["Title"];litDescription.Text=Convert.ToString(activity["Description"]);
             ((SiteMaster)Master).Breadcrumb=BreadcrumbHelper.ForActivity(activityID);
             pnlPreview.Visible=preview;lnkBack.NavigateUrl=ActivityHelper.Back(activity);lnkExit.NavigateUrl=lnkBack.NavigateUrl;
-            lblEmpty.Visible=statements.Rows.Count==0;btnSubmit.Enabled=statements.Rows.Count>0;pnlHistory.Visible=!preview;
+            lblEmpty.Visible=statements.Rows.Count==0;pnlResponses.Visible=Request.QueryString["attemptId"]!=null;btnSubmit.Enabled=statements.Rows.Count>0;pnlHistory.Visible=!preview;
             if(preview && Request.QueryString["attemptId"]!=null){Response.Redirect("~/AccessDenied.aspx");return;}
             if(!IsPostBack)
             {
@@ -43,7 +43,7 @@ namespace LearningSystem.Member
                 else
                 {
                     object average=Session[PreviewKey()];Session.Remove(PreviewKey());
-                    if(average is decimal)ShowFeedback((decimal)average,"Preview result — nothing was saved.");
+                    if(average is decimal)ShowFeedback((decimal)average,"Preview result. Nothing was saved.");
                 }
             }
         }
@@ -55,7 +55,7 @@ namespace LearningSystem.Member
             {
                 int statement,rating;
                 string postedID=((HiddenField)item.FindControl("hfStatement")).Value;
-                DropDownList field=(DropDownList)item.FindControl("ddlRating");
+                ListControl field=(ListControl)item.FindControl("ddlRating");
                 // Read the raw post value as well: a missing input must not fall back to ViewState.
                 string postedRating=Request.Form[field.UniqueID];
                 if(!Int32.TryParse(postedID,out statement) || statement!=(int)statements.Rows[item.ItemIndex]["StatementID"] || ratings.ContainsKey(statement))throw new InvalidOperationException("A statement ID is invalid for this assessment.");
@@ -99,7 +99,7 @@ namespace LearningSystem.Member
             DataTable answers=DatabaseHelper.ExecuteTable("SELECT s.StatementText,r.Rating FROM dbo.SAResponse r JOIN dbo.SAStatement s ON s.StatementID=r.StatementID WHERE r.AttemptID=@attempt AND s.ActivityID=@id ORDER BY s.SortOrder,s.StatementID",new[] {new SqlParameter("@attempt",attemptID),new SqlParameter("@id",activityID)});
             if(answers.Rows.Count==0){MessageHelper.SetError("This attempt has no saved ratings.");return;}
             int[] ratings=new int[answers.Rows.Count];for(int i=0;i<ratings.Length;i++)ratings[i]=(int)answers.Rows[i]["Rating"];
-            ShowFeedback(SelfAssessmentHelper.CalculateAverage(ratings),"Submitted "+((DateTime)attempts.Rows[0]["SubmittedAt"]).ToString("yyyy-MM-dd HH:mm:ss")+" UTC");
+            ShowFeedback(SelfAssessmentHelper.CalculateAverage(ratings),"Submitted "+((DateTime)attempts.Rows[0]["SubmittedAt"]).ToString("d MMMM yyyy, HH:mm")+" UTC");
             gvResponses.DataSource=answers;gvResponses.DataBind();
         }
         private void BindHistory()
@@ -111,7 +111,7 @@ namespace LearningSystem.Member
                 decimal average=(decimal)row["TotalRating"]/(int)row["Ratings"];
                 row["AverageDisplay"]=SelfAssessmentHelper.Display(average);row["Level"]=SelfAssessmentHelper.Level(average);
                 row["ReviewUrl"]="SelfAssessment.aspx?id="+activityID+"&attemptId="+row["AttemptID"];
-                row["DateDisplay"]=((DateTime)row["SubmittedAt"]).ToString("yyyy-MM-dd HH:mm:ss")+" UTC";
+                row["DateDisplay"]=((DateTime)row["SubmittedAt"]).ToString("d MMM yyyy, HH:mm");
             }
             gvHistory.DataSource=rows;gvHistory.DataBind();
         }

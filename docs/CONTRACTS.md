@@ -750,3 +750,55 @@ Payment: PaymentID INT IDENTITY primary key; LearnerID INT NOT NULL FK User.User
 AppSettings: EsewaProductCode=EPAYTEST; EsewaSecretKey empty in tracked config; EsewaFormUrl=https://rc-epay.esewa.com.np/api/epay/main/v2/form; EsewaStatusUrl=https://rc.esewa.com.np/api/epay/transaction/status/; existing HttpsOrigin=https://localhost:44393/ supplies callback origin. Optional App_Data/PaymentSettings.config overrides locally and is ignored by Git. Reject non-sandbox endpoints/product and non-HTTPS callback origin. Never log secrets. Status requests have a bounded timeout and no automatic retries/redirects.
 
 Request signature order total_amount,transaction_uuid,product_code. Amount/total use stored snapshot; tax/service/delivery are zero. UUID is GUID N format. Success requires signed COMPLETE plus server COMPLETE. Failure CANCELED maps Canceled, NOT_FOUND/FAILED maps Failed; pending/ambiguous/unavailable stays non-complete. Failure never creates enrolment or downgrades Complete. An already Complete purchase can restore missing enrolment after leaving; publication is rechecked in the ordinary enrolment path. Signed successful payment creates its enrolment atomically; if the course was meanwhile unpublished, existing content access still returns Not Found/unavailable.
+
+## Phase 17 — Inkwell extensions, 2026-10-01
+
+Approved by the team member who requested this phase (see DECISIONS.md). Earlier contracts stay valid except where listed here.
+
+### Schema
+- Activity.GameTemplate NVARCHAR(10); CHECK allows Matching, Memory, Scramble, Sort, Flashcards, FillBlank, TrueFalse, Sequence.
+- Material.MaterialType CHECK adds Code; CK_Material_6 requires TextContent for Text and Code.
+- New table PageView: PageViewID INT IDENTITY PK; PagePath NVARCHAR(200) NOT NULL (1 to 200); ViewerRole NVARCHAR(7) NOT NULL IN ('Visitor','Learner','Teacher','Admin'); ViewedAt DATETIME2(0) NOT NULL DEFAULT SYSUTCDATETIME(); index on ViewedAt. No foreign keys.
+- Added indexes IX_Payment_LearnerID and IX_Payment_CourseID.
+
+### Game item mapping (new templates)
+| Template | ItemText | MatchText | Answer value |
+| --- | --- | --- | --- |
+| Flashcards | Front (1 to 100) | Back (1 to 200) | known or learning |
+| FillBlank | Missing word or phrase | Sentence with exactly one ___ | Typed text (compared ignoring case and repeated spaces) |
+| TrueFalse | True or False | Statement | True, False or Skip |
+| Sequence | Step | Position 1..n, no gaps | Position chosen by the learner |
+
+Publish rules: Flashcards and TrueFalse at least 4 items; FillBlank and Sequence at least 3; maximum items Memory 12, Sequence 10, FillBlank 15, TrueFalse 20, others 30.
+
+### New and changed shared code
+| Class | Member | Purpose |
+| --- | --- | --- |
+| CurrentUserHelper | AuthorRoles, IsAuthor() | Teacher or Admin may author; ownership is still checked per course. |
+| UiHelper | Icon, TypeMark, TypeLabel, RoleLabel, Money, Ago, Plural, SiteName, SiteOrigin, ContactEmail, ContactAddress | Shared presentation and site settings. |
+| LessonFormatter | ToHtml(string) | Safe formatting of text lessons after HTML encoding. |
+| EngagementHelper | ActiveDays, Streak, WeekStrip, CompletedItems, AverageBestScore, LastCourse | Calculated learner engagement; nothing stored. |
+| AnalyticsHelper | RecordView, DailyViews, TopPages, ViewsByRole, TotalViews | First-party page analytics. |
+| CourseHelper | Stats, CoverHtml, PriceHtml, RatingHtml, ItemLink, ItemLabel, NextItem | Course cards, outlines and continue learning. |
+| GameHelper | Templates, TemplateName, MaxItems, IsBlankSentence, Position | New game templates. |
+| RobotsHandler, SitemapHandler | ProcessRequest | /robots.txt and /sitemap.xml (registered in Web.config). |
+
+### New routes
+| URL | Parameters | Contract |
+| --- | --- | --- |
+| ~/Privacy.aspx | none | Public privacy policy |
+| ~/Terms.aspx | none | Public terms of use |
+| ~/Admin/Analytics.aspx | none (period chosen in a postback list of 7, 14 or 30 days) | Admin only |
+| ~/robots.txt, ~/sitemap.xml | none | Generated |
+| ~/Courses.aspx | subjectId?, q?, price? (free or paid), sort? (title or popular) | Unknown values fall back to the default |
+| ~/Account/Register.aspx | as? (lecturer) | Pre-selects the lecturer application |
+| ~/Media.ashx | captions=1 with materialId | Serves the .vtt captions beside an authorised Video material |
+
+### Payment routes (replaces the Phase 15 eSewa sandbox routes)
+| URL | Parameters | Contract |
+| --- | --- | --- |
+| ~/Learner/Checkout.aspx | courseId | Active learner; paid, published course; creates a Pending payment with the current price, then opens the demo screen |
+| ~/Payment/EsewaDemo.aspx | paymentId | Payment must belong to the current learner and be Pending; mobile number then 4-digit code, checked on the server; 3 wrong codes set Failed; Cancel sets Canceled |
+| ~/Payment/EsewaSuccess.aspx | paymentId | Receipt for the current learner's Complete, verified payment |
+
+PaymentHelper public surface: Price, Enrol, CreatePending, Find(int), IsValidPhone, CodeMatches, MaskPhone, CompleteDemo, CloseDemo, History. EsewaHelper and Payment/EsewaFailure.aspx are removed.

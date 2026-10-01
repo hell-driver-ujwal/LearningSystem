@@ -12,7 +12,7 @@ namespace LearningSystem.Teacher
         private int activityID,topicID,courseID;
         protected void Page_Load(object sender,EventArgs e)
         {
-            AccessHelper.RequireRole(new[] {"Teacher"});
+            AccessHelper.RequireRole(CurrentUserHelper.AuthorRoles);
             bool edit=Request.QueryString["id"]!=null;
             if(edit && Request.QueryString["topicId"]!=null){Response.Redirect("~/AccessDenied.aspx");return;}
             DataRow activity=null;

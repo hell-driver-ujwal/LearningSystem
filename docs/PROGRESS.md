@@ -36,7 +36,7 @@ Planning deliverables only: CONTRACTS.md, PROGRESS.md, QUESTIONS.md, DECISIONS.m
 - [x] SYS-02 — Role-based nav bar
 - [x] SYS-03 — Access checks implemented through custom Phase 15; Phase 16 source audit found no demonstrated ownership/enrolment bypass. Final runtime blocked.
 - [x] SYS-04 — Access-denied page
-- [~] SYS-05 — PARTIAL: friendly pages exist but Web.config customErrors="Off"; Phase 16 MUST FIX M01. No application fix authorized.
+- [x] SYS-05 — Fixed 2026-10-01 (Phase 17): customErrors="On" with ResponseRewrite; technical details go only to App_Data/ErrorLog.txt (git-ignored).
 - [x] SYS-06 — Success / error messages
 - [x] SYS-09 — Database connection
 - [x] SYS-13 — Breadcrumbs implemented across current pages; source audited in Phase 16.
@@ -91,8 +91,8 @@ Planning deliverables only: CONTRACTS.md, PROGRESS.md, QUESTIONS.md, DECISIONS.m
 
 2026-09-30: Q31 approved and recorded in DECISIONS.md/CONTRACTS.md, with the original question retained. Implemented public pages, published catalogue/search/filter/paging, enrolment and leave, learner dashboard/MyCourses/CourseHome, all six material viewers, completion, shared calculated progress, read-only owner/admin material previews and protected Media.ashx delivery. Build passed with 0 warnings and 0 errors after fixing one handler-name warning. The four approved smoke checks passed on the workspace application: published catalogue, learner enrol/lesson/complete (0% to 25%), visitor free preview/access protection, and teacher draft preview with unchanged learner-data counts. No database rebuild, test application copy or security-setting change. The smoke flow retained Enrolment (LearnerID 8, CourseID 2) and MaterialCompletion (LearnerID 8, MaterialID 4). See PHASE5-VERIFICATION.md for files, checks, manual steps and content gaps. Phase 6 has not started; verification stopped at the approved budget.
 
-- [~] PUB-01 — Home page implemented; real intro video/poster and subject images await team content (Q31).
-- [~] PUB-02 — About content exists; actual contact details await team content (Phase 16 S01).
+- [x] PUB-01 — Home page with captioned intro video, poster, subject images and newest courses (Phase 17).
+- [x] PUB-02 — About page with mission, objectives, how it works, lecturers and contact details (Phase 17).
 - [x] PUB-03 — Browse subjects
 - [x] PUB-04 — Course catalogue
 - [x] PUB-05 — Search courses
@@ -100,7 +100,7 @@ Planning deliverables only: CONTRACTS.md, PROGRESS.md, QUESTIONS.md, DECISIONS.m
 - [x] PUB-07 — Course outline
 - [x] PUB-08 — Free preview
 - [x] PUB-09 — Help / FAQ page
-- [~] PUB-10 — Clearly labelled placeholders; real contact information awaits the team (Q31).
+- [x] PUB-10 — Contact email and address on About, Contact and the footer, configured in Web.config appSettings (Phase 17).
 - [x] MAT-07 — View material
 - [x] MAT-08 — Download PDF
 - [x] MAT-09 — Mark complete
@@ -210,9 +210,9 @@ Planning deliverables only: CONTRACTS.md, PROGRESS.md, QUESTIONS.md, DECISIONS.m
 - [x] SYS-07 — Empty-state messages
 - [x] SYS-10 — Responsive CSS
 - [x] SYS-11 — Delete confirmation
-- [~] SYS-14 — Page necessities implemented; real footer contact details remain placeholders (S01).
+- [x] SYS-14 — Footer shows contact details, last updated, About, Help, Contact, Site map, Privacy and Terms links (Phase 17).
 - [x] SYS-15 — Cancel button
-- [~] SYS-16 — Accessibility source reviewed; checkout payment form outside main landmark remains S03; rendered final checks blocked.
+- [x] SYS-16 — Accessibility: main landmark now wraps both forms (S03 fixed), skip link, visible focus, labelled fields, alt text, captions, reduced motion (Phase 17).
 
 ## Phase 12 — Optional Tier A
 
@@ -312,3 +312,21 @@ Before Phase 1, compare all 23 table definitions with Section 6 and lengths with
 
 
 
+
+## Phase 17 — Inkwell redesign and extensions (2026-10-01)
+
+Requested by the team member on branch `sunil/dev`; decisions recorded in DECISIONS.md. Built with MSBuild (0 errors, 0 warnings), database script run twice successfully, automated HTTP smoke test (all roles, 114 crawled links) and 23 browser end-to-end flows passed.
+
+- [x] Unused template packages removed (Bootstrap, jQuery, Modernizr, FriendlyUrls, bundling, mobile master).
+- [x] Admin can author courses using the lecturer course builder (ownership = Teacher or Admin who owns the course).
+- [x] New demo catalogue: 8 subjects including Programming, Cybersecurity and Artificial Intelligence; 19 courses (14 lecturer, 4 admin, 1 draft); 6 lecturers, 1 pending applicant, 4 learners, 1 admin.
+- [x] Four new game templates: Flashcards, Fill in the blank, True or false speed round, Put in order (server-scored).
+- [x] Code lab material type (virtual lab): learners edit and run HTML, CSS and JavaScript in a sandboxed frame.
+- [x] Formatted text lessons (headings, lists, code blocks, tips) rendered safely after HTML encoding.
+- [x] Generated media: course covers, subject images, diagrams, PDF handouts, narrated audio, captioned videos.
+- [x] New design system and redesign of every page; bundled Source Serif 4 and Source Sans 3; SVG icon set; favicon set and web manifest.
+- [x] Learner engagement: learning streak, weekly activity, continue learning, suggested courses, course outline sidebar, next/previous across lessons and activities.
+- [x] Privacy policy and Terms of use pages; registration requires accepting the terms.
+- [x] robots.txt and sitemap.xml generated from the database; canonical and Open Graph tags.
+- [x] First-party analytics (PageView table: page, role and time only) with an admin Analytics page.
+- [x] customErrors On with private error log; security headers; video captions served through Media.ashx.- [x] Demo eSewa payment screen (mobile number + 4-digit code, verified on the server) replaces the internet sandbox; paid courses open only after a verified payment.

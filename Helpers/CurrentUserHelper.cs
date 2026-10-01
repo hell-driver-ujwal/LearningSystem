@@ -19,6 +19,13 @@ namespace LearningSystem.Helpers
             return token != null && Equals(HttpContext.Current.Session[(string)token], GetUserID());
         }
         internal static void CompleteEdit(object token) { HttpContext.Current.Session.Remove((string)token); }
+        // Lecturers (Teacher role) and the admin can both author courses; ownership is still checked per course.
+        public static readonly string[] AuthorRoles = { "Teacher", "Admin" };
+        public static bool IsAuthor()
+        {
+            string role = GetRole();
+            return role == "Teacher" || role == "Admin";
+        }
         public static bool IsAuthenticated()
         {
             return HttpContext.Current.User != null && HttpContext.Current.User.Identity.IsAuthenticated;

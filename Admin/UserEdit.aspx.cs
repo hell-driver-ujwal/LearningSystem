@@ -31,7 +31,7 @@ namespace LearningSystem.Admin
                     ddlRole.Enabled = false;
                     ddlStatus.Enabled = !application;
                     rfvStatus.Enabled = !application;
-                    litApplication.Text = application ? "Application status: " + (string)user["Status"] + ". Use Teacher Applications for decisions." : "";
+                    litApplication.Text = application ? "Application status: " + (string)user["Status"] + ". Use Lecturer applications to approve or reject it." : "";
                     if (!IsPostBack)
                     {
                         txtFullName.Text = (string)user["FullName"];
@@ -42,7 +42,7 @@ namespace LearningSystem.Admin
                 }
                 catch (SqlException) { Response.Redirect("~/Error.aspx"); return; }
             }
-            litMode.Text = userID == 0 ? "Create a learner or teacher account." : "Edit account details or enter a temporary password and choose Reset password.";
+            litMode.Text = userID == 0 ? "Create a learner or lecturer account." : "Edit account details or enter a temporary password and choose Reset password.";
             btnReset.Visible = userID > 0;
             rfvPassword.ValidationGroup = revPassword.ValidationGroup = userID == 0 ? "Save" : "Reset";
             txtFullName.Text = txtFullName.Text.Trim();
@@ -52,7 +52,7 @@ namespace LearningSystem.Admin
         {
             args.IsValid = false;
             if (ddlRole.SelectedValue != "Learner" && ddlRole.SelectedValue != "Teacher")
-            { cvUser.ErrorMessage = "Choose Learner or Teacher."; return; }
+            { cvUser.ErrorMessage = "Choose Learner or Lecturer."; return; }
             if (!application && ddlStatus.SelectedValue != "Active" && ddlStatus.SelectedValue != "Deactivated")
             { cvUser.ErrorMessage = "Choose Active or Deactivated."; return; }
             try

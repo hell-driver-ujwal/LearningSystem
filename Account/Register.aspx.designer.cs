@@ -33,5 +33,7 @@ namespace LearningSystem.Account
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvCaptcha;
         protected global::System.Web.UI.WebControls.CompareValidator cvCaptchaNumber;
         protected global::System.Web.UI.WebControls.CustomValidator cvCaptcha;
+        protected global::System.Web.UI.WebControls.CheckBox chkTerms;
+        protected global::System.Web.UI.WebControls.CustomValidator cvTerms;
     }
 }

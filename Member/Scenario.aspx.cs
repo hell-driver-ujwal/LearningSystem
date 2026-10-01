@@ -35,9 +35,9 @@ namespace LearningSystem.Member
                 bool ending=(bool)step["IsEnding"];pnlChoices.Visible=!ending;pnlEnding.Visible=ending;
                 if(ending)
                 {
-                    litOutcome.Text=Convert.ToString(step["Outcome"]);litFeedback.Text=Convert.ToString(step["Feedback"]);
+                    litOutcome.Text=Convert.ToString(step["Outcome"]);litFeedback.Text=Convert.ToString(step["Feedback"]);pnlEnding.CssClass="outcome "+litOutcome.Text.ToLowerInvariant();
                     btnFinish.Visible=!run.Completed;
-                    litSaved.Text=run.Completed ? (preview ? "Preview complete — nothing was saved." : "Outcome saved. Your course progress is updated.") : "Select Finish to complete this run. Starting or restarting does not save an attempt.";
+                    litSaved.Text=run.Completed ? (preview ? "Preview complete. Nothing was saved." : "Outcome saved. Your course progress is updated.") : "Choose Finish to save this outcome. Restarting does not save anything.";
                 }
                 else
                 {
@@ -77,7 +77,8 @@ namespace LearningSystem.Member
             if(rows.Rows.Count!=1){Response.Redirect("~/AccessDenied.aspx");return;}
             DataRow step=rows.Rows[0];pnlStep.Visible=true;pnlEnding.Visible=true;pnlChoices.Visible=false;btnFinish.Visible=false;btnStart.Text="Restart scenario";
             litStep.Text=(string)step["StepText"];litImage.Text=ScenarioHelper.ImageMarkup(step);litOutcome.Text=Convert.ToString(step["Outcome"]);litFeedback.Text=Convert.ToString(step["Feedback"]);
-            litSaved.Text="Outcome saved "+((DateTime)step["SubmittedAt"]).ToString("yyyy-MM-dd HH:mm:ss")+" UTC. Your course progress is updated.";
+            pnlEnding.CssClass="outcome "+litOutcome.Text.ToLowerInvariant();
+            litSaved.Text="Outcome saved "+((DateTime)step["SubmittedAt"]).ToString("d MMMM yyyy, HH:mm")+" UTC. Restart to explore a different path.";
         }
         protected void Cancel(object sender,EventArgs e){Response.Redirect(ActivityHelper.Back(activity));}
     }

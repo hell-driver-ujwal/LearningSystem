@@ -40,7 +40,7 @@ namespace LearningSystem.Helpers
                 if (!groups.ContainsKey(id))
                 {
                     DataTable bins = new DataTable(); bins.Columns.Add("Label"); bins.Columns.Add("Count", typeof(int));
-                    foreach (string label in new[] { "0–<20%", "20–<40%", "40–<60%", "60–<80%", "80–100%" }) bins.Rows.Add(label, 0);
+                    foreach (string label in new[] { "0 to under 20%", "20 to under 40%", "40 to under 60%", "60 to under 80%", "80 to 100%" }) bins.Rows.Add(label, 0);
                     groups.Add(id, bins);
                     titles.Add(id, Convert.ToString(attempt["CourseTitle"]) + " / " + Convert.ToString(attempt["Title"]));
                 }

@@ -49,6 +49,30 @@ namespace LearningSystem
                 CompleteRequest();
             }
         }
+        // Users only ever see the friendly Error page. The technical details go to a private
+        // log in App_Data (never served to the browser) so the team can find and fix the problem.
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            Exception error = Server.GetLastError();
+            if (error == null) return;
+            // Missing pages are normal, so they are not logged.
+            bool missing = error is HttpException && ((HttpException)error).GetHttpCode() == 404;
+            if (!missing)
+            {
+                try
+                {
+                    string line = DateTime.UtcNow.ToString("s") + " UTC " + Request.HttpMethod + " " + Request.Url.AbsolutePath + Environment.NewLine + error + Environment.NewLine + Environment.NewLine;
+                    System.IO.File.AppendAllText(Server.MapPath("~/App_Data/ErrorLog.txt"), line);
+                }
+                catch (System.IO.IOException) { }
+                catch (UnauthorizedAccessException) { }
+            }
+            // Show the friendly page as a fresh request (with session state) while keeping the address the visitor typed.
+            string friendly = missing ? "~/NotFound.aspx" : "~/Error.aspx";
+            if (Request.AppRelativeCurrentExecutionFilePath.Equals(friendly, StringComparison.OrdinalIgnoreCase)) return;
+            Server.ClearError();
+            Server.TransferRequest(friendly, false);
+        }
         protected void Application_EndRequest(object sender, EventArgs e)
         {
             // Wrong roles need Access Denied, rather than another Login redirect.

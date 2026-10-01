@@ -8,7 +8,7 @@ namespace LearningSystem.Teacher
     {
         protected void Page_Load(object sender,EventArgs e)
         {
-            AccessHelper.RequireRole(new[] {"Teacher"});int id=CourseHelper.QueryID("id");
+            AccessHelper.RequireRole(CurrentUserHelper.AuthorRoles);int id=CourseHelper.QueryID("id");
             try
             {
                 if(!AccessHelper.IsOwnerOfCourse(CurrentUserHelper.GetUserID().Value,id)){Response.Redirect("~/AccessDenied.aspx");return;}

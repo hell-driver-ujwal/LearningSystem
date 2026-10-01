@@ -7,6 +7,7 @@ namespace LearningSystem.Member
         protected global::System.Web.UI.WebControls.HyperLink lnkExit;
         protected global::System.Web.UI.WebControls.Literal litPrompt;
         protected global::System.Web.UI.WebControls.Literal litStatus;
+        protected global::System.Web.UI.WebControls.Literal litCount;
         protected global::System.Web.UI.WebControls.Label lblEmpty;
         protected global::System.Web.UI.WebControls.Repeater rptPosts;
         protected global::System.Web.UI.WebControls.Panel pnlEditor;
