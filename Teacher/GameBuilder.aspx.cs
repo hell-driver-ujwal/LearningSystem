@@ -14,7 +14,7 @@ namespace LearningSystem.Teacher
         private int EditingGroup {get{return (int)(ViewState["GroupID"]??0);}set{ViewState["GroupID"]=value;}}
         protected void Page_Load(object sender,EventArgs e)
         {
-            AccessHelper.RequireRole(new[] {"Teacher"});bool edit=Request.QueryString["id"]!=null;
+            AccessHelper.RequireRole(CurrentUserHelper.AuthorRoles);bool edit=Request.QueryString["id"]!=null;
             if(edit && Request.QueryString["topicId"]!=null){Response.Redirect("~/AccessDenied.aspx");return;}
             DataRow activity=null;
             if(edit)

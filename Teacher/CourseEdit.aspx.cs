@@ -12,7 +12,7 @@ namespace LearningSystem.Teacher
         private int courseID;
         protected void Page_Load(object sender, EventArgs e)
         {
-            AccessHelper.RequireRole(new[] { "Teacher" });
+            AccessHelper.RequireRole(CurrentUserHelper.AuthorRoles);
             txtTitle.Text = txtTitle.Text.Trim();
             txtDescription.Text = txtDescription.Text.Trim();
             try
@@ -72,7 +72,7 @@ namespace LearningSystem.Teacher
                 using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.Serializable))
                 {
                     if (Convert.ToInt32(DatabaseHelper.ExecuteScalar(connection, transaction,
-                        "SELECT COUNT(*) FROM dbo.[User] WHERE UserID=@id AND Role='Teacher' AND Status='Active'", new[] { new SqlParameter("@id", CurrentUserHelper.GetUserID().Value) })) != 1)
+                        "SELECT COUNT(*) FROM dbo.[User] WHERE UserID=@id AND Role IN ('Teacher','Admin') AND Status='Active'", new[] { new SqlParameter("@id", CurrentUserHelper.GetUserID().Value) })) != 1)
                     { Response.Redirect("~/AccessDenied.aspx"); return; }
                     if (courseID > 0)
                     {

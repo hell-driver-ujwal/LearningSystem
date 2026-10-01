@@ -11,7 +11,7 @@ namespace LearningSystem.Teacher
         private const bool TeacherView=true;
         protected void Page_Load(object sender,EventArgs e)
         {
-            AccessHelper.RequireRole(new[] {"Teacher"});
+            AccessHelper.RequireRole(CurrentUserHelper.AuthorRoles);
             try
             {
                 int course=ResultsHelper.FilterID(Request.QueryString["courseId"]),activity=ResultsHelper.FilterID(Request.QueryString["activityId"]);

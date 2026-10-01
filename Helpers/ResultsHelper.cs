@@ -14,7 +14,7 @@ namespace LearningSystem.Helpers
         }
         internal static void RequireFilters(bool teacher,int course,int activity)
         {
-            AccessHelper.RequireRole(new[] {teacher ? "Teacher" : "Learner"});int user=CurrentUserHelper.GetUserID().Value;
+            AccessHelper.RequireRole(teacher ? CurrentUserHelper.AuthorRoles : new[] {"Learner"});int user=CurrentUserHelper.GetUserID().Value;
             if(course>0)
             {
                 bool allowed=teacher ? AccessHelper.IsOwnerOfCourse(user,course) : Convert.ToInt32(DatabaseHelper.ExecuteScalar("SELECT COUNT(*) FROM dbo.Attempt x JOIN dbo.Activity a ON a.ActivityID=x.ActivityID JOIN dbo.Topic t ON t.TopicID=a.TopicID WHERE x.LearnerID=@user AND t.CourseID=@course",new[] {new SqlParameter("@user",user),new SqlParameter("@course",course)}))>0;

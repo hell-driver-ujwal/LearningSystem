@@ -12,7 +12,7 @@ namespace LearningSystem.Teacher
         private int EditingTopic { get { return (int)(ViewState["EditingTopic"] ?? 0); } set { ViewState["EditingTopic"] = value; } }
         protected void Page_Load(object sender, EventArgs e)
         {
-            AccessHelper.RequireRole(new[] { "Teacher" });
+            AccessHelper.RequireRole(CurrentUserHelper.AuthorRoles);
             txtTitle.Text = txtTitle.Text.Trim(); txtOrder.Text = txtOrder.Text.Trim();
             try
             {

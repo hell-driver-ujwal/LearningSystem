@@ -14,7 +14,7 @@ namespace LearningSystem.Teacher
         private DataRow existing;
         protected void Page_Load(object sender, EventArgs e)
         {
-            AccessHelper.RequireRole(new[] { "Teacher" });
+            AccessHelper.RequireRole(CurrentUserHelper.AuthorRoles);
             txtTitle.Text = txtTitle.Text.Trim(); txtText.Text = txtText.Text.Trim();
             txtAlt.Text = txtAlt.Text.Trim(); txtYouTube.Text = txtYouTube.Text.Trim(); txtOrder.Text = txtOrder.Text.Trim();
             try

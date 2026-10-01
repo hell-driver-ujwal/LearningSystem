@@ -17,7 +17,9 @@ namespace LearningSystem.Helpers
         internal static string Back(DataRow row)
         {
             string role = CurrentUserHelper.GetRole();
-            return role == "Admin" ? "~/Admin/Activities.aspx" : role == "Teacher" ? "~/Teacher/CourseBuilder.aspx?id=" + row["CourseID"] : "~/Learner/CourseHome.aspx?id=" + row["CourseID"];
+            bool owner = CurrentUserHelper.GetUserID() == (int)row["TeacherID"];
+            if (role == "Teacher" || (role == "Admin" && owner)) return "~/Teacher/CourseBuilder.aspx?id=" + row["CourseID"];
+            return role == "Admin" ? "~/Admin/Activities.aspx" : "~/Learner/CourseHome.aspx?id=" + row["CourseID"];
         }
         internal static DataRow Require(int id, string type, bool preview)
         {

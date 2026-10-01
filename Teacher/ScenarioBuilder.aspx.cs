@@ -14,7 +14,7 @@ namespace LearningSystem.Teacher
         private int EditingChoice {get{return (int)(ViewState["ChoiceID"]??0);}set{ViewState["ChoiceID"]=value;}}
         protected void Page_Load(object sender,EventArgs e)
         {
-            AccessHelper.RequireRole(new[] {"Teacher"});bool edit=Request.QueryString["id"]!=null;
+            AccessHelper.RequireRole(CurrentUserHelper.AuthorRoles);bool edit=Request.QueryString["id"]!=null;
             if(edit && Request.QueryString["topicId"]!=null){Response.Redirect("~/AccessDenied.aspx");return;}
             DataRow a=null;
             if(edit)
