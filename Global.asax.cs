@@ -54,15 +54,24 @@ namespace LearningSystem
         protected void Application_Error(object sender, EventArgs e)
         {
             Exception error = Server.GetLastError();
-            // Missing pages are normal (the custom 404 page handles them), so they are not logged.
-            if (error == null || (error is HttpException && ((HttpException)error).GetHttpCode() == 404)) return;
-            try
+            if (error == null) return;
+            // Missing pages are normal, so they are not logged.
+            bool missing = error is HttpException && ((HttpException)error).GetHttpCode() == 404;
+            if (!missing)
             {
-                string line = DateTime.UtcNow.ToString("s") + " UTC " + Request.HttpMethod + " " + Request.Url.AbsolutePath + Environment.NewLine + error + Environment.NewLine + Environment.NewLine;
-                System.IO.File.AppendAllText(Server.MapPath("~/App_Data/ErrorLog.txt"), line);
+                try
+                {
+                    string line = DateTime.UtcNow.ToString("s") + " UTC " + Request.HttpMethod + " " + Request.Url.AbsolutePath + Environment.NewLine + error + Environment.NewLine + Environment.NewLine;
+                    System.IO.File.AppendAllText(Server.MapPath("~/App_Data/ErrorLog.txt"), line);
+                }
+                catch (System.IO.IOException) { }
+                catch (UnauthorizedAccessException) { }
             }
-            catch (System.IO.IOException) { }
-            catch (UnauthorizedAccessException) { }
+            // Show the friendly page as a fresh request (with session state) while keeping the address the visitor typed.
+            string friendly = missing ? "~/NotFound.aspx" : "~/Error.aspx";
+            if (Request.AppRelativeCurrentExecutionFilePath.Equals(friendly, StringComparison.OrdinalIgnoreCase)) return;
+            Server.ClearError();
+            Server.TransferRequest(friendly, false);
         }
         protected void Application_EndRequest(object sender, EventArgs e)
         {
