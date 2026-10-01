@@ -1,8 +1,29 @@
 # Inkwell database and demo data
+## Clean final Phase 17 database (current application target)
+
+The application now targets `LearningSystemFinal`, with `App_Data/LearningSystemFinal.mdf` and `LearningSystemFinal_log.ldf`. The former `LearningSystem.mdf` database is preserved as a fallback. **Do not run the destructive rebuild commands below against it.**
+
+For a fresh machine with no final database/files yet, from the repository root:
+
+```powershell
+.\Database\CreateFinalDatabase.ps1
+```
+
+This create-only wrapper executes the unchanged schema/seed/integrity section of current CreateDatabase.sql in a separate catalog, refuses existing final files/catalogs, and keeps it attached. It never drops or detaches the old database. Normal connection: `Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=LearningSystemFinal;Integrated Security=True`. When default LocalDB resolution is unavailable but the existing instance is running, the wrapper accepts `-Server` with that instance's observed existing endpoint; do not reset SQL to run it.
+
+Creation and all seed checks passed on 2026-10-01. The build passed with 0 warnings/errors. Application runtime remains blocked by normal LocalDB startup error 50 and browser connection/control timeouts; no successful login/Code Lab/Analytics runtime pass is claimed. See [full verification and manual checks](../docs/PHASE17-FINAL-DATABASE.md). Demo accounts are in the team-only DEMO_CREDENTIALS.md.
+
+The older presentation fixtures below describe the preserved fallback dataset. SeedPresentationDemo.ps1 reads the current Web.config target; do not run it automatically on the clean final dataset.
 
 `CreateDatabase.sql` rebuilds the whole `LearningSystem` database from scratch: it drops any existing copy, creates all 25 tables with their keys, checks and indexes, inserts the demo data, runs integrity checks and finally detaches the database so the web application can attach `App_Data\LearningSystem.mdf`.
 
 **Running it destroys the existing database and all of its data.**
+
+## Upgrade existing databases for Analytics
+
+Use `Database/Phase17AnalyticsUpgrade.sql` against the existing application database when Admin Analytics reports unavailable because `dbo.PageView` is missing. It creates only the contracted PageView table (identity primary key, path/role checks, UTC date default) and ViewedAt index. Existing accounts, courses, payments and learning records are preserved; no demo data is inserted. Re-running it leaves an existing table/index intact.
+
+In Visual Studio SQL Server Object Explorer or SSMS, select the database attached from this project's `App_Data/LearningSystem.mdf`, open the upgrade script and execute it. Do not select master and do not run CreateDatabase.sql to repair Analytics. Refresh Analytics and Admin Dashboard afterward; views begin accumulating from actual page visits, without historical backfill.
 
 ## How to run it
 
@@ -50,3 +71,7 @@ Media files live in `Uploads/` with GUID file names that match the `FilePath` an
 ## Integrity checks
 
 Before committing, the script stops with an error if any of these fail: table count, account mix (1 admin, 6 active lecturers, 1 pending, 4 learners), 4 to 5 admin-authored courses, 2 to 3 courses per lecturer, every activity type and game template published, a code lab exists, every quiz question has 2 to 6 options with exactly one correct, quiz and self-assessment answers belong to their attempt's activity, attempt fields match their activity type, learners only post in courses they are enrolled in, and paid enrolments have a completed payment.
+
+## Presentation fixtures (additive)
+Use SeedPresentationDemo.ps1, not CreateDatabase.sql, to add the four presentation courses and varied learning history without rebuilding the database. See ../docs/DEMO-DATA.md for accounts, payment-demo limitations and rerun behavior. No schema changes.
+

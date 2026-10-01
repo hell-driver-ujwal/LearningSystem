@@ -315,7 +315,11 @@ Before Phase 1, compare all 23 table definitions with Section 6 and lengths with
 
 ## Phase 17 — Inkwell redesign and extensions (2026-10-01)
 
+2026-10-01 follow-up: Reproduced Analytics/dashboard SQL errors with the live `admin@example.test` account. Existing database lacked PageView despite its presence in CreateDatabase.sql. Applied the transactional, non-destructive Phase17AnalyticsUpgrade.sql; table count increased 24 to 25. Before/after existing counts unchanged: User 16, Course 6, Material 16, Activity 11, Attempt 18, Payment 4, Enrolment 17. Browser checks passed: Analytics empty state, dashboard statistics/tables/charts restored, then Analytics showed two real visits (one Analytics and one Dashboard), 100% signed-in Admin share. Views begin now; no historical analytics were fabricated. Current Admin email differs from the rebuilt seed documented in DEMO_CREDENTIALS.md; existing account was preserved. No unrelated Phase 17 schema/data changes applied.
+
 Requested by the team member on branch `sunil/dev`; decisions recorded in DECISIONS.md. Built with MSBuild (0 errors, 0 warnings), database script run twice successfully, automated HTTP smoke test (all roles, 114 crawled links) and 23 browser end-to-end flows passed.
+
+Analytics repair build: full solution Debug MSBuild succeeded, exit code 0, no warnings or errors reported. Only the focused browser checks above were performed for this repair; prior Phase 17 test claims remain historical.
 
 - [x] Unused template packages removed (Bootstrap, jQuery, Modernizr, FriendlyUrls, bundling, mobile master).
 - [x] Admin can author courses using the lecturer course builder (ownership = Teacher or Admin who owns the course).
@@ -330,3 +334,24 @@ Requested by the team member on branch `sunil/dev`; decisions recorded in DECISI
 - [x] robots.txt and sitemap.xml generated from the database; canonical and Open Graph tags.
 - [x] First-party analytics (PageView table: page, role and time only) with an admin Analytics page.
 - [x] customErrors On with private error log; security headers; video captions served through Media.ashx.- [x] Demo eSewa payment screen (mobile number + 4-digit code, verified on the server) replaces the internet sandbox; paid courses open only after a verified payment.
+
+## 2026-10-01 — Presentation/demo dataset (data-only task)
+
+- [x] Reused four active fictional teachers, four learners and existing Admin; preserved other records and credentials.
+- [x] Added four Published courses, 40 topics, 49 materials and 16 activities: four quizzes, three self-assessments, four discussions, four original-template games and one six-step branching/looping scenario.
+- [x] Added seven presentation enrolments and 17 submitted attempts through existing helpers, plus completions, posts/reply, reviews/bookmarks and three explicitly offline-test payment states. Shared Web progress: Ben 11.76%, Chandra 47.06%, Anita 82.35%, Dina 100%.
+- [x] Added Database/SeedPresentationDemo.sql, SeedPresentationDemo.ps1 and standalone SeedPresentationHistory.cs (None project entry), manifest, four local GUID covers, docs/DEMO-DATA.md and docs/DEMO-ASSET-SOURCES.md. No application-code/schema changes or destructive rebuild.
+- [x] Build: LearningSystem.slnx Debug succeeded, exit 0; no warnings/errors emitted. Built once after project/assets changes.
+- [x] Representative checks: publication helpers passed; repeat seed preserved percentages; scoped queries found no duplicate presentation-course/enrolment groups. Browser: all four new catalogue covers loaded; Web CourseDetails outline/reviews/cover; Dina login/dashboard/results/certificate; Asha login/dashboard/recent attempts; Admin login/dashboard/payment history. Admin shows nine published courses and 35 total attempts, including preserved data.
+- [~] Existing unrelated course How to code in C cover did not load. Preserved unchanged for team review; all new covers loaded.
+- [~] No external eSewa verification: current application uses its existing offline demo. Seeded game times may be zero seconds; play fresh runs for human timing. Broader gameplay/CRUD/access checks remain manual per DEMO-DATA.md.
+- O10/O14 remain deferred. No optional features or application audit fixes started.
+
+## 2026-10-01 — Phase 17 final database verification
+
+- [x] Read-only inspection identified the old target as the attached `App_Data/LearningSystem.mdf` catalog on `(LocalDB)\\MSSQLLocalDB`; it had 25 tables but lacked Code support, the four new game-template values, and both Payment learner/course indexes.
+- [x] Created separate `LearningSystemFinal` from the current `Database/CreateDatabase.sql` schema/seed section using the create-only `Database/CreateFinalDatabase.ps1` wrapper. The original MDF/LDF and catalog were preserved and never rebuilt, detached or overwritten.
+- [x] Final database checks passed: 25 tables, 12 users, 19 courses, 72 materials, 73 activities, PageView, Payment constraints/indexes, five published Code Labs, all eight game templates, and the Course pricing checks.
+- [x] Switched `Web.config` `LearningSystemDb` to `Initial Catalog=LearningSystemFinal`; corrected the Phase 17 Code/game fixed-value documentation in AGENTS.md and recorded the comparison/connection details in `docs/PHASE17-FINAL-DATABASE.md`.
+- [x] Full Debug MSBuild succeeded with 0 warnings and 0 errors.
+- [~] Browser runtime checks blocked by the environment: IIS Express registered the existing bindings and logged one HTTP 200 Home request, but browser navigation refused/timed out and a normal LocalDB startup returned error 50. No security settings, certificates, SQL instance configuration or old database files were changed. Manual UI checks remain documented in `docs/PHASE17-FINAL-DATABASE.md`.

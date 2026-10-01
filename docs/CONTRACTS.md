@@ -759,6 +759,7 @@ Approved by the team member who requested this phase (see DECISIONS.md). Earlier
 - Activity.GameTemplate NVARCHAR(10); CHECK allows Matching, Memory, Scramble, Sort, Flashcards, FillBlank, TrueFalse, Sequence.
 - Material.MaterialType CHECK adds Code; CK_Material_6 requires TextContent for Text and Code.
 - New table PageView: PageViewID INT IDENTITY PK; PagePath NVARCHAR(200) NOT NULL (1 to 200); ViewerRole NVARCHAR(7) NOT NULL IN ('Visitor','Learner','Teacher','Admin'); ViewedAt DATETIME2(0) NOT NULL DEFAULT SYSUTCDATETIME(); index on ViewedAt. No foreign keys.
+- Existing-database upgrade: `Database/Phase17AnalyticsUpgrade.sql` creates the same PageView definition and `IX_PageView_ViewedAt` without rebuilding/reseeding. It is transactional and safe to rerun when the contracted table/index already exist. No additional columns or reporting contracts are introduced.
 - Added indexes IX_Payment_LearnerID and IX_Payment_CourseID.
 
 ### Game item mapping (new templates)

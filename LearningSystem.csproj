@@ -708,6 +708,7 @@
     <None Include="Database\CreateDatabase.sql" />
     <None Include="Database\GenerateDemoHashes.ps1" />
     <None Include="Database\Phase15PaymentUpgrade.sql" />
+    <None Include="Database\Phase17AnalyticsUpgrade.sql" />
     <None Include="Database\README.md" />
     <None Include="docs\BLUEPRINT.md" />
     <None Include="docs\CONTRACTS.md" />
@@ -781,4 +782,19 @@
     </PropertyGroup>
     <Error Condition="!Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
+  <ItemGroup>
+    <None Include="Database\CreateFinalDatabase.ps1" />
+    <None Include="docs\PHASE17-FINAL-DATABASE.md" />
+    <None Include="Database\SeedPresentationDemo.sql" />
+    <None Include="Database\SeedPresentationDemo.ps1" />
+    <None Include="Database\SeedPresentationHistory.cs" />
+    <None Include="docs\presentation-manifest.json" />
+    <None Include="docs\DEMO-DATA.md" />
+    <None Include="docs\DEMO-ASSET-SOURCES.md" />
+    <Content Include="Uploads\Images\b28d45b0-2d45-4d51-9974-a196a3586011.jpg" />
+    <Content Include="Uploads\Images\b28d45b0-2d45-4d51-9974-a196a3586012.jpg" />
+    <Content Include="Uploads\Images\b28d45b0-2d45-4d51-9974-a196a3586013.jpg" />
+    <Content Include="Uploads\Images\b28d45b0-2d45-4d51-9974-a196a3586014.jpg" />
+  </ItemGroup>
 </Project>
+

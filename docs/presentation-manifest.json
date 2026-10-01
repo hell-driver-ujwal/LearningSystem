@@ -1,0 +1,94 @@
+[
+  {
+    "code": "web",
+    "title": "Web Development Fundamentals: Build Accessible Pages",
+    "teacher": "asha.teacher@example.test",
+    "subject": "IT",
+    "price": 0,
+    "image": "b28d45b0-2d45-4d51-9974-a196a3586011.jpg",
+    "alt": "Hands typing source code on a laptop",
+    "pdf": "3ff3c1df-fc5a-51c9-847d-3a8e45a1cd4e.pdf",
+    "pdfTitle": "HTML and CSS quick reference",
+    "topics": [
+      "How the web delivers a page",
+      "Write a clear HTML document",
+      "Links, images and meaningful alternatives",
+      "Semantic sections and navigation",
+      "CSS selectors and readable typography",
+      "Understand the box model",
+      "Forms that explain what to enter",
+      "Responsive layout for small screens",
+      "Add a small JavaScript interaction",
+      "Review and publish a useful page"
+    ]
+  },
+  {
+    "code": "db",
+    "title": "Introduction to Databases: Design a Student Club System",
+    "teacher": "ravi.pending@example.test",
+    "subject": "IT",
+    "price": 0,
+    "image": "b28d45b0-2d45-4d51-9974-a196a3586012.jpg",
+    "alt": "Network cables connected to infrastructure used to access data",
+    "pdf": "e28a1c83-920c-5aa0-8c4f-d05bc0cf807e.pdf",
+    "pdfTitle": "Plan your database revision",
+    "topics": [
+      "From scattered records to structured data",
+      "Entities, attributes and primary keys",
+      "Relationships and foreign keys",
+      "Resolve a many-to-many relationship",
+      "Choose appropriate data types",
+      "Read data with SELECT and WHERE",
+      "Combine related tables with JOIN",
+      "Use constraints to prevent bad data",
+      "Keep related changes atomic",
+      "Review a complete club database"
+    ]
+  },
+  {
+    "code": "safe",
+    "title": "Digital Safety and Cyber Awareness: Make Safer Decisions",
+    "teacher": "maya.teacher@example.test",
+    "subject": "IT",
+    "price": 499,
+    "image": "b28d45b0-2d45-4d51-9974-a196a3586013.jpg",
+    "alt": "A person working on a laptop in a digital workspace",
+    "pdf": "e28a1c83-920c-5aa0-8c4f-d05bc0cf807e.pdf",
+    "pdfTitle": "Schedule your cyber-safety practice",
+    "topics": [
+      "Recognize what you need to protect",
+      "Build stronger account habits",
+      "Spot phishing without guessing",
+      "Separate useful access from excessive access",
+      "Use devices and networks thoughtfully",
+      "Choose a response to a suspicious message",
+      "Share files with the right audience",
+      "Recover from mistakes promptly",
+      "Check claims before spreading them",
+      "Create a sustainable safety routine"
+    ]
+  },
+  {
+    "code": "biz",
+    "title": "Entrepreneurship and Business Basics: Plan a Small Venture",
+    "teacher": "daniel.teacher@example.test",
+    "subject": "Business",
+    "price": 999,
+    "image": "b28d45b0-2d45-4d51-9974-a196a3586014.jpg",
+    "alt": "A team discussing ideas around a business meeting table",
+    "pdf": "47bd851f-4cc1-5dd4-9b0c-cc48bb2d4dd4.pdf",
+    "pdfTitle": "Budget worksheet for your venture",
+    "topics": [
+      "Start with a customer problem",
+      "Research before assuming demand",
+      "Explain your value proposition",
+      "Distinguish fixed and variable costs",
+      "Choose a price with a reason",
+      "Calculate a simple break-even point",
+      "Plan cash as well as profit",
+      "Reach customers honestly",
+      "Test, learn and manage risks",
+      "Present a practical venture plan"
+    ]
+  }
+]
