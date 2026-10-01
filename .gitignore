@@ -1,0 +1,10 @@
+bin/
+obj/
+.vs/
+packages/
+*.mdf
+*.ldf
+*.user
+App_Data/FileCleanup.log
+
+App_Data/PaymentSettings.config

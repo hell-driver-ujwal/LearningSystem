@@ -1,0 +1,689 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <ItemGroup>
+    <None Include="Database\CreateDatabase.sql" />
+    <None Include="Database\GenerateDemoHashes.ps1" />
+    <None Include="Database\README.md" />
+    <None Include=".gitignore" />
+    <None Include="docs\CONTRACTS.md" />
+    <None Include="docs\DECISIONS.md" />
+    <None Include="docs\PROGRESS.md" />
+    <None Include="docs\QUESTIONS.md" />
+    <Content Include="Uploads\web.config" />
+    <Content Include="Uploads\Images\35f96cb1-24e5-4556-85de-d4b3f5adce01.png" />
+    <Content Include="Uploads\Images\35f96cb1-24e5-4556-85de-d4b3f5adce02.png" />
+    <Content Include="Uploads\Images\35f96cb1-24e5-4556-85de-d4b3f5adce03.png" />
+    <Content Include="Uploads\Images\35f96cb1-24e5-4556-85de-d4b3f5adce04.png" />
+  </ItemGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{72D69177-338D-4381-BD03-3BC044A6C30F}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LearningSystem</RootNamespace>
+    <AssemblyName>LearningSystem</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort>44393</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>packages\Microsoft.Web.Infrastructure.2.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ScriptManager.MSAjax">
+      <HintPath>packages\Microsoft.AspNet.ScriptManager.MSAjax.5.0.0\lib\net45\Microsoft.ScriptManager.MSAjax.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ScriptManager.WebForms">
+      <HintPath>packages\Microsoft.AspNet.ScriptManager.WebForms.5.0.0\lib\net45\Microsoft.ScriptManager.WebForms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Web.Optimization.WebForms">
+      <Private>True</Private>
+      <HintPath>packages\Microsoft.AspNet.Web.Optimization.WebForms.1.1.3\lib\net45\Microsoft.AspNet.Web.Optimization.WebForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.FriendlyUrls">
+      <HintPath>packages\Microsoft.AspNet.FriendlyUrls.Core.1.0.2\lib\net45\Microsoft.AspNet.FriendlyUrls.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <HintPath>packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="About.aspx" />
+    <Content Include="AGENTS.md" />
+    <Content Include="Contact.aspx" />
+    <Content Include="Content\bootstrap-grid.css" />
+    <Content Include="Content\bootstrap-grid.min.css" />
+    <Content Include="Content\bootstrap-grid.rtl.css" />
+    <Content Include="Content\bootstrap-grid.rtl.min.css" />
+    <Content Include="Content\bootstrap-reboot.css" />
+    <Content Include="Content\bootstrap-reboot.min.css" />
+    <Content Include="Content\bootstrap-reboot.rtl.css" />
+    <Content Include="Content\bootstrap-reboot.rtl.min.css" />
+    <Content Include="Content\bootstrap-utilities.css" />
+    <Content Include="Content\bootstrap-utilities.min.css" />
+    <Content Include="Content\bootstrap-utilities.rtl.css" />
+    <Content Include="Content\bootstrap-utilities.rtl.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\bootstrap.rtl.css" />
+    <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Default.aspx" />
+    <Content Include="docs\BLUEPRINT.md" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap.bundle.js" />
+    <Content Include="Scripts\bootstrap.bundle.min.js" />
+    <Content Include="Scripts\bootstrap.esm.js" />
+    <Content Include="Scripts\bootstrap.esm.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\bootstrap.min.js.map" />
+    <Content Include="Scripts\bootstrap.js.map" />
+    <Content Include="Scripts\bootstrap.esm.min.js.map" />
+    <Content Include="Scripts\bootstrap.esm.js.map" />
+    <Content Include="Scripts\bootstrap.bundle.min.js.map" />
+    <Content Include="Scripts\bootstrap.bundle.js.map" />
+    <Content Include="Content\bootstrap.rtl.min.css.map" />
+    <Content Include="Content\bootstrap.rtl.css.map" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-utilities.rtl.min.css.map" />
+    <Content Include="Content\bootstrap-utilities.rtl.css.map" />
+    <Content Include="Content\bootstrap-utilities.min.css.map" />
+    <Content Include="Content\bootstrap-utilities.css.map" />
+    <Content Include="Content\bootstrap-reboot.rtl.min.css.map" />
+    <Content Include="Content\bootstrap-reboot.rtl.css.map" />
+    <Content Include="Content\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\bootstrap-reboot.css.map" />
+    <Content Include="Content\bootstrap-grid.rtl.min.css.map" />
+    <Content Include="Content\bootstrap-grid.rtl.css.map" />
+    <Content Include="Content\bootstrap-grid.min.css.map" />
+    <Content Include="Content\bootstrap-grid.css.map" />
+    <None Include="Scripts\jquery-3.7.0.intellisense.js" />
+    <Content Include="Scripts\jquery-3.7.0.js" />
+    <Content Include="Scripts\jquery-3.7.0.min.js" />
+    <Content Include="Scripts\jquery-3.7.0.slim.js" />
+    <Content Include="Scripts\jquery-3.7.0.slim.min.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\WebForms\DetailsView.js" />
+    <Content Include="Scripts\WebForms\Focus.js" />
+    <Content Include="Scripts\WebForms\GridView.js" />
+    <Content Include="Scripts\WebForms\Menu.js" />
+    <Content Include="Scripts\WebForms\MenuStandards.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjax.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxApplicationServices.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxComponentModel.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxCore.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxGlobalization.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxHistory.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxNetwork.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxSerialization.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxTimer.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxWebForms.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxWebServices.js" />
+    <Content Include="Scripts\WebForms\SmartNav.js" />
+    <Content Include="Scripts\WebForms\TreeView.js" />
+    <Content Include="Scripts\WebForms\WebForms.js" />
+    <Content Include="Scripts\WebForms\WebParts.js" />
+    <Content Include="Scripts\WebForms\WebUIValidation.js" />
+    <Content Include="Site.Master" />
+    <Content Include="ViewSwitcher.ascx" />
+    <Content Include="Web.config" />
+    <Content Include="Bundle.config" />
+    <Content Include="Site.Mobile.Master" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="About.aspx.cs">
+      <DependentUpon>About.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="About.aspx.designer.cs">
+      <DependentUpon>About.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Contact.aspx.cs">
+      <DependentUpon>Contact.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Contact.aspx.designer.cs">
+      <DependentUpon>Contact.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Site.Master.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Site.Master.designer.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Site.Mobile.Master.cs">
+      <DependentUpon>Site.Mobile.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Site.Mobile.Master.designer.cs">
+      <DependentUpon>Site.Mobile.Master</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSwitcher.ascx.cs">
+      <DependentUpon>ViewSwitcher.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSwitcher.ascx.designer.cs">
+      <DependentUpon>ViewSwitcher.ascx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
+    <Content Include="Scripts\jquery-3.7.0.min.map" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>52178</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>https://localhost:44393/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <ItemGroup>
+      <None Include="Database\CreateDatabase.sql" />
+      <None Include="Database\GenerateDemoHashes.ps1" />
+      <None Include="Database\README.md" />
+      <None Include=".gitignore" />
+      <None Include="docs\CONTRACTS.md" />
+      <None Include="docs\DECISIONS.md" />
+      <None Include="docs\PROGRESS.md" />
+      <None Include="docs\QUESTIONS.md" />
+      <Content Include="Uploads\web.config" />
+      <Content Include="Uploads\Images\35f96cb1-24e5-4556-85de-d4b3f5adce01.png" />
+      <Content Include="Uploads\Images\35f96cb1-24e5-4556-85de-d4b3f5adce02.png" />
+      <Content Include="Uploads\Images\35f96cb1-24e5-4556-85de-d4b3f5adce03.png" />
+      <Content Include="Uploads\Images\35f96cb1-24e5-4556-85de-d4b3f5adce04.png" />
+    </ItemGroup>
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <ItemGroup>
+    <Compile Include="Helpers\AccessHelper.cs" />
+    <Compile Include="Helpers\AuthenticationHelper.cs" />
+    <Compile Include="Helpers\BreadcrumbHelper.cs" />
+    <Compile Include="Helpers\CurrentUserHelper.cs" />
+    <Compile Include="Helpers\DatabaseHelper.cs" />
+    <Compile Include="Helpers\MessageHelper.cs" />
+    <Compile Include="Helpers\PasswordHelper.cs" />
+    <Content Include="Account\Login.aspx" />
+    <Compile Include="Account\Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Account\Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Account\Logout.aspx" />
+    <Compile Include="Account\Logout.aspx.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Account\Logout.aspx.designer.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Account\Register.aspx" />
+    <Compile Include="Account\Register.aspx.cs">
+      <DependentUpon>Register.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Account\Register.aspx.designer.cs">
+      <DependentUpon>Register.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Member\ChangePassword.aspx" />
+    <Compile Include="Member\ChangePassword.aspx.cs">
+      <DependentUpon>ChangePassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Member\ChangePassword.aspx.designer.cs">
+      <DependentUpon>ChangePassword.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Member\Profile.aspx" />
+    <Compile Include="Member\Profile.aspx.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Member\Profile.aspx.designer.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Learner\Dashboard.aspx" />
+    <Compile Include="Learner\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Learner\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Teacher\Dashboard.aspx" />
+    <Compile Include="Teacher\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Teacher\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Admin\Dashboard.aspx" />
+    <Compile Include="Admin\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Styles\site.css" />
+    <Content Include="AccessDenied.aspx" />
+    <Compile Include="AccessDenied.aspx.cs">
+      <DependentUpon>AccessDenied.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AccessDenied.aspx.designer.cs">
+      <DependentUpon>AccessDenied.aspx</DependentUpon>
+    </Compile>
+    <Content Include="NotFound.aspx" />
+    <Compile Include="NotFound.aspx.cs">
+      <DependentUpon>NotFound.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NotFound.aspx.designer.cs">
+      <DependentUpon>NotFound.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Error.aspx" />
+    <Compile Include="Error.aspx.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Error.aspx.designer.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Helpers\ValidationResult.cs" />
+    <Compile Include="Helpers\UploadHelper.cs" />
+    <Compile Include="Helpers\DeleteHelper.cs" />
+    <Content Include="Admin\Subjects.aspx" />
+    <Compile Include="Admin\Subjects.aspx.cs">
+      <DependentUpon>Subjects.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Subjects.aspx.designer.cs">
+      <DependentUpon>Subjects.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Admin\Users.aspx" />
+    <Compile Include="Admin\Users.aspx.cs">
+      <DependentUpon>Users.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Users.aspx.designer.cs">
+      <DependentUpon>Users.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Admin\UserEdit.aspx" />
+    <Compile Include="Admin\UserEdit.aspx.cs">
+      <DependentUpon>UserEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\UserEdit.aspx.designer.cs">
+      <DependentUpon>UserEdit.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Admin\TeacherApplications.aspx" />
+    <Compile Include="Admin\TeacherApplications.aspx.cs">
+      <DependentUpon>TeacherApplications.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\TeacherApplications.aspx.designer.cs">
+      <DependentUpon>TeacherApplications.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Admin\Courses.aspx" />
+    <Compile Include="Admin\Courses.aspx.cs">
+      <DependentUpon>Courses.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Courses.aspx.designer.cs">
+      <DependentUpon>Courses.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Admin\Activities.aspx" />
+    <Compile Include="Admin\Activities.aspx.cs">
+      <DependentUpon>Activities.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Activities.aspx.designer.cs">
+      <DependentUpon>Activities.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="docs\PHASE3-VERIFICATION.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Helpers\PublishHelper.cs" />
+    <Content Include="Teacher\MyCourses.aspx" />
+    <Compile Include="Teacher\MyCourses.aspx.cs">
+      <DependentUpon>MyCourses.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Teacher\MyCourses.aspx.designer.cs">
+      <DependentUpon>MyCourses.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Teacher\CourseEdit.aspx" />
+    <Compile Include="Teacher\CourseEdit.aspx.cs">
+      <DependentUpon>CourseEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Teacher\CourseEdit.aspx.designer.cs">
+      <DependentUpon>CourseEdit.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Teacher\CourseBuilder.aspx" />
+    <Compile Include="Teacher\CourseBuilder.aspx.cs">
+      <DependentUpon>CourseBuilder.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Teacher\CourseBuilder.aspx.designer.cs">
+      <DependentUpon>CourseBuilder.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Teacher\MaterialEdit.aspx" />
+    <Compile Include="Teacher\MaterialEdit.aspx.cs">
+      <DependentUpon>MaterialEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Teacher\MaterialEdit.aspx.designer.cs">
+      <DependentUpon>MaterialEdit.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="docs\PHASE4-VERIFICATION.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Courses.aspx" />
+    <Compile Include="Courses.aspx.cs">
+      <DependentUpon>Courses.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Courses.aspx.designer.cs">
+      <DependentUpon>Courses.aspx</DependentUpon>
+    </Compile>
+    <Content Include="CourseDetails.aspx" />
+    <Compile Include="CourseDetails.aspx.cs">
+      <DependentUpon>CourseDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CourseDetails.aspx.designer.cs">
+      <DependentUpon>CourseDetails.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Preview.aspx" />
+    <Compile Include="Preview.aspx.cs">
+      <DependentUpon>Preview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Preview.aspx.designer.cs">
+      <DependentUpon>Preview.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Help.aspx" />
+    <Compile Include="Help.aspx.cs">
+      <DependentUpon>Help.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Help.aspx.designer.cs">
+      <DependentUpon>Help.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Learner\MyCourses.aspx" />
+    <Compile Include="Learner\MyCourses.aspx.cs">
+      <DependentUpon>MyCourses.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Learner\MyCourses.aspx.designer.cs">
+      <DependentUpon>MyCourses.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Learner\CourseHome.aspx" />
+    <Compile Include="Learner\CourseHome.aspx.cs">
+      <DependentUpon>CourseHome.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Learner\CourseHome.aspx.designer.cs">
+      <DependentUpon>CourseHome.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Member\Lesson.aspx" />
+    <Compile Include="Member\Lesson.aspx.cs">
+      <DependentUpon>Lesson.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Member\Lesson.aspx.designer.cs">
+      <DependentUpon>Lesson.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\ProgressHelper.cs" />
+    <Compile Include="Helpers\CourseHelper.cs" />
+    <Compile Include="Helpers\MaterialHelper.cs" />
+    <None Include="docs\PHASE5-VERIFICATION.md" />
+    <Content Include="Media.ashx" />
+    <Compile Include="Media.ashx.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Teacher\QuizBuilder.aspx" />
+    <Compile Include="Teacher\QuizBuilder.aspx.cs"><DependentUpon>QuizBuilder.aspx</DependentUpon></Compile>
+    <Compile Include="Teacher\QuizBuilder.aspx.designer.cs"><DependentUpon>QuizBuilder.aspx</DependentUpon></Compile>
+    <Content Include="Teacher\DiscussionEdit.aspx" />
+    <Compile Include="Teacher\DiscussionEdit.aspx.cs"><DependentUpon>DiscussionEdit.aspx</DependentUpon></Compile>
+    <Compile Include="Teacher\DiscussionEdit.aspx.designer.cs"><DependentUpon>DiscussionEdit.aspx</DependentUpon></Compile>
+    <Content Include="Member\Quiz.aspx" />
+    <Compile Include="Member\Quiz.aspx.cs"><DependentUpon>Quiz.aspx</DependentUpon></Compile>
+    <Compile Include="Member\Quiz.aspx.designer.cs"><DependentUpon>Quiz.aspx</DependentUpon></Compile>
+    <Content Include="Member\QuizResult.aspx" />
+    <Compile Include="Member\QuizResult.aspx.cs"><DependentUpon>QuizResult.aspx</DependentUpon></Compile>
+    <Compile Include="Member\QuizResult.aspx.designer.cs"><DependentUpon>QuizResult.aspx</DependentUpon></Compile>
+    <Content Include="Member\Discussion.aspx" />
+    <Compile Include="Member\Discussion.aspx.cs"><DependentUpon>Discussion.aspx</DependentUpon></Compile>
+    <Compile Include="Member\Discussion.aspx.designer.cs"><DependentUpon>Discussion.aspx</DependentUpon></Compile>
+    <Compile Include="Helpers\ActivityHelper.cs" />
+    <Compile Include="Helpers\ActivityAccessHelper.cs" />
+    <Compile Include="Helpers\ContentLockHelper.cs" />
+    <Compile Include="Helpers\DiscussionHelper.cs" />
+    <Compile Include="Helpers\QuizHelper.cs" />
+    <Content Include="Scripts\quiz.js" />
+    <None Include="docs\PHASE6-VERIFICATION.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Teacher\SABuilder.aspx" />
+    <Compile Include="Teacher\SABuilder.aspx.cs"><DependentUpon>SABuilder.aspx</DependentUpon></Compile>
+    <Compile Include="Teacher\SABuilder.aspx.designer.cs"><DependentUpon>SABuilder.aspx</DependentUpon></Compile>
+    <Content Include="Member\SelfAssessment.aspx" />
+    <Compile Include="Member\SelfAssessment.aspx.cs"><DependentUpon>SelfAssessment.aspx</DependentUpon></Compile>
+    <Compile Include="Member\SelfAssessment.aspx.designer.cs"><DependentUpon>SelfAssessment.aspx</DependentUpon></Compile>
+    <Compile Include="Helpers\SelfAssessmentHelper.cs" />
+    <None Include="docs\PHASE7-VERIFICATION.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Teacher\GameBuilder.aspx" />
+    <Compile Include="Teacher\GameBuilder.aspx.cs"><DependentUpon>GameBuilder.aspx</DependentUpon></Compile>
+    <Compile Include="Teacher\GameBuilder.aspx.designer.cs"><DependentUpon>GameBuilder.aspx</DependentUpon></Compile>
+    <Content Include="Member\PlayGame.aspx" />
+    <Compile Include="Member\PlayGame.aspx.cs"><DependentUpon>PlayGame.aspx</DependentUpon></Compile>
+    <Compile Include="Member\PlayGame.aspx.designer.cs"><DependentUpon>PlayGame.aspx</DependentUpon></Compile>
+    <Compile Include="Helpers\GameHelper.cs" />
+    <Compile Include="Helpers\GameContentHelper.cs" />
+    <Content Include="Scripts\games.js" />
+    <None Include="docs\PHASE8-VERIFICATION.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Teacher\ScenarioBuilder.aspx" />
+    <Compile Include="Teacher\ScenarioBuilder.aspx.cs"><DependentUpon>ScenarioBuilder.aspx</DependentUpon></Compile>
+    <Compile Include="Teacher\ScenarioBuilder.aspx.designer.cs"><DependentUpon>ScenarioBuilder.aspx</DependentUpon></Compile>
+    <Content Include="Member\Scenario.aspx" />
+    <Compile Include="Member\Scenario.aspx.cs"><DependentUpon>Scenario.aspx</DependentUpon></Compile>
+    <Compile Include="Member\Scenario.aspx.designer.cs"><DependentUpon>Scenario.aspx</DependentUpon></Compile>
+    <Compile Include="Helpers\ScenarioHelper.cs" />
+    <Compile Include="Helpers\ScenarioPlayHelper.cs" />
+    <None Include="docs\PHASE9-VERIFICATION.md" />
+  </ItemGroup>  <ItemGroup>
+    <Content Include="Learner\MyResults.aspx" />
+    <Compile Include="Learner\MyResults.aspx.cs"><DependentUpon>MyResults.aspx</DependentUpon></Compile>
+    <Compile Include="Learner\MyResults.aspx.designer.cs"><DependentUpon>MyResults.aspx</DependentUpon></Compile>
+    <Content Include="Teacher\Results.aspx" />
+    <Compile Include="Teacher\Results.aspx.cs"><DependentUpon>Results.aspx</DependentUpon></Compile>
+    <Compile Include="Teacher\Results.aspx.designer.cs"><DependentUpon>Results.aspx</DependentUpon></Compile>
+    <Content Include="Teacher\CourseLearners.aspx" />
+    <Compile Include="Teacher\CourseLearners.aspx.cs"><DependentUpon>CourseLearners.aspx</DependentUpon></Compile>
+    <Compile Include="Teacher\CourseLearners.aspx.designer.cs"><DependentUpon>CourseLearners.aspx</DependentUpon></Compile>
+    <Compile Include="Helpers\ResultsHelper.cs" />
+    <None Include="docs\PHASE10-VERIFICATION.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="docs\EVIDENCE.md" />
+    <None Include="docs\PHASE11-VERIFICATION.md" />
+    <None Include="docs\phase11-home.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Helpers\AccountSecurityHelper.cs" />
+    <Compile Include="Helpers\CaptchaHelper.cs" />
+    <Compile Include="Helpers\ChartHelper.cs" />
+    <Content Include="Scripts\charts.js" />
+    <Content Include="SiteMap.aspx" />
+    <Compile Include="SiteMap.aspx.cs"><DependentUpon>SiteMap.aspx</DependentUpon></Compile>
+    <Compile Include="SiteMap.aspx.designer.cs"><DependentUpon>SiteMap.aspx</DependentUpon></Compile>
+    <None Include="docs\PHASE12-VERIFICATION.md" />
+    <None Include="docs\phase12-charts.png" />
+  </ItemGroup>
+<ItemGroup>
+    <Content Include="Admin\Messages.aspx" />
+    <Compile Include="Admin\Messages.aspx.cs"><DependentUpon>Messages.aspx</DependentUpon></Compile>
+    <Compile Include="Admin\Messages.aspx.designer.cs"><DependentUpon>Messages.aspx</DependentUpon></Compile>
+    <Content Include="Admin\FAQ.aspx" />
+    <Compile Include="Admin\FAQ.aspx.cs"><DependentUpon>FAQ.aspx</DependentUpon></Compile>
+    <Compile Include="Admin\FAQ.aspx.designer.cs"><DependentUpon>FAQ.aspx</DependentUpon></Compile>
+    <Content Include="Learner\MyBookmarks.aspx" />
+    <Compile Include="Learner\MyBookmarks.aspx.cs"><DependentUpon>MyBookmarks.aspx</DependentUpon></Compile>
+    <Compile Include="Learner\MyBookmarks.aspx.designer.cs"><DependentUpon>MyBookmarks.aspx</DependentUpon></Compile>
+    <Content Include="Learner\Certificate.aspx" />
+    <Compile Include="Learner\Certificate.aspx.cs"><DependentUpon>Certificate.aspx</DependentUpon></Compile>
+    <Compile Include="Learner\Certificate.aspx.designer.cs"><DependentUpon>Certificate.aspx</DependentUpon></Compile>
+    <Compile Include="Helpers\ReviewHelper.cs" /><Compile Include="Helpers\BookmarkHelper.cs" /><Content Include="Styles\print.css" /><Content Include="Scripts\shortcuts.js" /><None Include="docs\PHASE13-VERIFICATION.md" /><None Include="docs\phase13-help.png" /></ItemGroup>
+<ItemGroup>
+<Content Include="Account\StudentLogin.aspx" />
+<Compile Include="Account\StudentLogin.aspx.cs"><DependentUpon>StudentLogin.aspx</DependentUpon></Compile>
+<Compile Include="Account\StudentLogin.aspx.designer.cs"><DependentUpon>StudentLogin.aspx</DependentUpon></Compile>
+<Content Include="Account\TeacherLogin.aspx" />
+<Compile Include="Account\TeacherLogin.aspx.cs"><DependentUpon>TeacherLogin.aspx</DependentUpon></Compile>
+<Compile Include="Account\TeacherLogin.aspx.designer.cs"><DependentUpon>TeacherLogin.aspx</DependentUpon></Compile>
+<Content Include="Account\AdminLogin.aspx" />
+<Compile Include="Account\AdminLogin.aspx.cs"><DependentUpon>AdminLogin.aspx</DependentUpon></Compile>
+<Compile Include="Account\AdminLogin.aspx.designer.cs"><DependentUpon>AdminLogin.aspx</DependentUpon></Compile>
+<Content Include="Learner\Checkout.aspx" />
+<Compile Include="Learner\Checkout.aspx.cs"><DependentUpon>Checkout.aspx</DependentUpon></Compile>
+<Compile Include="Learner\Checkout.aspx.designer.cs"><DependentUpon>Checkout.aspx</DependentUpon></Compile>
+<Content Include="Learner\MyPayments.aspx" />
+<Compile Include="Learner\MyPayments.aspx.cs"><DependentUpon>MyPayments.aspx</DependentUpon></Compile>
+<Compile Include="Learner\MyPayments.aspx.designer.cs"><DependentUpon>MyPayments.aspx</DependentUpon></Compile>
+<Content Include="Admin\Payments.aspx" />
+<Compile Include="Admin\Payments.aspx.cs"><DependentUpon>Payments.aspx</DependentUpon></Compile>
+<Compile Include="Admin\Payments.aspx.designer.cs"><DependentUpon>Payments.aspx</DependentUpon></Compile>
+<Content Include="Payment\EsewaSuccess.aspx" />
+<Compile Include="Payment\EsewaSuccess.aspx.cs"><DependentUpon>EsewaSuccess.aspx</DependentUpon></Compile>
+<Compile Include="Payment\EsewaSuccess.aspx.designer.cs"><DependentUpon>EsewaSuccess.aspx</DependentUpon></Compile>
+<Content Include="Payment\EsewaFailure.aspx" />
+<Compile Include="Payment\EsewaFailure.aspx.cs"><DependentUpon>EsewaFailure.aspx</DependentUpon></Compile>
+<Compile Include="Payment\EsewaFailure.aspx.designer.cs"><DependentUpon>EsewaFailure.aspx</DependentUpon></Compile>
+<Compile Include="Helpers\PortalLoginHelper.cs" />
+<Compile Include="Helpers\EsewaHelper.cs" />
+<Compile Include="Helpers\PaymentHelper.cs" />
+<None Include="Database\Phase15PaymentUpgrade.sql" />
+<None Include="docs\PHASE15-CUSTOM-SCOPE.md" />
+<None Include="docs\PHASE15-PAYMENT-SETUP.md" />
+<None Include="docs\PHASE15-VERIFICATION.md" />
+</ItemGroup>
+<ItemGroup><None Include="docs\phase15-portals.png" /><None Include="docs\phase15-sandbox.png" /></ItemGroup>
+</Project>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,41 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.Master.cs" Inherits="LearningSystem.SiteMaster" %>
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%: Page.Title %> | Learning System</title>
+    <link href="~/Styles/site.css" rel="stylesheet" runat="server" />
+    <%-- Internal CSS demonstration required by the assignment. --%>
+    <style>.site-name { letter-spacing: -0.025em; }</style>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <form id="frmSite" runat="server">
+        <header class="site-header">
+            <div class="header-inner">
+                <a class="logo" href="<%: ResolveUrl("~/Default.aspx") %>" aria-label="Learning System home"><span aria-hidden="true" class="logo-mark">LS</span><span class="site-name">Learning System</span></a>
+                <nav class="primary-nav" aria-label="Main navigation"><asp:PlaceHolder ID="phNavigation" runat="server" /></nav>
+                <nav class="account-nav" aria-label="Account navigation"><asp:PlaceHolder ID="phAccount" runat="server" /></nav>
+            </div>
+        </header>
+        <main id="main-content" class="page-shell" tabindex="-1">
+            <nav id="navBreadcrumb" runat="server" class="breadcrumb" aria-label="Breadcrumb"><asp:PlaceHolder ID="phBreadcrumb" runat="server" /></nav>
+            <asp:Panel ID="pnlMessage" runat="server" Visible="false" role="status" aria-live="polite"><asp:Literal ID="litMessage" runat="server" Mode="Encode" /></asp:Panel>
+            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+        </main>
+    </form>
+    <asp:ContentPlaceHolder ID="OutsideFormContent" runat="server" />
+        <footer class="site-footer">
+            <div class="footer-inner">
+                <div><strong>Learning System</strong><p>Contact email: awaiting team details.<br />Address: awaiting team details.</p></div>
+                <div><nav aria-label="Footer navigation"><asp:PlaceHolder ID="phFooter" runat="server" /></nav><p>Last updated: 30 September 2026<br />&copy; <%: DateTime.UtcNow.Year %> Learning System</p></div>
+            </div>
+        </footer>
+    <div id="shortcut-settings" hidden data-home="<%: ResolveUrl("~/Default.aspx") %>" data-courses="<%: ResolveUrl("~/Courses.aspx") %>" data-help="<%: ResolveUrl("~/Help.aspx") %>" data-dashboard="<%: LearningSystem.Helpers.CurrentUserHelper.IsAuthenticated() ? ResolveUrl(LearningSystem.Helpers.CurrentUserHelper.GetDashboardUrl()) : "" %>"></div>
+    <script src="<%: ResolveUrl("~/Scripts/shortcuts.js") %>" defer></script>
+</body>
+</html>
+
+
+

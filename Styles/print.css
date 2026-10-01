@@ -1,0 +1,5 @@
+/* Print only the currently authorized certificate; eligibility is checked on each page request. */
+@page { size: landscape; margin: 20mm; }
+body, .page-shell { background: white; color: black; margin: 0; padding: 0; max-width: none; }
+.site-header, .site-footer, .breadcrumb, .skip-link, .message, .no-print { display: none !important; }
+.certificate { border: 3px solid #333; text-align: center; padding: 30px; box-shadow: none; break-inside: avoid; }

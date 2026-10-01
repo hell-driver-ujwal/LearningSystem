@@ -1,0 +1,32 @@
+<%@ Page Title="Self-assessment builder" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="SABuilder.aspx.cs" Inherits="LearningSystem.Teacher.SABuilder" %>
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+<h1>Self-assessment builder</h1>
+<asp:Label ID="lblLock" runat="server" Visible="false" Text="Attempts exist. Statements and structural ordering are locked; title, description and publication remain editable." />
+<section class="form-card"><h2>Settings</h2>
+<asp:ValidationSummary ID="vsSettings" runat="server" ValidationGroup="Settings" />
+<div class="field"><asp:Label ID="lblTitle" runat="server" AssociatedControlID="txtTitle" Text="Title" /><asp:TextBox ID="txtTitle" runat="server" MaxLength="100" />
+<asp:RequiredFieldValidator ID="rfvTitle" runat="server" ControlToValidate="txtTitle" ValidationGroup="Settings" ErrorMessage="Enter a title." />
+<asp:RegularExpressionValidator ID="revTitle" runat="server" ControlToValidate="txtTitle" ValidationGroup="Settings" ValidationExpression="^[\s\S]{3,100}$" ErrorMessage="Title must be 3–100 characters." /></div>
+<div class="field"><asp:Label ID="lblDescription" runat="server" AssociatedControlID="txtDescription" Text="Description (optional)" /><asp:TextBox ID="txtDescription" runat="server" TextMode="MultiLine" MaxLength="1000" />
+<asp:RegularExpressionValidator ID="revDescription" runat="server" ControlToValidate="txtDescription" ValidationGroup="Settings" ValidationExpression="^[\s\S]{0,1000}$" ErrorMessage="Description must be at most 1000 characters." /></div>
+<div class="field"><asp:Label ID="lblOrder" runat="server" AssociatedControlID="txtOrder" Text="Activity order" /><asp:TextBox ID="txtOrder" runat="server" TextMode="Number" />
+<asp:RequiredFieldValidator ID="rfvOrder" runat="server" ControlToValidate="txtOrder" ValidationGroup="Settings" ErrorMessage="Enter an activity order." />
+<asp:RangeValidator ID="rvOrder" runat="server" ControlToValidate="txtOrder" ValidationGroup="Settings" Type="Integer" MinimumValue="1" MaximumValue="2147483647" ErrorMessage="Order must be a positive integer." /></div>
+<div class="field"><asp:Label ID="lblStatus" runat="server" AssociatedControlID="ddlStatus" Text="Publication" /><asp:DropDownList ID="ddlStatus" runat="server"><asp:ListItem Text="Draft" /><asp:ListItem Text="Published" /></asp:DropDownList></div>
+<p>Save a new assessment as Draft, add statements, then publish it.</p>
+<div class="actions"><asp:Button ID="btnSave" runat="server" Text="Save settings" ValidationGroup="Settings" OnClick="SaveSettings" /><asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false" OnClick="Cancel" /><asp:HyperLink ID="lnkPreview" runat="server" Text="Preview" /><asp:Button ID="btnDelete" runat="server" Text="Delete assessment" ValidationGroup="Action" OnClick="DeleteAssessment" OnClientClick="return confirm('Delete this self-assessment and its statements? Attempts block deletion.');" /></div></section>
+<asp:Panel ID="pnlStatements" runat="server"><h2>Statements</h2>
+<div class="table-scroll" role="region" aria-label="Assessment statements" tabindex="0"><asp:GridView ID="gvStatements" runat="server" AutoGenerateColumns="false" Caption="Assessment statements" UseAccessibleHeader="true" EmptyDataText="No statements yet." OnRowCommand="StatementCommand"><Columns>
+<asp:BoundField DataField="StatementText" HeaderText="Statement" HtmlEncode="true" /><asp:BoundField DataField="SortOrder" HeaderText="Order" />
+<asp:TemplateField HeaderText="Actions"><ItemTemplate><asp:Button ID="btnEditStatement" runat="server" Text="Edit" CommandName="EditStatement" CommandArgument='<%# Eval("StatementID") %>' ValidationGroup="Action" /><asp:Button ID="btnDeleteStatement" runat="server" Text="Delete" CommandName="DeleteStatement" CommandArgument='<%# Eval("StatementID") %>' ValidationGroup="Action" OnClientClick="return confirm('Delete this statement?');" /></ItemTemplate></asp:TemplateField></Columns></asp:GridView></div>
+<asp:Panel ID="pnlStatementForm" runat="server" CssClass="form-card"><h3>Add / edit statement</h3>
+<asp:ValidationSummary ID="vsStatement" runat="server" ValidationGroup="Statement" />
+<div class="field"><asp:Label ID="lblStatement" runat="server" AssociatedControlID="txtStatement" Text="Statement" /><asp:TextBox ID="txtStatement" runat="server" MaxLength="200" />
+<asp:RequiredFieldValidator ID="rfvStatement" runat="server" ControlToValidate="txtStatement" ValidationGroup="Statement" ErrorMessage="Enter a statement." /><asp:RegularExpressionValidator ID="revStatement" runat="server" ControlToValidate="txtStatement" ValidationGroup="Statement" ValidationExpression="^[\s\S]{5,200}$" ErrorMessage="Statement must be 5–200 characters." /></div>
+<div class="field"><asp:Label ID="lblStatementOrder" runat="server" AssociatedControlID="txtStatementOrder" Text="Statement order" /><asp:TextBox ID="txtStatementOrder" runat="server" TextMode="Number" />
+<asp:RequiredFieldValidator ID="rfvStatementOrder" runat="server" ControlToValidate="txtStatementOrder" ValidationGroup="Statement" ErrorMessage="Enter a statement order." /><asp:RangeValidator ID="rvStatementOrder" runat="server" ControlToValidate="txtStatementOrder" ValidationGroup="Statement" Type="Integer" MinimumValue="1" MaximumValue="2147483647" ErrorMessage="Statement order must be a positive integer." /></div>
+<div class="actions"><asp:Button ID="btnSaveStatement" runat="server" Text="Save statement" ValidationGroup="Statement" OnClick="SaveStatement" /><asp:Button ID="btnCancelStatement" runat="server" Text="Cancel statement edit" CausesValidation="false" OnClick="CancelStatement" /></div></asp:Panel></asp:Panel>
+<asp:Panel ID="pnlSummary" runat="server"><h2>Class confidence summary</h2><p>Average rating per statement across all submitted attempts, including repeat attempts. These are confidence ratings out of 5, not scores.</p>
+<div class="table-scroll" role="region" aria-label="Class confidence by statement" tabindex="0"><asp:GridView ID="gvSummary" runat="server" AutoGenerateColumns="false" Caption="Class confidence by statement" UseAccessibleHeader="true" EmptyDataText="No statements or ratings yet."><Columns><asp:BoundField DataField="StatementText" HeaderText="Statement" HtmlEncode="true" /><asp:BoundField DataField="Responses" HeaderText="Submitted ratings" /><asp:BoundField DataField="AverageDisplay" HeaderText="Average confidence / 5" HtmlEncode="true" /></Columns></asp:GridView></div></asp:Panel>
+</asp:Content>
+
