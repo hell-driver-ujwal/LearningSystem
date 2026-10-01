@@ -1,41 +1,125 @@
 <%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.Master.cs" Inherits="LearningSystem.SiteMaster" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title><%: Page.Title %> | Learning System</title>
+    <title><%: PageTitle %></title>
+    <meta name="theme-color" content="#1f3a5f" />
+    <meta property="og:site_name" content="<%: LearningSystem.Helpers.UiHelper.SiteName %>" />
+    <meta property="og:title" content="<%: PageTitle %>" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="<%: CanonicalUrl %>" />
+    <meta property="og:image" content="<%: LearningSystem.Helpers.UiHelper.SiteOrigin %>/Assets/images/social-card.png" />
+    <link rel="canonical" href="<%: CanonicalUrl %>" />
+    <link rel="icon" href="<%: ResolveUrl("~/favicon.ico") %>" sizes="32x32" />
+    <link rel="icon" href="<%: ResolveUrl("~/Assets/icons/favicon.svg") %>" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="<%: ResolveUrl("~/Assets/icons/apple-touch-icon.png") %>" />
+    <link rel="manifest" href="<%: ResolveUrl("~/site.webmanifest") %>" />
+    <link rel="preload" href="<%: ResolveUrl("~/Fonts/SourceSerif4-Variable.woff2") %>" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="<%: ResolveUrl("~/Fonts/SourceSans3-Variable.woff2") %>" as="font" type="font/woff2" crossorigin="anonymous" />
     <link href="~/Styles/site.css" rel="stylesheet" runat="server" />
-    <%-- Internal CSS demonstration required by the assignment. --%>
-    <style>.site-name { letter-spacing: -0.025em; }</style>
+    <%-- Internal CSS: this block demonstrates the internal stylesheet type required by the assignment. --%>
+    <style>
+        .site-name .dot { color: #b0502a; }
+        .no-js .menu-toggle { display: none; }
+    </style>
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
 </head>
 <body>
-    <a class="skip-link" href="#main-content">Skip to content</a>
-    <form id="frmSite" runat="server">
-        <header class="site-header">
-            <div class="header-inner">
-                <a class="logo" href="<%: ResolveUrl("~/Default.aspx") %>" aria-label="Learning System home"><span aria-hidden="true" class="logo-mark">LS</span><span class="site-name">Learning System</span></a>
-                <nav class="primary-nav" aria-label="Main navigation"><asp:PlaceHolder ID="phNavigation" runat="server" /></nav>
-                <nav class="account-nav" aria-label="Account navigation"><asp:PlaceHolder ID="phAccount" runat="server" /></nav>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+        <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+        <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+        <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+        <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+        <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 3 3 5-6"/></symbol>
+        <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></symbol>
+        <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></symbol>
+        <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></symbol>
+        <symbol id="i-play" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3z"/></symbol>
+        <symbol id="i-headphones" viewBox="0 0 24 24"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="5" height="7" rx="2"/><rect x="16" y="14" width="5" height="7" rx="2"/></symbol>
+        <symbol id="i-code" viewBox="0 0 24 24"><path d="m9 8-5 4 5 4M15 8l5 4-5 4M13.5 5l-3 14"/></symbol>
+        <symbol id="i-quiz" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 9 1.5 1.5L12 8M8 15l1.5 1.5L12 14M14 9.5h3M14 15.5h3"/></symbol>
+        <symbol id="i-puzzle" viewBox="0 0 24 24"><path d="M10 3h4v2.5a1.5 1.5 0 0 0 3 0V3h4v7h-2.5a1.5 1.5 0 0 0 0 3H21v8h-7v-2.5a1.5 1.5 0 0 0-3 0V21H3v-8h2.5a1.5 1.5 0 0 0 0-3H3V3h7z"/></symbol>
+        <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="19" r="2.5"/><circle cx="18" cy="5" r="2.5"/><path d="M8.5 19H16a3.5 3.5 0 0 0 0-7H8a3.5 3.5 0 0 1 0-7h7.5"/></symbol>
+        <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 18a9 9 0 1 1 16 0"/><path d="m12 13 4-5"/><circle cx="12" cy="13.5" r="1.5"/></symbol>
+        <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-5A8 8 0 1 1 21 12z"/></symbol>
+        <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 22a7 7 0 0 0 7-7c0-4-3-6.5-4.5-9.5C13 8 12 9 10.5 9.5 10 6.5 11 4 12 2 7.5 4.5 5 9.5 5 15a7 7 0 0 0 7 7z"/></symbol>
+        <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="m8.5 14-1.5 8 5-3 5 3-1.5-8"/></symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+        <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18.5 14a6.5 6.5 0 0 1 3 6"/></symbol>
+        <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+        <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4M4 20h16"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/><rect x="17" y="13" width="3" height="4"/></symbol>
+        <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 7 8.5-7"/></symbol>
+        <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 22s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+        <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17.5v.01"/></symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+        <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></symbol>
+        <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></symbol>
+        <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+        <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+        <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol>
+        <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+        <symbol id="i-logout" viewBox="0 0 24 24"><path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4M10 16l-4-4 4-4M6 12h10"/></symbol>
+        <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 11 9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+        <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></symbol>
+    </svg>
+
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="logo" href="<%: ResolveUrl("~/Default.aspx") %>" aria-label="<%: LearningSystem.Helpers.UiHelper.SiteName %> home">
+                <svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><rect width="40" height="40" rx="9" fill="#1f3a5f"/><path d="M20 6.5c-4.6 6.2-9.2 11.4-9.2 16.6a9.2 9.2 0 0 0 18.4 0c0-5.2-4.6-10.4-9.2-16.6z" fill="#f6efe2"/><path d="M20 19.5v9" stroke="#1f3a5f" stroke-width="2.2" stroke-linecap="round"/><circle cx="20" cy="18" r="2.4" fill="#b0502a"/></svg>
+                <span class="site-name"><%: LearningSystem.Helpers.UiHelper.SiteName %><span class="dot">.</span></span>
+            </a>
+            <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-nav"><svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg> Menu</button>
+            <div class="site-nav" id="site-nav">
+                <nav class="primary-nav" aria-label="Main"><asp:PlaceHolder ID="phNavigation" runat="server" /></nav>
+                <form class="header-search" role="search" action="<%: ResolveUrl("~/Courses.aspx") %>" method="get">
+                    <label class="visually-hidden" for="site-search">Search courses</label>
+                    <svg class="icon" aria-hidden="true"><use href="#i-search"></use></svg>
+                    <input type="search" id="site-search" name="q" maxlength="50" placeholder="Search courses" autocomplete="off" />
+                </form>
+                <nav class="account-nav" aria-label="Account"><asp:PlaceHolder ID="phAccount" runat="server" /></nav>
             </div>
-        </header>
-        <main id="main-content" class="page-shell" tabindex="-1">
+        </div>
+        <asp:Panel ID="pnlWorkspace" runat="server" CssClass="workspace-bar" Visible="false">
+            <nav class="workspace-nav" aria-label="Your workspace"><asp:PlaceHolder ID="phWorkspace" runat="server" /></nav>
+        </asp:Panel>
+    </header>
+
+    <form id="frmSite" runat="server">
+        <main id="main-content" class="page-shell<%: MainClass %>" tabindex="-1">
             <nav id="navBreadcrumb" runat="server" class="breadcrumb" aria-label="Breadcrumb"><asp:PlaceHolder ID="phBreadcrumb" runat="server" /></nav>
             <asp:Panel ID="pnlMessage" runat="server" Visible="false" role="status" aria-live="polite"><asp:Literal ID="litMessage" runat="server" Mode="Encode" /></asp:Panel>
             <asp:ContentPlaceHolder ID="MainContent" runat="server" />
         </main>
     </form>
     <asp:ContentPlaceHolder ID="OutsideFormContent" runat="server" />
-        <footer class="site-footer">
-            <div class="footer-inner">
-                <div><strong>Learning System</strong><p>Contact email: awaiting team details.<br />Address: awaiting team details.</p></div>
-                <div><nav aria-label="Footer navigation"><asp:PlaceHolder ID="phFooter" runat="server" /></nav><p>Last updated: 30 September 2026<br />&copy; <%: DateTime.UtcNow.Year %> Learning System</p></div>
-            </div>
-        </footer>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <section aria-labelledby="footer-about">
+                <h2 id="footer-about" class="visually-hidden">About <%: LearningSystem.Helpers.UiHelper.SiteName %></h2>
+                <a class="logo" href="<%: ResolveUrl("~/Default.aspx") %>"><svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><rect width="40" height="40" rx="9" fill="#f6efe2"/><path d="M20 6.5c-4.6 6.2-9.2 11.4-9.2 16.6a9.2 9.2 0 0 0 18.4 0c0-5.2-4.6-10.4-9.2-16.6z" fill="#1f3a5f"/><path d="M20 19.5v9" stroke="#f6efe2" stroke-width="2.2" stroke-linecap="round"/><circle cx="20" cy="18" r="2.4" fill="#b0502a"/></svg><span class="site-name"><%: LearningSystem.Helpers.UiHelper.SiteName %></span></a>
+                <p>Short courses for pre-university and foundation students, with practice built into every topic.</p>
+                <p><svg class="icon" aria-hidden="true"><use href="#i-mail"></use></svg> <a href="mailto:<%: LearningSystem.Helpers.UiHelper.ContactEmail %>"><%: LearningSystem.Helpers.UiHelper.ContactEmail %></a></p>
+                <p><svg class="icon" aria-hidden="true"><use href="#i-pin"></use></svg> <%: LearningSystem.Helpers.UiHelper.ContactAddress %></p>
+            </section>
+            <nav aria-labelledby="footer-learn"><h2 id="footer-learn">Learn</h2><asp:PlaceHolder ID="phFooterLearn" runat="server" /></nav>
+            <nav aria-labelledby="footer-support"><h2 id="footer-support">Support</h2><asp:PlaceHolder ID="phFooter" runat="server" /></nav>
+            <nav aria-labelledby="footer-legal"><h2 id="footer-legal">Company</h2><asp:PlaceHolder ID="phFooterLegal" runat="server" /></nav>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; <%: DateTime.UtcNow.Year %> <%: LearningSystem.Helpers.UiHelper.SiteName %> Academy. All rights reserved.</span>
+            <span>Last updated <%: LearningSystem.Helpers.UiHelper.LastUpdated %></span>
+        </div>
+    </footer>
     <div id="shortcut-settings" hidden data-home="<%: ResolveUrl("~/Default.aspx") %>" data-courses="<%: ResolveUrl("~/Courses.aspx") %>" data-help="<%: ResolveUrl("~/Help.aspx") %>" data-dashboard="<%: LearningSystem.Helpers.CurrentUserHelper.IsAuthenticated() ? ResolveUrl(LearningSystem.Helpers.CurrentUserHelper.GetDashboardUrl()) : "" %>"></div>
+    <script src="<%: ResolveUrl("~/Scripts/site.js") %>" defer></script>
     <script src="<%: ResolveUrl("~/Scripts/shortcuts.js") %>" defer></script>
 </body>
 </html>
-
-
-

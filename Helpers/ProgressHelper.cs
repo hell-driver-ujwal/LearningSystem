@@ -9,11 +9,11 @@ namespace LearningSystem.Helpers
         internal static DataTable PublishedItems(int learnerID, int courseID)
         {
             return DatabaseHelper.ExecuteTable(@"
-SELECT t.TopicID,t.Title AS TopicTitle,t.SortOrder AS TopicOrder,m.MaterialID AS ItemID,m.Title,m.MaterialType AS ItemType,m.SortOrder,0 AS ItemKind,
+SELECT t.TopicID,t.Title AS TopicTitle,t.SortOrder AS TopicOrder,m.MaterialID AS ItemID,m.Title,m.MaterialType AS ItemType,m.SortOrder,0 AS ItemKind,CAST(NULL AS nvarchar(10)) AS GameTemplate,
  CAST(CASE WHEN EXISTS(SELECT 1 FROM dbo.MaterialCompletion x WHERE x.MaterialID=m.MaterialID AND x.LearnerID=@user) THEN 1 ELSE 0 END AS bit) AS Done
 FROM dbo.Material m JOIN dbo.Topic t ON t.TopicID=m.TopicID WHERE t.CourseID=@course AND m.Status='Published'
 UNION ALL
-SELECT t.TopicID,t.Title,t.SortOrder,a.ActivityID,a.Title,a.ActivityType,a.SortOrder,1,
+SELECT t.TopicID,t.Title,t.SortOrder,a.ActivityID,a.Title,a.ActivityType,a.SortOrder,1,a.GameTemplate,
  CAST(CASE WHEN (a.ActivityType='Discussion' AND EXISTS(SELECT 1 FROM dbo.DiscussionPost p WHERE p.ActivityID=a.ActivityID AND p.UserID=@user))
  OR (a.ActivityType IN ('Quiz','SelfAssessment','Game','Scenario') AND EXISTS(SELECT 1 FROM dbo.Attempt x WHERE x.ActivityID=a.ActivityID AND x.LearnerID=@user)) THEN 1 ELSE 0 END AS bit)
 FROM dbo.Activity a JOIN dbo.Topic t ON t.TopicID=a.TopicID WHERE t.CourseID=@course AND a.Status='Published'

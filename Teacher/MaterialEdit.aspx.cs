@@ -60,7 +60,8 @@ namespace LearningSystem.Teacher
         private static SqlParameter[] IdParameters(int id) { return new[] { new SqlParameter("@id", id) }; }
         private void ShowTypeFields()
         {
-            pnlText.Visible = ddlType.SelectedValue == "Text";
+            pnlText.Visible = ddlType.SelectedValue == "Text" || ddlType.SelectedValue == "Code";
+            lblText.Text = ddlType.SelectedValue == "Code" ? "Starter code for the code lab (HTML with optional CSS and JavaScript, 20 to 10,000 characters)" : "Lesson text (20 to 10,000 characters)";
             pnlAlt.Visible = ddlType.SelectedValue == "Image";
             pnlFile.Visible = IsFileType(ddlType.SelectedValue);
             pnlYouTube.Visible = ddlType.SelectedValue == "YouTube";
@@ -71,9 +72,9 @@ namespace LearningSystem.Teacher
         {
             string type = ddlType.SelectedValue;
             string error = "";
-            if (!IsFileType(type) && type != "Text" && type != "YouTube") error = "Choose a material type.";
-            else if (type == "Text" && (txtText.Text.Length < 20 || txtText.Text.Length > 10000)) error = "Lesson text must be 20–10,000 characters.";
-            else if (type == "Image" && (txtAlt.Text.Length < 5 || txtAlt.Text.Length > 150)) error = "Image alt text must be 5–150 characters.";
+            if (!IsFileType(type) && type != "Text" && type != "Code" && type != "YouTube") error = "Choose a material type.";
+            else if ((type == "Text" || type == "Code") && (txtText.Text.Length < 20 || txtText.Text.Length > 10000)) error = "Lesson text or starter code must be 20 to 10,000 characters.";
+            else if (type == "Image" && (txtAlt.Text.Length < 5 || txtAlt.Text.Length > 150)) error = "Image alt text must be 5 to 150 characters.";
             else if (type == "YouTube" && !ValidYouTube(txtYouTube.Text)) error = "Enter a valid youtube.com/watch?v= video URL or youtu.be video URL.";
             if (error == "" && IsFileType(type))
             {
@@ -126,7 +127,7 @@ namespace LearningSystem.Teacher
                     SqlParameter[] parameters = {
                         new SqlParameter("@id", materialID), new SqlParameter("@topic", topicID), new SqlParameter("@title", SqlDbType.NVarChar,100) { Value=txtTitle.Text },
                         new SqlParameter("@type", type), new SqlParameter("@status", ddlStatus.SelectedValue), new SqlParameter("@order", order), new SqlParameter("@preview", chkPreview.Checked),
-                        new SqlParameter("@text", SqlDbType.NVarChar,-1) { Value=type == "Text" ? (object)txtText.Text : DBNull.Value },
+                        new SqlParameter("@text", SqlDbType.NVarChar,-1) { Value=type == "Text" || type == "Code" ? (object)txtText.Text : DBNull.Value },
                         new SqlParameter("@path", SqlDbType.NVarChar,500) { Value=String.IsNullOrEmpty(savedPath) ? (object)DBNull.Value : savedPath },
                         new SqlParameter("@url", SqlDbType.NVarChar,500) { Value=type == "YouTube" ? (object)txtYouTube.Text : DBNull.Value },
                         new SqlParameter("@alt", SqlDbType.NVarChar,150) { Value=type == "Image" ? (object)txtAlt.Text : DBNull.Value }

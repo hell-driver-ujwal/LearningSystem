@@ -12,7 +12,7 @@ namespace LearningSystem.Helpers
     {
         internal static DataRow Find(int courseID)
         {
-            DataTable rows = DatabaseHelper.ExecuteTable("SELECT c.*,s.SubjectName,u.FullName AS TeacherName FROM dbo.Course c JOIN dbo.Subject s ON s.SubjectID=c.SubjectID JOIN dbo.[User] u ON u.UserID=c.TeacherID WHERE c.CourseID=@id", new[] { new SqlParameter("@id", courseID) });
+            DataTable rows = DatabaseHelper.ExecuteTable("SELECT c.*,s.SubjectName,u.FullName AS TeacherName,u.Role AS TeacherRole FROM dbo.Course c JOIN dbo.Subject s ON s.SubjectID=c.SubjectID JOIN dbo.[User] u ON u.UserID=c.TeacherID WHERE c.CourseID=@id", new[] { new SqlParameter("@id", courseID) });
             return rows.Rows.Count == 1 ? rows.Rows[0] : null;
         }
         internal static int QueryID(string name)
@@ -24,30 +24,95 @@ namespace LearningSystem.Helpers
         }
         internal static string Encode(object value) { return HttpUtility.HtmlEncode(Convert.ToString(value, CultureInfo.InvariantCulture)); }
         internal static string Url(string path) { return VirtualPathUtility.ToAbsolute(path); }
+
         internal static string Progress(int learnerID, int courseID)
         {
             string percent = ProgressHelper.CalculatePercent(learnerID, courseID).ToString("0.##", CultureInfo.InvariantCulture);
-            return "<progress max=\"100\" value=\"" + percent + "\" aria-label=\"Course progress\">" + percent + "%</progress> <span>" + percent + "% complete</span>";
+            return "<span class=\"progress-row\"><progress max=\"100\" value=\"" + percent + "\" aria-label=\"Course progress\">" + percent + "%</progress> <span>" + percent + "% complete</span></span>";
         }
+
+        // Counts shown on course cards and the course page. Only published content is counted.
+        internal static DataRow Stats(int courseID)
+        {
+            return DatabaseHelper.ExecuteTable(@"SELECT
+ (SELECT COUNT(*) FROM dbo.Topic t WHERE t.CourseID=@id) AS Topics,
+ (SELECT COUNT(*) FROM dbo.Material m JOIN dbo.Topic t ON t.TopicID=m.TopicID WHERE t.CourseID=@id AND m.Status='Published') AS Lessons,
+ (SELECT COUNT(*) FROM dbo.Activity a JOIN dbo.Topic t ON t.TopicID=a.TopicID WHERE t.CourseID=@id AND a.Status='Published') AS Activities,
+ (SELECT COUNT(*) FROM dbo.Activity a JOIN dbo.Topic t ON t.TopicID=a.TopicID WHERE t.CourseID=@id AND a.Status='Published' AND a.ActivityType='Quiz') AS Quizzes,
+ (SELECT COUNT(*) FROM dbo.Activity a JOIN dbo.Topic t ON t.TopicID=a.TopicID WHERE t.CourseID=@id AND a.Status='Published' AND a.ActivityType='Game') AS Games,
+ (SELECT COUNT(*) FROM dbo.Activity a JOIN dbo.Topic t ON t.TopicID=a.TopicID WHERE t.CourseID=@id AND a.Status='Published' AND a.ActivityType='Scenario') AS Scenarios,
+ (SELECT COUNT(*) FROM dbo.Material m JOIN dbo.Topic t ON t.TopicID=m.TopicID WHERE t.CourseID=@id AND m.Status='Published' AND m.MaterialType='Code') AS CodeLabs,
+ (SELECT COUNT(*) FROM dbo.Material m JOIN dbo.Topic t ON t.TopicID=m.TopicID WHERE t.CourseID=@id AND m.Status='Published' AND m.MaterialType IN ('Video','Audio','YouTube')) AS MediaLessons,
+ (SELECT COUNT(*) FROM dbo.Enrolment e WHERE e.CourseID=@id) AS Learners,
+ (SELECT COUNT(*) FROM dbo.Review r WHERE r.CourseID=@id) AS Reviews,
+ (SELECT AVG(CAST(r.Rating AS decimal(10,2))) FROM dbo.Review r WHERE r.CourseID=@id) AS Rating", new[] { new SqlParameter("@id", courseID) }).Rows[0];
+        }
+
+        internal static string CoverHtml(DataRow row, string cssClass)
+        {
+            if (row.IsNull("CoverImagePath"))
+                return "<div class=\"cover-placeholder\" aria-hidden=\"true\">" + Encode(row["Title"]) + "</div>";
+            return "<img class=\"" + cssClass + "\" src=\"" + Url("~/Media.ashx?courseId=" + row["CourseID"]) + "\" alt=\"Cover image for " + Encode(row["Title"]) + "\" loading=\"lazy\" width=\"640\" height=\"360\" />";
+        }
+
+        internal static string RatingHtml(DataRow stats)
+        {
+            if ((int)stats["Reviews"] == 0) return "<p class=\"course-rating muted\">No reviews yet</p>";
+            string average = Convert.ToDecimal(stats["Rating"]).ToString("0.0", CultureInfo.InvariantCulture);
+            return "<p class=\"course-rating\"><span class=\"star\" aria-hidden=\"true\">&#9733;</span> " + average + " <span class=\"muted\">(" + UiHelper.Plural((int)stats["Reviews"], "review") + ")</span></p>";
+        }
+
+        internal static string PriceHtml(DataRow row)
+        {
+            bool paid = (bool)row["IsPaid"];
+            return "<p class=\"course-price" + (paid ? "" : " free") + "\">" + (paid ? Encode(UiHelper.Money((decimal)row["PriceNPR"])) : "Free") + "</p>";
+        }
+
         internal static void Cards(PlaceHolder target, DataTable courses)
         {
             target.Controls.Clear();
-            if (courses.Rows.Count == 0) { target.Controls.Add(new LiteralControl("<p>No published courses match your selection.</p>")); return; }
+            if (courses.Rows.Count == 0)
+            {
+                target.Controls.Add(new LiteralControl("<div class=\"empty-state\">" + UiHelper.Icon("search") + "<strong>No courses match your search</strong><p>Try a different word, choose another subject, or clear the filters to see every course.</p></div>"));
+                return;
+            }
             StringBuilder html = new StringBuilder("<div class=\"course-grid\">");
             foreach (DataRow row in courses.Rows)
             {
                 string id = row["CourseID"].ToString();
-                html.Append("<article class=\"course-card\">");
-                if (!row.IsNull("CoverImagePath")) html.Append("<img class=\"course-cover\" src=\"").Append(Url("~/Media.ashx?courseId=" + id)).Append("\" alt=\"").Append(Encode(row["Title"])).Append("\" />");
-                else html.Append("<div class=\"cover-placeholder\">Course cover not supplied</div>");
-                html.Append("<h3><a href=\"").Append(Url("~/CourseDetails.aspx?id="+id)).Append("\">").Append(Encode(row["Title"])).Append("</a></h3><p class=\"course-subject\">").Append(Encode(row["SubjectName"])).Append("</p>");
-                html.Append("<p class=\"course-rating\">Rating: ").Append(Encode(ReviewHelper.Average((int)row["CourseID"]))).Append("</p>");
-                html.Append("<p class=\"course-price\">").Append(Encode(PaymentHelper.Price(row))).Append("</p>");
-                if(row.Table.Columns.Contains("TeacherName"))html.Append("<p class=\"course-teacher\">By ").Append(Encode(row["TeacherName"])).Append("</p>");
-                html.Append("<p class=\"course-description\">").Append(Encode(row["Description"])).Append("</p><p class=\"course-action\"><a href=\"").Append(Url("~/CourseDetails.aspx?id="+id)).Append("\" aria-label=\"View course: ").Append(Encode(row["Title"])).Append("\">View course &#8594;</a></p></article>");
+                DataRow stats = Stats((int)row["CourseID"]);
+                html.Append("<article class=\"course-card\">").Append(CoverHtml(row, "course-cover"));
+                html.Append("<div class=\"course-body\"><p class=\"course-subject\">").Append(Encode(row["SubjectName"])).Append("</p>");
+                html.Append("<h3><a href=\"").Append(Url("~/CourseDetails.aspx?id=" + id)).Append("\">").Append(Encode(row["Title"])).Append("</a></h3>");
+                if (row.Table.Columns.Contains("TeacherName")) html.Append("<p class=\"course-teacher\">").Append(Encode(row["TeacherName"])).Append("</p>");
+                html.Append("<p class=\"course-description\">").Append(Encode(row["Description"])).Append("</p>");
+                html.Append("<ul class=\"course-meta\" aria-label=\"Course contents\"><li>").Append(UiHelper.Icon("book")).Append(UiHelper.Plural((int)stats["Lessons"], "lesson"))
+                    .Append("</li><li>").Append(UiHelper.Icon("puzzle")).Append(UiHelper.Plural((int)stats["Activities"], "activity", "activities")).Append("</li>");
+                if ((int)stats["CodeLabs"] > 0) html.Append("<li>").Append(UiHelper.Icon("code")).Append("Code labs</li>");
+                html.Append("</ul><div class=\"course-foot\">").Append(PriceHtml(row)).Append(RatingHtml(stats)).Append("</div></div></article>");
             }
             html.Append("</div>"); target.Controls.Add(new LiteralControl(html.ToString()));
         }
+
+        // Link for one published item. Learners go to the lesson or activity; visitors only see free previews.
+        internal static string ItemLink(DataRow item, bool learner)
+        {
+            bool material = (int)item["ItemKind"] == 0;
+            string type = (string)item["ItemType"];
+            if (material && learner) return "~/Member/Lesson.aspx?id=" + item["ItemID"];
+            if (material) return AccessHelper.CanViewFreePreview((int)item["ItemID"]) ? "~/Preview.aspx?id=" + item["ItemID"] : null;
+            if (!learner) return null;
+            return "~/Member/" + (type == "Game" ? "PlayGame" : type) + ".aspx?id=" + item["ItemID"];
+        }
+
+        internal static string ItemLabel(DataRow item)
+        {
+            string type = (string)item["ItemType"];
+            if ((int)item["ItemKind"] == 1 && type == "Game" && item.Table.Columns.Contains("GameTemplate") && !item.IsNull("GameTemplate"))
+                return "Game: " + GameHelper.TemplateName((string)item["GameTemplate"]).ToLowerInvariant();
+            return UiHelper.TypeLabel(type);
+        }
+
         internal static void Outline(PlaceHolder target, int courseID, bool learner)
         {
             int user = learner ? CurrentUserHelper.GetUserID().Value : 0;
@@ -55,40 +120,43 @@ namespace LearningSystem.Helpers
             DataTable topics = DatabaseHelper.ExecuteTable("SELECT TopicID,Title FROM dbo.Topic WHERE CourseID=@id ORDER BY SortOrder,TopicID", new[] { new SqlParameter("@id", courseID) });
             target.Controls.Clear();
             StringBuilder html = new StringBuilder();
-            if (topics.Rows.Count == 0) html.Append("<p>No published learning content is available yet.</p>");
+            if (topics.Rows.Count == 0) html.Append("<div class=\"empty-state\"><strong>Content is on its way</strong><p>The lecturer has not published any topics yet.</p></div>");
+            int number = 0;
             foreach (DataRow topic in topics.Rows)
             {
-                html.Append("<section class=\"topic-card\"><h2>").Append(Encode(topic["Title"])).Append("</h2><ul class=\"lesson-list\">");
-                int count = 0, activities = 0;
+                number++;
+                int count = 0, done = 0;
+                StringBuilder list = new StringBuilder();
                 foreach (DataRow item in items.Rows)
                 {
                     if ((int)item["TopicID"] != (int)topic["TopicID"]) continue;
-                    count++; bool material = (int)item["ItemKind"] == 0;
-                    if (!material) activities++;
-                    html.Append("<li>");
-                    if (learner) html.Append((bool)item["Done"] ? "<span aria-label=\"Completed\">&#10003;</span> " : "<span class=\"muted\">Not completed</span> ");
-                    string link = null;
-                    if (material && learner) link = "~/Member/Lesson.aspx?id=" + item["ItemID"];
-                    else if (material && AccessHelper.CanViewFreePreview((int)item["ItemID"])) link = "~/Preview.aspx?id=" + item["ItemID"];
-                    if (!material && learner && ((string)item["ItemType"] == "Quiz" || (string)item["ItemType"] == "Discussion" || (string)item["ItemType"] == "SelfAssessment" || (string)item["ItemType"] == "Scenario")) link = "~/Member/" + item["ItemType"] + ".aspx?id=" + item["ItemID"];
-                    if (!material && learner && (string)item["ItemType"] == "Game") link = "~/Member/PlayGame.aspx?id=" + item["ItemID"];
-                    if (link != null) html.Append("<a href=\"").Append(Url(link)).Append("\">").Append(Encode(item["Title"])).Append("</a>");
-                    else html.Append(Encode(item["Title"]));
-                    html.Append(" — ").Append(Encode(item["ItemType"]));
-                    if (material && !learner && link != null) html.Append(" <span class=\"badge\">Free preview</span>");
-                    if (!material && learner && link == null) html.Append(" <span class=\"muted\">— activity player available in a later phase</span>");
-                    html.Append("</li>");
+                    count++;
+                    bool isDone = (bool)item["Done"];
+                    if (isDone) done++;
+                    string link = ItemLink(item, learner);
+                    list.Append("<li>");
+                    if (learner) list.Append(isDone ? "<span class=\"check\" title=\"Completed\">" + UiHelper.Icon("check") + "<span class=\"visually-hidden\">Completed: </span></span>" : "<span class=\"todo\" title=\"Not completed yet\"><span class=\"visually-hidden\">Not completed: </span></span>");
+                    list.Append(UiHelper.TypeMark((string)item["ItemType"])).Append("<span class=\"item-title\">");
+                    if (link != null) list.Append("<a href=\"").Append(Url(link)).Append("\">").Append(Encode(item["Title"])).Append("</a>");
+                    else list.Append(Encode(item["Title"]));
+                    if ((int)item["ItemKind"] == 0 && !learner && link != null) list.Append(" <span class=\"chip green\">Free preview</span>");
+                    list.Append("</span><span class=\"item-type\">").Append(Encode(ItemLabel(item))).Append("</span></li>");
                 }
-                if (count == 0) html.Append("<li>No published items in this topic.</li>");
-                html.Append("</ul><p>").Append(activities).Append(" published activities</p></section>");
+                string summary = learner ? done + " of " + count + " done" : UiHelper.Plural(count, "item");
+                html.Append("<section class=\"topic-card\"><h2 class=\"topic-head\"><span>").Append(number).Append(". ").Append(Encode(topic["Title"]))
+                    .Append("</span><span class=\"muted\">").Append(summary).Append("</span></h2>");
+                html.Append(count == 0 ? "<p class=\"muted\">No published items in this topic yet.</p>" : "<ul class=\"lesson-list\">" + list + "</ul>");
+                html.Append("</section>");
             }
             target.Controls.Add(new LiteralControl(html.ToString()));
         }
+
+        // The first published item the learner has not finished yet, used for "Continue learning".
+        internal static DataRow NextItem(int learnerID, int courseID)
+        {
+            foreach (DataRow item in ProgressHelper.PublishedItems(learnerID, courseID).Rows)
+                if (!(bool)item["Done"]) return item;
+            return null;
+        }
     }
 }
-
-
-
-
-
-
