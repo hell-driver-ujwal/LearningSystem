@@ -27,7 +27,11 @@ namespace LearningSystem.Helpers
 
         internal static string Progress(int learnerID, int courseID)
         {
-            string percent = ProgressHelper.CalculatePercent(learnerID, courseID).ToString("0.##", CultureInfo.InvariantCulture);
+            return ProgressBar(ProgressHelper.CalculatePercent(learnerID, courseID));
+        }
+        internal static string ProgressBar(decimal value)
+        {
+            string percent = value.ToString("0.##", CultureInfo.InvariantCulture);
             return "<span class=\"progress-row\"><progress max=\"100\" value=\"" + percent + "\" aria-label=\"Course progress\">" + percent + "%</progress> <span>" + percent + "% complete</span></span>";
         }
 
@@ -154,9 +158,15 @@ namespace LearningSystem.Helpers
         // The first published item the learner has not finished yet, used for "Continue learning".
         internal static DataRow NextItem(int learnerID, int courseID)
         {
-            foreach (DataRow item in ProgressHelper.PublishedItems(learnerID, courseID).Rows)
-                if (!(bool)item["Done"]) return item;
-            return null;
+            DataTable items = ProgressHelper.PublishedItems(learnerID, courseID);
+            int index = FirstUnfinished(items);
+            return index < 0 ? null : items.Rows[index];
+        }
+        // Position of the first item the learner has not finished, or -1 when the course is complete.
+        internal static int FirstUnfinished(DataTable items)
+        {
+            for (int i = 0; i < items.Rows.Count; i++) if (!(bool)items.Rows[i]["Done"]) return i;
+            return -1;
         }
     }
 }

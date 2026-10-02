@@ -66,11 +66,16 @@
         show(0, false);
     }
 
+    // Only a click, tap or number key moves on to the next question. Arrow keys inside a radio group
+    // also select options, so keyboard and screen-reader users must be able to use them without jumping away.
+    var pickedDirectly = false;
+    document.addEventListener("pointerdown", function (event) { if (event.target.closest && event.target.closest(".quiz-option")) pickedDirectly = true; });
     document.addEventListener("change", function (event) {
         if (!event.target.name || event.target.name.indexOf("q_") !== 0) return;
         update(); fx().play("click");
+        var moveOn = pickedDirectly; pickedDirectly = false;
         // Move on to the next question after a short pause, so the choice is visible first.
-        if (questions.length > 1 && current < questions.length - 1 && questions[current].contains(event.target)) {
+        if (moveOn && questions.length > 1 && current < questions.length - 1 && questions[current].contains(event.target)) {
             var from = current;
             window.setTimeout(function () { if (current === from) window.quizShow(current + 1, false); }, 450);
         }
@@ -78,11 +83,12 @@
 
     // Number keys choose an option in the question on screen (not while typing in a field).
     document.addEventListener("keydown", function (event) {
+        pickedDirectly = false; // a key press is never a click: only the number keys below count as a direct pick
         if (event.ctrlKey || event.altKey || event.metaKey || /input|textarea|select/i.test(event.target.tagName) && event.target.type !== "radio") return;
         var number = Number(event.key);
         if (!number) return;
         var options = questions[current].querySelectorAll("input[type=radio]");
-        if (options[number - 1]) { options[number - 1].checked = true; options[number - 1].focus(); options[number - 1].dispatchEvent(new Event("change", { bubbles: true })); }
+        if (options[number - 1]) { pickedDirectly = true; options[number - 1].checked = true; options[number - 1].focus(); options[number - 1].dispatchEvent(new Event("change", { bubbles: true })); }
     });
     update();
 

@@ -29,6 +29,8 @@ namespace LearningSystem.Helpers
         public int LongestStreak;
         public int TodayCount;
         public int DailyGoal;
+        public int CoursesDone;
+        public HashSet<DateTime> Days = new HashSet<DateTime>();
         public List<Badge> Badges = new List<Badge>();
         public int BadgesEarned { get { int n = 0; foreach (Badge b in Badges) if (b.Earned) n++; return n; } }
     }
@@ -54,6 +56,20 @@ namespace LearningSystem.Helpers
             return 0;
         }
 
+        // XP the learner currently holds for one activity: it always comes from their best result.
+        public static int BestActivityXp(int learnerID, int activityID)
+        {
+            DataTable best = DatabaseHelper.ExecuteTable(@"SELECT a.ActivityType, MAX(x.ScorePercent) AS BestScore,
+ MAX(CASE s.Outcome WHEN 'Best' THEN 3 WHEN 'Acceptable' THEN 2 WHEN 'Poor' THEN 1 ELSE 0 END) AS BestOutcome
+FROM dbo.Attempt x JOIN dbo.Activity a ON a.ActivityID=x.ActivityID LEFT JOIN dbo.SimStep s ON s.StepID=x.EndingStepID
+WHERE x.LearnerID=@user AND x.ActivityID=@id GROUP BY a.ActivityType", new[] { new SqlParameter("@user", learnerID), new SqlParameter("@id", activityID) });
+            if (best.Rows.Count == 0) return 0;
+            DataRow row = best.Rows[0];
+            int outcome = Convert.ToInt32(row["BestOutcome"]);
+            return ActivityXp((string)row["ActivityType"], row.IsNull("BestScore") ? (decimal?)null : Convert.ToDecimal(row["BestScore"]),
+                outcome == 3 ? "Best" : outcome == 2 ? "Acceptable" : outcome == 1 ? "Poor" : null);
+        }
+
         // Level n starts at 50 x n x (n - 1) XP: 0, 100, 300, 600, 1000, 1500 and so on.
         public static int LevelFor(int xp)
         {
@@ -75,8 +91,8 @@ namespace LearningSystem.Helpers
  (SELECT COUNT(DISTINCT ActivityID) FROM dbo.DiscussionPost WHERE UserID=@user) AS Discussions,
  (SELECT COUNT(*) FROM dbo.Enrolment WHERE LearnerID=@user) AS Enrolments,
  (SELECT COUNT(*) FROM dbo.MaterialCompletion WHERE LearnerID=@user AND CAST(CompletedDate AS date)=CAST(SYSUTCDATETIME() AS date))
- + (SELECT COUNT(*) FROM dbo.Attempt WHERE LearnerID=@user AND CAST(SubmittedAt AS date)=CAST(SYSUTCDATETIME() AS date))
- + (SELECT COUNT(*) FROM dbo.DiscussionPost WHERE UserID=@user AND CAST(PostedDate AS date)=CAST(SYSUTCDATETIME() AS date)) AS Today", me).Rows[0];
+ + (SELECT COUNT(DISTINCT ActivityID) FROM dbo.Attempt WHERE LearnerID=@user AND CAST(SubmittedAt AS date)=CAST(SYSUTCDATETIME() AS date))
+ + (SELECT COUNT(DISTINCT ActivityID) FROM dbo.DiscussionPost WHERE UserID=@user AND CAST(PostedDate AS date)=CAST(SYSUTCDATETIME() AS date)) AS Today", me).Rows[0];
 
             // Best result on each activity the learner has attempted.
             DataTable best = DatabaseHelper.ExecuteTable(@"SELECT a.ActivityType, MAX(x.ScorePercent) AS BestScore,
@@ -106,14 +122,15 @@ WHERE x.LearnerID=@user GROUP BY x.ActivityID, a.ActivityType", new[] { new SqlP
             foreach (DataRow course in DatabaseHelper.ExecuteTable("SELECT e.CourseID FROM dbo.Enrolment e JOIN dbo.Course c ON c.CourseID=e.CourseID WHERE e.LearnerID=@user AND c.Status='Published'", new[] { new SqlParameter("@user", learnerID) }).Rows)
                 if (ProgressHelper.CalculatePercent(learnerID, (int)course["CourseID"]) == 100m) coursesDone++;
             stats.Xp += coursesDone * CourseBonusXp;
+            stats.CoursesDone = coursesDone;
 
             stats.Level = LevelFor(stats.Xp);
             stats.LevelTitle = TitleFor(stats.Level);
             stats.XpIntoLevel = stats.Xp - LevelStart(stats.Level);
             stats.XpForLevel = LevelStart(stats.Level + 1) - LevelStart(stats.Level);
-            HashSet<DateTime> days = EngagementHelper.ActiveDays(learnerID);
-            stats.Streak = EngagementHelper.Streak(days);
-            stats.LongestStreak = LongestStreak(days);
+            stats.Days = EngagementHelper.ActiveDays(learnerID);
+            stats.Streak = EngagementHelper.Streak(stats.Days);
+            stats.LongestStreak = LongestStreak(stats.Days);
             stats.TodayCount = Convert.ToInt32(totals["Today"]);
             stats.DailyGoal = DailyGoalItems;
 

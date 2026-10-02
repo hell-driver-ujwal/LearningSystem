@@ -138,7 +138,7 @@ namespace LearningSystem.Helpers
                 }
                 if(total==0)throw new InvalidOperationException("No valid quiz questions are available.");
                 decimal percent=Math.Round(earned*100m/total,2,MidpointRounding.AwayFromZero);
-                string feedback=Review(questions,chosen,percent);
+                string feedback=Review(questions,chosen,percent,null,true);
                 if(!preview)
                 {
                     int attempt=Convert.ToInt32(DatabaseHelper.ExecuteScalar(c,t,"INSERT dbo.Attempt(ActivityID,LearnerID,ScorePercent,TimeTakenSeconds) VALUES(@id,@user,@score,@seconds); SELECT CAST(SCOPE_IDENTITY() AS int)",new[] {new SqlParameter("@id",id),new SqlParameter("@user",run.UserID),new SqlParameter("@score",percent),new SqlParameter("@seconds",(int)Math.Min(Int32.MaxValue,Math.Floor((now-run.Started).TotalSeconds)))}));
@@ -150,7 +150,7 @@ namespace LearningSystem.Helpers
                 run.Feedback=feedback;run.Finished=true;return run;
             }
         }
-        internal static string Review(DataTable questions,Dictionary<int,int?> chosen,decimal percent)
+        internal static string Review(DataTable questions,Dictionary<int,int?> chosen,decimal percent,int? bestXp,bool celebrate)
         {
             StringBuilder list=new StringBuilder("<ol class=\"answer-review\">");
             int last=0,questionCount=0,rightCount=0;
@@ -177,7 +177,7 @@ namespace LearningSystem.Helpers
             list.Append("</ol>");
             string value=percent.ToString("0.##",System.Globalization.CultureInfo.InvariantCulture);
             string message=percent>=80m ? "Excellent work. You have a strong grasp of this topic." : percent>=50m ? "Good effort. Review the questions below, then try again to improve your score." : "Keep going. Re-read the lesson, then use the review below before your next try.";
-            return "<section class=\"result-panel\" aria-label=\"Your score\">"+GameUiHelper.ResultArt(percent,"Quiz")+"<div><h2>"+rightCount+" of "+questionCount+" questions correct</h2><p>"+message+"</p></div></section><h2>Answer review</h2>"+list;
+            return "<section class=\"result-panel\" aria-label=\"Your score\">"+GameUiHelper.ResultArt(percent,bestXp,celebrate)+"<div><h2>"+rightCount+" of "+questionCount+" questions correct</h2><p>"+message+"</p></div></section><h2>Answer review</h2>"+list;
         }
     }
 }

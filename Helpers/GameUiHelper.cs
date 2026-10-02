@@ -74,28 +74,30 @@ namespace LearningSystem.Helpers
 
         // Result art for quizzes and games: Inky reacts to the score, the ring shows it, and the label shows its XP.
         // data-celebrate asks fx.js for confetti and a sound on good scores.
-        public static string ResultArt(decimal score, string type)
+        // bestXp: what the learner's best result on this activity is worth, or null (previews and other people's attempts).
+        // celebrate: only straight after a result is submitted, not when an old attempt is reopened.
+        public static string ResultArt(decimal score, int? bestXp, bool celebrate)
         {
             string value = score.ToString("0.##", CultureInfo.InvariantCulture);
             string pose = score >= 80m ? "cheer" : score >= 50m ? "wave" : "oops";
-            string celebrate = score >= 80m ? "big" : score >= 50m ? "small" : "none";
-            return "<div data-celebrate=\"" + celebrate + "\">" + MascotHelper.Render(pose) + "</div><div style=\"display:grid;justify-items:center;gap:10px\"><div class=\"score-ring\" style=\"--value:" + value + "\"><span>" + value + "%</span></div>"
-                + XpEarned(GamificationHelper.ActivityXp(type, score, null), 50) + "</div>";
+            string party = !celebrate ? "none" : score >= 80m ? "big" : score >= 50m ? "small" : "none";
+            return "<div data-celebrate=\"" + party + "\">" + MascotHelper.Render(pose) + "</div><div style=\"display:grid;justify-items:center;gap:10px\"><div class=\"score-ring\" style=\"--value:" + value + "\"><span>" + value + "%</span></div>"
+                + (bestXp.HasValue ? XpEarned(bestXp.Value, 50) : "") + "</div>";
         }
 
         // Scenario endings: Inky's reaction depends on the outcome; a saved best ending gets confetti.
-        public static string OutcomeArt(string outcome, bool celebrate)
+        public static string OutcomeArt(string outcome, int? bestXp, bool celebrate)
         {
             string pose = outcome == "Best" ? "trophy" : outcome == "Acceptable" ? "think" : "oops";
             string party = !celebrate ? "none" : outcome == "Best" ? "big" : outcome == "Acceptable" ? "small" : "none";
             return "<div class=\"outcome-art\" data-celebrate=\"" + party + "\">" + MascotHelper.Render(pose)
-                + XpEarned(GamificationHelper.ActivityXp("Scenario", null, outcome), 40) + "</div>";
+                + (bestXp.HasValue ? XpEarned(bestXp.Value, 40) : "") + "</div>";
         }
 
-        // XP this attempt's activity is now worth, shown on result pages.
+        // XP the learner's best result on an activity is worth, shown on result pages.
         public static string XpEarned(int xp, int max)
         {
-            return "<p class=\"xp-earned\">" + UiHelper.Icon("zap") + "Activity XP: " + xp + " of " + max + "</p>";
+            return "<p class=\"xp-earned\">" + UiHelper.Icon("zap") + "Your best here: " + xp + " of " + max + " XP</p>";
         }
 
         // The course as a winding path of nodes, one per lesson or activity, in course order.

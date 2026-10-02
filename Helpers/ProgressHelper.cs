@@ -22,7 +22,11 @@ ORDER BY TopicOrder,TopicID,ItemKind,SortOrder,ItemID",
         }
         public static decimal CalculatePercent(int learnerID, int courseID)
         {
-            DataTable items = PublishedItems(learnerID, courseID);
+            return PercentOf(PublishedItems(learnerID, courseID));
+        }
+        // The same rule for a table that is already loaded, so a page does not query the items twice.
+        public static decimal PercentOf(DataTable items)
+        {
             if (items.Rows.Count == 0) return 0m;
             int done = 0;
             foreach (DataRow row in items.Rows) if ((bool)row["Done"]) done++;

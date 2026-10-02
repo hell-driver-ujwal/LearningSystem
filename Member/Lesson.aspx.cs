@@ -11,6 +11,7 @@ namespace LearningSystem.Member
     {
         private int materialID;
         private bool preview;
+        private int courseID;
         protected void Page_Load(object sender,EventArgs e)
         {
             AccessHelper.RequireRole(new[] {"Learner","Teacher","Admin"});
@@ -26,7 +27,7 @@ namespace LearningSystem.Member
                 MaterialHelper.Render(phViewer,row,preview);
                 ((SiteMaster)Master).Breadcrumb=BreadcrumbHelper.ForMaterial(row,preview,false);
                 pnlPreview.Visible=preview;btnComplete.Visible=!preview;
-                int courseID=(int)row["CourseID"];
+                courseID=(int)row["CourseID"];
                 // Owners (lecturer or admin author) return to their builder; other admins return to course oversight.
                 bool owner=AccessHelper.IsOwnerOfCourse(CurrentUserHelper.GetUserID().Value,courseID);
                 string back=preview ? (owner ? "~/Teacher/CourseBuilder.aspx?id="+courseID : "~/Admin/Courses.aspx") : "~/Learner/CourseHome.aspx?id="+courseID;
@@ -90,21 +91,11 @@ namespace LearningSystem.Member
                 break;
             }
         }
-        // After completing a lesson the learner goes straight to the next item in the course,
-        // or back to the course path when this was the last one.
-        private string NextAfterThis()
-        {
-            int courseID=Convert.ToInt32(DatabaseHelper.ExecuteScalar("SELECT t.CourseID FROM dbo.Material m JOIN dbo.Topic t ON t.TopicID=m.TopicID WHERE m.MaterialID=@id",new[] {new SqlParameter("@id",materialID)}));
-            DataTable items=ProgressHelper.PublishedItems(CurrentUserHelper.GetUserID().Value,courseID);
-            for(int i=0;i<items.Rows.Count-1;i++)
-                if((int)items.Rows[i]["ItemKind"]==0 && (int)items.Rows[i]["ItemID"]==materialID) return CourseHelper.ItemLink(items.Rows[i+1],true);
-            return "~/Learner/CourseHome.aspx?id="+courseID;
-        }
-
         protected void MarkComplete(object sender,EventArgs e)
         {
             if (!Page.IsValid) return;
             if(preview || CurrentUserHelper.GetRole()!="Learner") {Response.Redirect("~/AccessDenied.aspx");return;}
+            int added=0;
             try
             {
                 using(SqlConnection connection=DatabaseHelper.OpenConnection())
@@ -114,13 +105,15 @@ namespace LearningSystem.Member
                     if(published!=1){Response.Redirect("~/NotFound.aspx");return;}
                     int allowed=Convert.ToInt32(DatabaseHelper.ExecuteScalar(connection,transaction,"SELECT COUNT(*) FROM dbo.Material m JOIN dbo.Topic t ON t.TopicID=m.TopicID JOIN dbo.Enrolment e ON e.CourseID=t.CourseID JOIN dbo.[User] u ON u.UserID=e.LearnerID WHERE m.MaterialID=@id AND e.LearnerID=@user AND u.Role='Learner' AND u.Status='Active'",new[] {new SqlParameter("@id",materialID),new SqlParameter("@user",CurrentUserHelper.GetUserID().Value)}));
                     if(allowed!=1){Response.Redirect("~/AccessDenied.aspx");return;}
-                    DatabaseHelper.ExecuteNonQuery(connection,transaction,"IF NOT EXISTS(SELECT 1 FROM dbo.MaterialCompletion WHERE LearnerID=@user AND MaterialID=@id) INSERT dbo.MaterialCompletion (LearnerID,MaterialID) VALUES (@user,@id)",new[] {new SqlParameter("@user",CurrentUserHelper.GetUserID().Value),new SqlParameter("@id",materialID)});
+                    added=DatabaseHelper.ExecuteNonQuery(connection,transaction,"IF NOT EXISTS(SELECT 1 FROM dbo.MaterialCompletion WHERE LearnerID=@user AND MaterialID=@id) INSERT dbo.MaterialCompletion (LearnerID,MaterialID) VALUES (@user,@id)",new[] {new SqlParameter("@user",CurrentUserHelper.GetUserID().Value),new SqlParameter("@id",materialID)});
                     transaction.Commit();
                 }
-                MessageHelper.SetSuccess("Lesson complete! +"+GamificationHelper.LessonXp+" XP.");
-                Response.Redirect(NextAfterThis());
             }
-            catch(SqlException) {MessageHelper.SetError("Completion could not be saved. Please try again.");}
+            catch(SqlException) {MessageHelper.SetError("Completion could not be saved. Please try again.");return;}
+            // The insert reports one row only when this lesson was not complete before.
+            MessageHelper.SetSuccess(added==1 ? "Lesson complete! +"+GamificationHelper.LessonXp+" XP." : "This lesson was already complete.");
+            // Page_Load has already worked out the next item for the Next link; go there, or back to the course path.
+            Response.Redirect(lnkNext.Visible ? lnkNext.NavigateUrl : "~/Learner/CourseHome.aspx?id="+courseID);
         }
         protected void SetBookmark(object sender,EventArgs e)
         {

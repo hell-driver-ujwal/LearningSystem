@@ -19,11 +19,10 @@ namespace LearningSystem.Learner
                 PlayerStats stats=GamificationHelper.Load(user);
                 phPlayer.Controls.Add(new LiteralControl(GameUiHelper.PlayerCard(stats,UiHelper.FirstName(name),user)));
                 phBadges.Controls.Add(new LiteralControl(GameUiHelper.BadgeGrid(stats)));
-                litWeek.Text=EngagementHelper.WeekStrip(EngagementHelper.ActiveDays(user));
+                litWeek.Text=EngagementHelper.WeekStrip(stats.Days);
 
                 DataTable courses=DatabaseHelper.ExecuteTable("SELECT c.CourseID,c.Title,c.Status,c.CoverImagePath,s.SubjectName FROM dbo.Enrolment e JOIN dbo.Course c ON c.CourseID=e.CourseID JOIN dbo.Subject s ON s.SubjectID=c.SubjectID WHERE e.LearnerID=@user ORDER BY e.EnrolDate DESC,c.CourseID DESC",new[] {new SqlParameter("@user",user)});
-                int completed=0;
-                foreach(DataRow row in courses.Rows) if((string)row["Status"]=="Published" && ProgressHelper.CalculatePercent(user,(int)row["CourseID"])==100m) completed++;
+                int completed=stats.CoursesDone;
                 litCourses.Text=courses.Rows.Count.ToString(CultureInfo.InvariantCulture);
                 litCoursesNote.Text=completed+" completed, "+(courses.Rows.Count-completed)+" in progress";
                 litDone.Text=EngagementHelper.CompletedItems(user).ToString(CultureInfo.InvariantCulture);

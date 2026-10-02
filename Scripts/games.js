@@ -165,7 +165,7 @@
             });
             setProgress(count(answers));
             if (count(answers) === data.items.length && !finished) finish("Every item is matched!", "Check the colours: each pair shares a number.");
-            else if (finished) unfinish();
+            else if (count(answers) < data.items.length && finished) unfinish();
         }
         order.forEach(function (item) {
             leftButtons[item.id] = button(item.text, function () { selected = item.id; refresh(); fx().play("click"); announce("Now pick the match for: " + item.text); });
@@ -258,7 +258,7 @@
                 });
                 if (input.value.trim()) answers[item.id] = input.value.trim(); else delete answers[item.id];
                 setProgress(count(answers));
-                var allFull = data.items.every(function (it) { return answers[it.id] && answers[it.id].length === it.text.length; });
+                var allFull = data.items.every(function (it) { return /^[A-Za-z]{3,15}$/.test(answers[it.id] || ""); });
                 if (allFull && !finished) finish("Every word is built!", "Check your spelling before you save.");
                 else if (!allFull && finished) unfinish();
             }
@@ -298,7 +298,7 @@
             });
             setProgress(count(answers));
             if (count(answers) === data.items.length && !finished) finish("Everything is sorted!", "Move any item before you save if you change your mind.");
-            else if (finished) unfinish();
+            else if (count(answers) < data.items.length && finished) unfinish();
         }
         function dropTarget(zone, groupId) {
             zone.addEventListener("dragover", function (e) { e.preventDefault(); zone.classList.add("is-over"); });
