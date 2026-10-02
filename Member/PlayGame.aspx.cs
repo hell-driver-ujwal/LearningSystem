@@ -33,7 +33,7 @@ namespace LearningSystem.Member
                 {
                     string token=Session[PreviewKey()] as string;Session.Remove(PreviewKey());
                     GameRun run=GameHelper.Run(activityID,token,true);
-                    if(run!=null && run.Completed)ShowResult(run.Score,run.Seconds,"Preview result. Nothing was saved.");
+                    if(run!=null && run.Completed)ShowResult(run.Score,run.Seconds,"Preview result. Nothing was saved.",null,true);
                 }
             }
         }
@@ -69,21 +69,21 @@ namespace LearningSystem.Member
             {
                 GameRun run=GameHelper.Submit(activityID,hfRun.Value,submitted,preview);
                 if(preview){Session[PreviewKey()]=run.Token;Response.Redirect("PlayGame.aspx?id="+activityID+"&preview=1");}
-                else {MessageHelper.SetSuccess("Result saved. Your course progress is updated.");Response.Redirect("PlayGame.aspx?id="+activityID+"&attemptId="+run.AttemptID);}
+                else {MessageHelper.SetSuccess("Result saved. Your course progress is updated.");Response.Redirect("PlayGame.aspx?id="+activityID+"&attemptId="+run.AttemptID+"&fresh=1");}
             }
             catch(UnauthorizedAccessException){Response.Redirect("~/AccessDenied.aspx");}
             catch(InvalidOperationException ex){MessageHelper.SetError(ex.Message);}
             catch(SqlException){MessageHelper.SetError("Your result could not be saved. Please try again.");}
         }
-        private void ShowResult(decimal score,int seconds,string context)
+        private void ShowResult(decimal score,int seconds,string context,int? bestXp,bool celebrate)
         {
-            pnlResult.Visible=true;litResultContext.Text=context;string value=score.ToString("0.##",CultureInfo.InvariantCulture);litScore.Text=value+"%";litSeconds.Text="Finished in "+UiHelper.Plural(seconds,"second")+". "+(score>=80m ? "Great work." : score>=50m ? "Good effort. Play again to beat your score." : "Review the lesson, then try again.");litRing.Text="<div class=\"score-ring\" style=\"--value:"+value+"\"><span>"+value+"%</span></div>";btnStart.Text="Play again";
+            pnlResult.Visible=true;litResultContext.Text=context;string value=score.ToString("0.##",CultureInfo.InvariantCulture);litScore.Text=value+"%";litSeconds.Text="Finished in "+UiHelper.Plural(seconds,"second")+". "+(score>=80m ? "Great work." : score>=50m ? "Good effort. Play again to beat your score." : "Review the lesson, then try again.");litRing.Text=GameUiHelper.ResultArt(score,bestXp,celebrate);btnStart.Text="Play again";
         }
         private void ShowAttempt(int attempt)
         {
             DataTable rows=DatabaseHelper.ExecuteTable("SELECT ScorePercent,TimeTakenSeconds,SubmittedAt FROM dbo.Attempt WHERE AttemptID=@attempt AND ActivityID=@id AND LearnerID=@user",new[] {new SqlParameter("@attempt",attempt),new SqlParameter("@id",activityID),new SqlParameter("@user",CurrentUserHelper.GetUserID().Value)});
             if(rows.Rows.Count!=1){Response.Redirect("~/AccessDenied.aspx");return;}
-            DataRow row=rows.Rows[0];ShowResult((decimal)row["ScorePercent"],(int)row["TimeTakenSeconds"],"Saved "+((DateTime)row["SubmittedAt"]).ToString("d MMMM yyyy, HH:mm",CultureInfo.InvariantCulture)+" UTC");
+            DataRow row=rows.Rows[0];ShowResult((decimal)row["ScorePercent"],(int)row["TimeTakenSeconds"],"Saved "+((DateTime)row["SubmittedAt"]).ToString("d MMMM yyyy, HH:mm",CultureInfo.InvariantCulture)+" UTC",GamificationHelper.BestActivityXp(CurrentUserHelper.GetUserID().Value,activityID),Request.QueryString["fresh"]=="1");
         }
         private void BindHistory()
         {

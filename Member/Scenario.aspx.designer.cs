@@ -14,6 +14,7 @@ namespace LearningSystem.Member
         protected global::System.Web.UI.WebControls.Label lblNoChoices;
         protected global::System.Web.UI.WebControls.Repeater rptChoices;
         protected global::System.Web.UI.WebControls.Panel pnlEnding;
+        protected global::System.Web.UI.WebControls.Literal litEndingArt;
         protected global::System.Web.UI.WebControls.Literal litOutcome;
         protected global::System.Web.UI.WebControls.Literal litFeedback;
         protected global::System.Web.UI.WebControls.Literal litSaved;

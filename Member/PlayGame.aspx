@@ -9,15 +9,18 @@
 </asp:Panel>
 <asp:Panel ID="pnlStart" runat="server" CssClass="start-panel">
     <p><asp:Literal ID="litHowTo" runat="server" Mode="Encode" /></p>
-    <asp:Button ID="btnStart" runat="server" Text="Start game" ValidationGroup="Start" OnClick="StartGame" CssClass="large" />
+    <asp:Button ID="btnStart" runat="server" Text="Start game" ValidationGroup="Start" OnClick="StartGame" CssClass="large accent" />
+    <%= LearningSystem.Helpers.MascotHelper.Render("wave") %>
 </asp:Panel>
 <asp:Panel ID="pnlPlay" runat="server" Visible="false" CssClass="game-shell">
     <h2 class="visually-hidden">Play</h2>
     <noscript><p class="message error">This game needs JavaScript. Turn it on in your browser, then start again.</p></noscript>
     <asp:ValidationSummary ID="vsResult" runat="server" ValidationGroup="Result" /><asp:CustomValidator ID="cvResult" runat="server" ValidationGroup="Result" OnServerValidate="ValidateResult" ErrorMessage="Finish the game, then submit your result." Display="None" />
+    <%-- Poses Inky uses while coaching the game (games.js copies them) --%>
+    <div id="inky-poses" hidden><%= LearningSystem.Helpers.MascotHelper.Render("think") %><%= LearningSystem.Helpers.MascotHelper.Render("cheer") %><%= LearningSystem.Helpers.MascotHelper.Render("oops") %><%= LearningSystem.Helpers.MascotHelper.Render("trophy") %><%= LearningSystem.Helpers.MascotHelper.Render("wave") %></div>
     <asp:HiddenField ID="hfRun" runat="server" /><asp:HiddenField ID="hfResult" runat="server" ClientIDMode="Static" />
     <asp:Literal ID="litGame" runat="server" />
-    <div class="actions"><asp:Button ID="btnSubmit" runat="server" Text="Submit result" ValidationGroup="Result" OnClick="SubmitGame" OnClientClick="if (!window.learningGame || !window.learningGame.prepare()) return false;" CssClass="large" /></div>
+    <div class="actions submit-row"><asp:Button ID="btnSubmit" runat="server" Text="Save my score" ValidationGroup="Result" OnClick="SubmitGame" OnClientClick="if (!window.learningGame || !window.learningGame.prepare()) return false;" CssClass="large" /></div>
 </asp:Panel>
 <div class="actions"><asp:Button ID="btnCancel" runat="server" Text="Back to course" CausesValidation="false" OnClick="Cancel" CssClass="secondary" /><asp:HyperLink ID="lnkBack" runat="server" Text="Course outline" /><asp:HyperLink ID="lnkMyResults" runat="server" NavigateUrl="~/Learner/MyResults.aspx" Text="All my results" Visible="false" /></div>
 <asp:Panel ID="pnlHistory" runat="server" CssClass="section"><h2>Your attempts</h2><p><asp:Literal ID="litBest" runat="server" Mode="Encode" /></p>

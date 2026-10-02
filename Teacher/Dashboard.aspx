@@ -1,6 +1,7 @@
 <%@ Page Title="Lecturer dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="LearningSystem.Teacher.Dashboard" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 <div class="page-header hero-banner">
+    <%= LearningSystem.Helpers.MascotHelper.Render("read") %>
     <div><h1><asp:Literal ID="litGreeting" runat="server" Mode="Encode" /></h1><p class="intro">Your courses, your learners and their latest results.</p></div>
     <div class="actions" style="margin:0"><a class="button" href="CourseEdit.aspx"><%= LearningSystem.Helpers.UiHelper.Icon("plus") %> Create a course</a><a class="button secondary" href="Results.aspx">All results</a></div>
 </div>

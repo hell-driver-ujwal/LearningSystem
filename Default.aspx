@@ -4,10 +4,10 @@
 <section class="hero" aria-labelledby="hero-title">
     <div>
         <p class="eyebrow">Free and low-cost short courses</p>
-        <h1 id="hero-title">Learn a topic, then practise it straight away.</h1>
+        <h1 id="hero-title">Learn a topic, then <span class="hl">practise it</span> straight away.</h1>
         <p class="intro">Courses in programming, cybersecurity, AI, maths, science, business and writing. Each topic pairs short lessons with a quiz, a game, a code lab or a decision scenario, so you finish with something you can actually do.</p>
         <div class="actions">
-            <a class="button large" href="Courses.aspx">Browse all courses <%= LearningSystem.Helpers.UiHelper.Icon("arrow-right") %></a>
+            <a class="button large accent" href="Courses.aspx">Browse all courses <%= LearningSystem.Helpers.UiHelper.Icon("arrow-right") %></a>
             <asp:HyperLink ID="lnkRegister" runat="server" CssClass="button secondary large" NavigateUrl="~/Account/Register.aspx" Text="Create a free account" />
         </div>
         <ul class="facts" aria-label="Inkwell at a glance">
@@ -16,17 +16,20 @@
             <li><strong><asp:Literal ID="litActivityCount" runat="server" Mode="Encode" /></strong>practice activities</li>
         </ul>
     </div>
+    <div class="hero-side">
+    <%= LearningSystem.Helpers.MascotHelper.Render("wave") %>
     <figure class="hero-media">
-        <video controls preload="metadata" poster="Assets/video/inkwell-intro-poster.jpg" width="1280" height="720">
-            <source src="Assets/video/inkwell-intro.mp4" type="video/mp4" />
-            <track kind="captions" src="Assets/video/inkwell-intro.vtt" srclang="en" label="English" />
+        <video controls preload="none" poster="<%: LearningSystem.Helpers.UiHelper.AssetUrl("~/Assets/video/inkwell-intro-poster.jpg") %>" width="1280" height="720">
+            <source src="<%: LearningSystem.Helpers.UiHelper.AssetUrl("~/Assets/video/inkwell-intro.mp4") %>" type="video/mp4" />
+            <track kind="captions" src="<%: LearningSystem.Helpers.UiHelper.AssetUrl("~/Assets/video/inkwell-intro.vtt") %>" srclang="en" label="English" />
             Your browser cannot play this video. The tour shows how to choose a course, study a lesson and practise with a game.
         </video>
         <figcaption>A short tour: finding a course, studying a lesson, practising and tracking your progress. Captions available.</figcaption>
     </figure>
+    </div>
 </section>
 
-<section id="subjects" class="section" aria-labelledby="subjects-title">
+<section id="subjects" class="section reveal" aria-labelledby="subjects-title">
     <div class="section-head">
         <div><h2 id="subjects-title">Browse by subject</h2><p>Pick an area to see every course in it.</p></div>
         <a class="lead-link" href="Courses.aspx">See all courses <%= LearningSystem.Helpers.UiHelper.Icon("arrow-right") %></a>
@@ -37,7 +40,7 @@
     <asp:Label ID="lblNoSubjects" runat="server" Visible="false" CssClass="empty-state" Text="Subjects will appear here once the first courses are published." />
 </section>
 
-<section class="section" aria-labelledby="latest-title">
+<section class="section reveal" aria-labelledby="latest-title">
     <div class="section-head">
         <div><h2 id="latest-title">New on Inkwell</h2><p>The most recently published courses.</p></div>
         <a class="lead-link" href="Courses.aspx">View the full catalogue <%= LearningSystem.Helpers.UiHelper.Icon("arrow-right") %></a>
@@ -45,7 +48,7 @@
     <asp:PlaceHolder ID="phCourses" runat="server" />
 </section>
 
-<section class="section" aria-labelledby="how-title">
+<section class="section reveal" aria-labelledby="how-title">
     <div class="section-head"><div><h2 id="how-title">How learning works here</h2><p>Every course follows the same simple rhythm.</p></div></div>
     <ol class="steps">
         <li><h3>Look before you join</h3><p>Read the outline and open the free preview lessons without an account.</p></li>
@@ -55,7 +58,7 @@
     </ol>
 </section>
 
-<section class="section" aria-labelledby="practise-title">
+<section class="section reveal" aria-labelledby="practise-title">
     <div class="section-head"><div><h2 id="practise-title">Ways to practise</h2><p>Different kinds of activity suit different kinds of knowledge.</p></div></div>
     <div class="practice-grid">
         <article><%= LearningSystem.Helpers.UiHelper.TypeMark("Quiz") %><h3>Quizzes</h3><p>Timed or untimed questions, marked instantly with a full answer review.</p></article>
@@ -68,6 +71,7 @@
 </section>
 
 <section class="cta-band" aria-labelledby="teach-title">
+    <%= LearningSystem.Helpers.MascotHelper.Render("read") %>
     <div>
         <h2 id="teach-title">Teach a course on Inkwell</h2>
         <p>Lecturers build courses with lessons, files, quizzes, games and scenarios, then follow each learner's results. Applications are reviewed by our team before your account opens.</p>
@@ -78,7 +82,7 @@
     </div>
 </section>
 
-<section class="section" aria-labelledby="faq-title">
+<section class="section reveal" aria-labelledby="faq-title">
     <div class="section-head">
         <div><h2 id="faq-title">Common questions</h2><p>Quick answers before you sign up.</p></div>
         <a class="lead-link" href="Help.aspx">All help topics <%= LearningSystem.Helpers.UiHelper.Icon("arrow-right") %></a>

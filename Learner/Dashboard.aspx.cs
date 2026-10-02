@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
@@ -16,16 +15,14 @@ namespace LearningSystem.Learner
             try
             {
                 string name=Convert.ToString(Session["FullName"]);
-                litGreeting.Text="Welcome back, "+name.Split(' ')[0];
-                HashSet<DateTime> days=EngagementHelper.ActiveDays(user);
-                int streak=EngagementHelper.Streak(days);
-                litStreak.Text=UiHelper.Plural(streak,"day");
-                litWeek.Text=EngagementHelper.WeekStrip(days);
-                litIntro.Text=streak==0 ? "Finish one lesson or activity today to start a new learning streak." : days.Contains(DateTime.UtcNow.Date) ? "You have studied today. Keep the streak going tomorrow." : "Complete something today to keep your streak alive.";
+                // The player card: level, XP, streak, daily goal and badges, calculated from real activity.
+                PlayerStats stats=GamificationHelper.Load(user);
+                phPlayer.Controls.Add(new LiteralControl(GameUiHelper.PlayerCard(stats,UiHelper.FirstName(name),user)));
+                phBadges.Controls.Add(new LiteralControl(GameUiHelper.BadgeGrid(stats)));
+                litWeek.Text=EngagementHelper.WeekStrip(stats.Days);
 
                 DataTable courses=DatabaseHelper.ExecuteTable("SELECT c.CourseID,c.Title,c.Status,c.CoverImagePath,s.SubjectName FROM dbo.Enrolment e JOIN dbo.Course c ON c.CourseID=e.CourseID JOIN dbo.Subject s ON s.SubjectID=c.SubjectID WHERE e.LearnerID=@user ORDER BY e.EnrolDate DESC,c.CourseID DESC",new[] {new SqlParameter("@user",user)});
-                int completed=0;
-                foreach(DataRow row in courses.Rows) if((string)row["Status"]=="Published" && ProgressHelper.CalculatePercent(user,(int)row["CourseID"])==100m) completed++;
+                int completed=stats.CoursesDone;
                 litCourses.Text=courses.Rows.Count.ToString(CultureInfo.InvariantCulture);
                 litCoursesNote.Text=completed+" completed, "+(courses.Rows.Count-completed)+" in progress";
                 litDone.Text=EngagementHelper.CompletedItems(user).ToString(CultureInfo.InvariantCulture);
@@ -58,9 +55,9 @@ ORDER BY CASE WHEN c.SubjectID IN (SELECT c2.SubjectID FROM dbo.Enrolment e2 JOI
             string link=next==null ? "CourseHome.aspx?id="+courseID : ResolveUrl(CourseHelper.ItemLink(next,true));
             string action=next==null ? "Review the course" : "Continue: "+CourseHelper.Encode(next["Title"]);
             string detail=next==null ? "You have completed every item in this course. Your certificate is ready." : "Next up is a "+CourseHelper.Encode(CourseHelper.ItemLabel(next)).ToLowerInvariant()+" in this course.";
-            phContinue.Controls.Add(new LiteralControl("<section class=\"continue-card\" aria-labelledby=\"continue-title\">"+CourseHelper.CoverHtml(course,"")
-                +"<div><p class=\"eyebrow\">Continue learning</p><h2 id=\"continue-title\">"+CourseHelper.Encode(course["Title"])+"</h2><p>"+detail+"</p>"
-                +CourseHelper.Progress(user,courseID)+"<div class=\"actions\"><a class=\"button\" href=\""+link+"\">"+action+"</a><a href=\"CourseHome.aspx?id="+courseID+"\">Course outline</a></div></div></section>"));
+            phContinue.Controls.Add(new LiteralControl("<article class=\"quest-card\" aria-labelledby=\"continue-title\">"+CourseHelper.CoverHtml(course,"")
+                +"<div><p class=\"eyebrow\">"+UiHelper.Icon("target")+"Next quest</p><h2 id=\"continue-title\">"+CourseHelper.Encode(course["Title"])+"</h2><p>"+detail+"</p>"
+                +CourseHelper.Progress(user,courseID)+"</div><div class=\"actions\" style=\"margin:0;flex-direction:column;align-items:stretch\"><a class=\"button large accent\" href=\""+link+"\">"+(next==null ? "Review" : "Play")+"<span class=\"visually-hidden\">: "+action+"</span> "+UiHelper.Icon("arrow-right")+"</a><a href=\"CourseHome.aspx?id="+courseID+"\">Course path</a></div>"+"</article>"));
         }
 
         private void ShowCourses(int user,DataTable courses)

@@ -25,8 +25,9 @@ namespace LearningSystem.Helpers
         // Browsers keep these files for 7 days (Web.config), so the stamp makes them download a new copy after every change.
         public static string AssetUrl(string virtualPath)
         {
+            // A missing file simply gets a fixed stamp (GetLastWriteTimeUtc returns a 1601 date for it).
             string file = System.Web.Hosting.HostingEnvironment.MapPath(virtualPath);
-            string version = System.IO.File.Exists(file) ? System.IO.File.GetLastWriteTimeUtc(file).Ticks.ToString(CultureInfo.InvariantCulture) : "1";
+            string version = System.IO.File.GetLastWriteTimeUtc(file).Ticks.ToString(CultureInfo.InvariantCulture);
             return VirtualPathUtility.ToAbsolute(virtualPath) + "?v=" + version;
         }
 
@@ -99,6 +100,13 @@ namespace LearningSystem.Helpers
             if (role == "Teacher") return "Lecturer";
             if (role == "Admin") return "Administrator";
             return role;
+        }
+
+        // First word of a full name, used for friendly greetings ("Welcome back, Anita").
+        public static string FirstName(string name)
+        {
+            name = (name ?? "").Trim();
+            return name.Length == 0 ? "" : name.Split(' ')[0];
         }
 
         public static string Initial(string name)

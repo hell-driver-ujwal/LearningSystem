@@ -82,7 +82,7 @@ namespace LearningSystem.Member
                 }
                 QuizRun run=QuizHelper.SubmitRun(activityID,answers.ToArray(),hfRun.Value,preview);
                 if(preview){Session["QuizPreviewResult_"+activityID]=run.Token;Response.Redirect("Quiz.aspx?id="+activityID+"&preview=1");}
-                else Response.Redirect("QuizResult.aspx?id="+run.AttemptID);
+                else Response.Redirect("QuizResult.aspx?id="+run.AttemptID+"&fresh=1");
             }
             catch(InvalidOperationException ex){MessageHelper.SetError(ex.Message);pnlPlay.Visible=false;pnlIntro.Visible=true;}
             catch(UnauthorizedAccessException){Response.Redirect("~/AccessDenied.aspx");}

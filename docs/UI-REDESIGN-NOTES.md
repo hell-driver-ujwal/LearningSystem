@@ -53,3 +53,12 @@ Left out on purpose: cartoon characters, music content, fake media controls, inv
 - Builder and editor forms (QuizBuilder, GameBuilder, ScenarioBuilder, MaterialEdit) use the shared form styles and were only spot-checked; check long forms for spacing.
 - Certificate printing: print styles hide the sidebar; print one certificate to confirm.
 - The eSewa demo screens keep eSewa green on purpose so the payment step is recognisable.
+
+## Fixes after code review (2 October 2026)
+
+- The desktop sidebar is now a fixed panel with the page beside it (`padding-left` on the body). Inside the earlier CSS grid the sticky top bar scrolled away.
+- Chart bars use colours with at least 3:1 contrast (WCAG 1.4.11), draw with a correct rounded end at any width, and redraw once the web font has loaded.
+- The home tour video, poster and captions use `UiHelper.AssetUrl` stamps, so returning browsers never mix an old video with new captions.
+- The dashboard banner leaves more room for text between 961px and 1200px.
+- `print.css` hides `.app-sidebar` itself instead of the removed `.workspace-bar`.
+- `Site.Master.cs` no longer fails on error pages when the database is unavailable; `UiHelper.FirstName` replaces three copies of the same logic.

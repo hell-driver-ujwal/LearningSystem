@@ -803,3 +803,11 @@ Publish rules: Flashcards and TrueFalse at least 4 items; FillBlank and Sequence
 | ~/Payment/EsewaSuccess.aspx | paymentId | Receipt for the current learner's Complete, verified payment |
 
 PaymentHelper public surface: Price, Enrol, CreatePending, Find(int), IsValidPhone, CodeMatches, MaskPhone, CompleteDemo, CloseDemo, History. EsewaHelper and Payment/EsewaFailure.aspx are removed.
+
+## Phase 18 additions (2026-10-02, dark redesign)
+
+- `MascotHelper.Render(pose, label = null, cssClass = "")`: inline SVG of Inky. Poses: wave, cheer, think, read, point, sleep, oops, search, lock, trophy, fire, graduate. Needs the `inkyFill` gradient defined once in Site.Master.
+- `GamificationHelper.Load(learnerID)` returns `PlayerStats` (Xp, Level, LevelTitle, XpIntoLevel, XpForLevel, Streak, LongestStreak, TodayCount, DailyGoal, Badges). `ActivityXp(type, bestScore, bestOutcome)`, `LevelFor(xp)`, `LevelStart(level)`. Constants LessonXp 10, DiscussionXp 15, SelfAssessmentXp 20, CourseBonusXp 100, DailyGoalItems 3. Nothing is stored.
+- `GameUiHelper`: `PlayerCard`, `BadgeGrid`, `Path(items, nextIndex)`, `ResultArt(score, type)`, `OutcomeArt(outcome, celebrate)`, `XpEarned(xp, max)`, `Speech(stats)`.
+- Body classes `role-learner`, `role-teacher`, `role-admin` set the accent colour. `data-celebrate="big|small|none"` and `data-count-up` are read by `Scripts/fx.js`; `window.inkFx` exposes play, confetti and toast.
+- Browser storage keys (per viewer, optional): `inkwell-sound` (on/off), `inkwell-level-<userID>` (last level seen).

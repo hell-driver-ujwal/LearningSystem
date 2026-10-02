@@ -364,3 +364,15 @@ Analytics repair build: full solution Debug MSBuild succeeded, exit code 0, no w
 - [x] Build: MSBuild Debug, 0 errors, 0 warnings.
 - [x] Checks run: no horizontal overflow on 20 representative pages at 1366, 820 and 390px for visitor, learner, lecturer and admin; code lab Run and Reset; lesson next link; lecturer topic validator and Cancel postback; game preview start postback; admin role filter postback; skip link, focus outline and keyboard access to sidebar links; no JavaScript errors.
 - [~] Long builder/editor forms, certificate printing and every remaining page were not individually reviewed; see docs/UI-REDESIGN-NOTES.md.
+
+## 2026-10-02 - Dark game-style redesign (branch sunil/advanced)
+
+- [x] Dark high-contrast theme, Nunito font, role accents, chunky buttons, motion with reduced-motion support.
+- [x] Inky mascot with 12 poses across dashboards, activities, log-in and error pages.
+- [x] Game layer computed from real records: XP, levels, streak, daily goal, 12 badges, level-up celebration.
+- [x] Learning path course home; Complete and continue lessons; one-question-at-a-time quiz; all eight games reworked; sound effects (O14).
+- [x] Home tour video rebuilt in the dark design.
+- [x] Build 0 errors, 0 warnings; 65 automated browser checks passed (games end to end, layout at three widths, new flows); no JavaScript errors.
+- [~] Every page restyled through the shared stylesheet; lesser-used admin and builder forms were spot-checked rather than reviewed one by one.
+
+- [x] 2026-10-02 follow-up: flat dark restyle (no gradients, system font) and 38 extra games across 16 courses; fresh database builds with all checks passed (77 games).

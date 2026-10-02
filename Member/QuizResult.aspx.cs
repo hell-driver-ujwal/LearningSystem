@@ -22,7 +22,10 @@ namespace LearningSystem.Member
             litDate.Text="Submitted "+((DateTime)attempt["SubmittedAt"]).ToString("d MMMM yyyy, HH:mm",System.Globalization.CultureInfo.InvariantCulture)+" UTC. Time taken: "+UiHelper.Plural(Convert.ToInt32(attempt["TimeTakenSeconds"])/60,"minute")+" "+(Convert.ToInt32(attempt["TimeTakenSeconds"])%60)+" seconds.";
             var chosen=new Dictionary<int,int?>();
             foreach(DataRow answer in DatabaseHelper.ExecuteTable("SELECT QuestionID,SelectedOptionID FROM dbo.QuizAnswer WHERE AttemptID=@id",ActivityHelper.ID(id)).Rows)chosen.Add((int)answer["QuestionID"],answer.IsNull("SelectedOptionID") ? (int?)null : (int)answer["SelectedOptionID"]);
-            litReview.Text=QuizHelper.Review(QuizHelper.Questions(activity),chosen,(decimal)attempt["ScorePercent"]);
+            // A learner looking at their own attempt sees the XP of their best result; "fresh" means it was just submitted.
+            int viewer=CurrentUserHelper.GetUserID().Value;
+            int? bestXp=(int)attempt["LearnerID"]==viewer ? GamificationHelper.BestActivityXp(viewer,activity) : (int?)null;
+            litReview.Text=QuizHelper.Review(QuizHelper.Questions(activity),chosen,(decimal)attempt["ScorePercent"],bestXp,Request.QueryString["fresh"]=="1");
             ((SiteMaster)Master).Breadcrumb=BreadcrumbHelper.ForAttempt(id);
             lnkBack.NavigateUrl=ActivityHelper.Back(a);lnkRetry.NavigateUrl="Quiz.aspx?id="+activity+(CurrentUserHelper.GetRole()=="Learner" ? "" : "&preview=1");
         }

@@ -16,7 +16,7 @@ namespace LearningSystem.Teacher
             try
             {
                 SqlParameter[] me={new SqlParameter("@user",user)};
-                litGreeting.Text="Welcome back, "+Convert.ToString(Session["FullName"]).Split(' ')[0];
+                litGreeting.Text="Welcome back, "+UiHelper.FirstName(Convert.ToString(Session["FullName"]));
                 DataTable courses=DatabaseHelper.ExecuteTable("SELECT c.CourseID,c.Title,c.Status,c.CoverImagePath,s.SubjectName,(SELECT COUNT(*) FROM dbo.Enrolment e WHERE e.CourseID=c.CourseID) AS Learners FROM dbo.Course c JOIN dbo.Subject s ON s.SubjectID=c.SubjectID WHERE c.TeacherID=@user ORDER BY c.LastUpdated DESC,c.CourseID",new[] {new SqlParameter("@user",user)});
                 int published=0;foreach(DataRow row in courses.Rows)if((string)row["Status"]=="Published")published++;
                 litCourses.Text=courses.Rows.Count.ToString();litCoursesNote.Text=published+" published, "+(courses.Rows.Count-published)+" in draft";

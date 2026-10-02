@@ -69,6 +69,7 @@
 </div>
 </section>
 <aside class="auth-aside" aria-label="What you get">
+<%= LearningSystem.Helpers.MascotHelper.Render("cheer") %>
 <h2>A free learner account gives you</h2>
 <ul>
 <li><%= LearningSystem.Helpers.UiHelper.Icon("book") %><span>Every free course, with lessons, games, quizzes and code labs.</span></li>

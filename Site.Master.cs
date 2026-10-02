@@ -19,6 +19,8 @@ namespace LearningSystem
         protected string SidebarFirstName { get; private set; }
         protected string SidebarInitial { get; private set; }
         protected string SidebarRole { get; private set; }
+        // Inky greets each role with a different pose in the sidebar.
+        protected string SidebarPose { get; private set; }
 
         // Body class: signed-in users get the sidebar layout. Lesson and activity pages use a slim
         // icon-only sidebar so the learning content has more room.
@@ -27,9 +29,11 @@ namespace LearningSystem
             get
             {
                 if (!pnlWorkspace.Visible) return "public";
+                // The role class picks the accent colour: violet for learners, cyan for lecturers, gold for the admin.
+                string role = "role-" + CurrentUserHelper.GetRole().ToLowerInvariant();
                 bool memberPage = CurrentPath.StartsWith("~/Member/", StringComparison.OrdinalIgnoreCase);
                 bool accountPage = CurrentPath.EndsWith("/Profile.aspx", StringComparison.OrdinalIgnoreCase) || CurrentPath.EndsWith("/ChangePassword.aspx", StringComparison.OrdinalIgnoreCase);
-                return memberPage && !accountPage ? "has-sidebar is-rail" : "has-sidebar";
+                return role + (memberPage && !accountPage ? " has-sidebar is-rail" : " has-sidebar");
             }
         }
         private bool IsHome { get { return CurrentPath.Equals("~/Default.aspx", StringComparison.OrdinalIgnoreCase); } }
@@ -106,17 +110,25 @@ namespace LearningSystem
         {
             if (role == "")
             {
-                AddLink(phAccount, "Log in", "~/Account/Login.aspx");
+                AddLink(phAccount, "Log in", "~/Account/StudentLogin.aspx");
                 phAccount.Controls.Add(new HyperLink { Text = "Join for free", NavigateUrl = "~/Account/Register.aspx", CssClass = "button" });
                 return;
             }
-            string name = Context.Session == null ? CurrentUserHelper.GetFullName() : Convert.ToString(Session["FullName"]);
-            SidebarFirstName = name.Trim().Split(' ')[0];
+            string name = Context.Session != null ? Convert.ToString(Session["FullName"]) : "";
+            // Error pages can run without session state; the name then comes from the database,
+            // which may itself be the reason for the error, so a failure must not break the page.
+            if (Context.Session == null)
+            {
+                try { name = CurrentUserHelper.GetFullName() ?? ""; }
+                catch (SqlException) { name = ""; }
+            }
+            SidebarFirstName = UiHelper.FirstName(name);
             SidebarInitial = UiHelper.Initial(name);
             SidebarRole = UiHelper.RoleLabel(role);
+            SidebarPose = role == "Teacher" ? "read" : role == "Admin" ? "point" : "wave";
             phAccount.Controls.Add(new LiteralControl("<a class=\"user-chip\" href=\"" + ResolveUrl("~/Member/Profile.aspx") + "\" title=\"My profile\"><span class=\"avatar\" aria-hidden=\"true\">"
-                + HttpUtility.HtmlEncode(UiHelper.Initial(name)) + "</span><span><span class=\"name\">" + HttpUtility.HtmlEncode(name)
-                + "</span><span class=\"role-label\">" + HttpUtility.HtmlEncode(UiHelper.RoleLabel(role)) + "</span></span></a>"));
+                + HttpUtility.HtmlEncode(SidebarInitial) + "</span><span><span class=\"name\">" + HttpUtility.HtmlEncode(name)
+                + "</span><span class=\"role-label\">" + HttpUtility.HtmlEncode(SidebarRole) + "</span></span></a>"));
             phAccount.Controls.Add(new LiteralControl("<a href=\"" + ResolveUrl("~/Account/Logout.aspx") + "\">" + UiHelper.Icon("logout") + " Log out</a>"));
         }
 

@@ -1,22 +1,28 @@
 <%@ Page Title="My dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="LearningSystem.Learner.Dashboard" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-<div class="page-header hero-banner">
-    <div><h1><asp:Literal ID="litGreeting" runat="server" Mode="Encode" /></h1><p class="intro"><asp:Literal ID="litIntro" runat="server" Mode="Encode" /></p></div>
-    <a class="button secondary" href="../Courses.aspx">Find a new course</a>
-</div>
+<%-- Player card: Inky, level, XP, streak, daily goal and badges, all worked out from real activity --%>
+<asp:PlaceHolder ID="phPlayer" runat="server" />
 
-<div class="stat-grid">
-    <section class="stat-card streak" aria-labelledby="streak-label"><span class="label" id="streak-label"><%= LearningSystem.Helpers.UiHelper.Icon("flame") %>Learning streak</span><p class="value"><asp:Literal ID="litStreak" runat="server" Mode="Encode" /></p><asp:Literal ID="litWeek" runat="server" /></section>
+<section aria-labelledby="quest-title">
+    <h2 id="quest-title" class="visually-hidden">Your next quest</h2>
+    <asp:PlaceHolder ID="phContinue" runat="server" />
+</section>
+
+<div class="stat-grid" aria-label="Your stats">
     <section class="stat-card" aria-labelledby="courses-label"><span class="label" id="courses-label"><%= LearningSystem.Helpers.UiHelper.Icon("layers") %>Courses</span><p class="value"><asp:Literal ID="litCourses" runat="server" Mode="Encode" /></p><span class="note"><asp:Literal ID="litCoursesNote" runat="server" Mode="Encode" /></span></section>
-    <section class="stat-card" aria-labelledby="done-label"><span class="label" id="done-label"><%= LearningSystem.Helpers.UiHelper.Icon("check-circle") %>Items completed</span><p class="value"><asp:Literal ID="litDone" runat="server" Mode="Encode" /></p><span class="note">Lessons, activities and discussions</span></section>
-    <section class="stat-card" aria-labelledby="score-label"><span class="label" id="score-label"><%= LearningSystem.Helpers.UiHelper.Icon("target") %>Average best score</span><p class="value"><asp:Literal ID="litScore" runat="server" Mode="Encode" /></p><span class="note">Across your quizzes and games</span></section>
+    <section class="stat-card" aria-labelledby="done-label"><span class="label" id="done-label"><%= LearningSystem.Helpers.UiHelper.Icon("check-circle") %>Items done</span><p class="value"><asp:Literal ID="litDone" runat="server" Mode="Encode" /></p><span class="note">Lessons, activities, posts</span></section>
+    <section class="stat-card" aria-labelledby="score-label"><span class="label" id="score-label"><%= LearningSystem.Helpers.UiHelper.Icon("target") %>Best score average</span><p class="value"><asp:Literal ID="litScore" runat="server" Mode="Encode" /></p><span class="note">Quizzes and games</span></section>
+    <section class="stat-card" aria-labelledby="week-label"><span class="label" id="week-label"><%= LearningSystem.Helpers.UiHelper.Icon("calendar") %>This week</span><asp:Literal ID="litWeek" runat="server" /></section>
 </div>
-
-<asp:PlaceHolder ID="phContinue" runat="server" />
 
 <section class="section" aria-labelledby="courses-title">
-    <div class="section-head"><div><h2 id="courses-title">Your courses</h2><p>Progress counts every published lesson and activity once.</p></div><a class="lead-link" href="MyCourses.aspx">Manage my courses <%= LearningSystem.Helpers.UiHelper.Icon("arrow-right") %></a></div>
+    <div class="section-head"><div><h2 id="courses-title">Your courses</h2><p>Each course is a path of lessons and activities. Progress counts every item once.</p></div><a class="lead-link" href="MyCourses.aspx">Manage my courses <%= LearningSystem.Helpers.UiHelper.Icon("arrow-right") %></a></div>
     <asp:PlaceHolder ID="phCourses" runat="server" />
+</section>
+
+<section class="section" aria-labelledby="badges-title">
+    <div class="section-head"><div><h2 id="badges-title">Badges</h2><p>Earn badges by learning in different ways. Locked badges show how close you are.</p></div></div>
+    <asp:PlaceHolder ID="phBadges" runat="server" />
 </section>
 
 <section class="section" aria-labelledby="results-title">
@@ -27,10 +33,5 @@
 <section class="section" aria-labelledby="next-title">
     <div class="section-head"><div><h2 id="next-title">Suggested next courses</h2><p>Popular courses in the subjects you are studying.</p></div></div>
     <asp:PlaceHolder ID="phSuggested" runat="server" />
-</section>
-
-<section class="cta-band slim" aria-labelledby="cta-title">
-    <div><h2 id="cta-title">Ready for something new?</h2><p>Browse the catalogue by subject, or open a free preview lesson before you join a course.</p></div>
-    <div class="actions"><a class="button" href="../Courses.aspx">Browse courses <%= LearningSystem.Helpers.UiHelper.Icon("arrow-right") %></a></div>
 </section>
 </asp:Content>

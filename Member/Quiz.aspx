@@ -6,7 +6,8 @@
 <asp:ValidationSummary ID="vsQuiz" runat="server" />
 <asp:Panel ID="pnlIntro" runat="server" CssClass="start-panel">
     <asp:Literal ID="litIntro" runat="server" />
-    <asp:Button ID="btnStart" runat="server" Text="Start quiz" OnClick="StartQuiz" CssClass="large" />
+    <asp:Button ID="btnStart" runat="server" Text="Start quiz" OnClick="StartQuiz" CssClass="large accent" />
+    <%= LearningSystem.Helpers.MascotHelper.Render("think") %>
 </asp:Panel>
 <asp:Panel ID="pnlPlay" runat="server" Visible="false">
     <asp:HiddenField ID="hfRun" runat="server" />

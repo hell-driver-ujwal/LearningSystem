@@ -123,11 +123,8 @@
     <Content Include="Assets\video\inkwell-intro.mp4" />
     <Content Include="Assets\video\inkwell-intro.vtt" />
     <Content Include="Fonts\OFL-SourceCodePro.txt" />
-    <Content Include="Fonts\OFL-SourceSans3.txt" />
     <Content Include="Fonts\OFL-SourceSerif4.txt" />
     <Content Include="Fonts\SourceCodePro-Regular.woff2" />
-    <Content Include="Fonts\SourceSans3-Variable-Italic.woff2" />
-    <Content Include="Fonts\SourceSans3-Variable.woff2" />
     <Content Include="Fonts\SourceSerif4-Variable-Italic.woff2" />
     <Content Include="Fonts\SourceSerif4-Variable.woff2" />
     <Content Include="Learner\Certificate.aspx" />
@@ -150,6 +147,7 @@
     <Content Include="Payment\EsewaDemo.aspx" />
     <Content Include="Payment\EsewaSuccess.aspx" />
     <Content Include="Scripts\charts.js" />
+    <Content Include="Scripts\fx.js" />
     <Content Include="Scripts\games.js" />
     <Content Include="Scripts\quiz.js" />
     <Content Include="Scripts\shortcuts.js" />
@@ -466,6 +464,9 @@
     <Compile Include="Helpers\EngagementHelper.cs" />
     <Compile Include="Helpers\GameContentHelper.cs" />
     <Compile Include="Helpers\GameHelper.cs" />
+    <Compile Include="Helpers\GameUiHelper.cs" />
+    <Compile Include="Helpers\GamificationHelper.cs" />
+    <Compile Include="Helpers\MascotHelper.cs" />
     <Compile Include="Helpers\LessonFormatter.cs" />
     <Compile Include="Helpers\MaterialHelper.cs" />
     <Compile Include="Helpers\MessageHelper.cs" />
@@ -707,6 +708,7 @@
     <None Include="AGENTS.md" />
     <None Include="README.md" />
     <None Include="Database\CreateDatabase.sql" />
+    <None Include="Database\AddMoreGames.sql" />
     <None Include="Database\GenerateDemoHashes.ps1" />
     <None Include="Database\Phase15PaymentUpgrade.sql" />
     <None Include="Database\Phase17AnalyticsUpgrade.sql" />
@@ -793,6 +795,7 @@
     <None Include="docs\DEMO-DATA.md" />
     <None Include="docs\DEMO-ASSET-SOURCES.md" />
     <None Include="docs\UI-REDESIGN-NOTES.md" />
+    <None Include="docs\ADVANCED-REDESIGN-NOTES.md" />
     <Content Include="Uploads\Images\b28d45b0-2d45-4d51-9974-a196a3586011.jpg" />
     <Content Include="Uploads\Images\b28d45b0-2d45-4d51-9974-a196a3586012.jpg" />
     <Content Include="Uploads\Images\b28d45b0-2d45-4d51-9974-a196a3586013.jpg" />
