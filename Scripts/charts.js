@@ -1,14 +1,14 @@
 /* Plain canvas horizontal count charts. The adjacent HTML table is the accessible alternative. */
 (function () {
     "use strict";
-    // Soft pastel bar colours from the site palette; exact values are printed beside each bar.
-    var colours = ["#8b73e0", "#e57ba1", "#e0a43a", "#5b9be0", "#4fae7f"];
+    // Bar colours from the site palette, each at least 3:1 against the card (WCAG non-text contrast).
+    var colours = ["#7b62d6", "#c2416f", "#a86a00", "#2f6fb5", "#2f7f57"];
+    // Bar with a rounded right end; browsers without roundRect get a plain rectangle.
     function roundedBar(ctx, x, y, width, height) {
-        var r = Math.min(height / 2, width / 2);
+        if (typeof ctx.roundRect !== "function") { ctx.fillRect(x, y, width, height); return; }
         ctx.beginPath();
-        ctx.moveTo(x, y); ctx.lineTo(x + width - r, y);
-        ctx.arc(x + width - r, y + r, r, -Math.PI / 2, Math.PI / 2);
-        ctx.lineTo(x, y + height); ctx.closePath(); ctx.fill();
+        ctx.roundRect(x, y, width, height, [0, height / 2, height / 2, 0]);
+        ctx.fill();
     }
     function draw(canvas) {
         var data = JSON.parse(canvas.getAttribute("data-chart"));
@@ -35,5 +35,7 @@
     }
     function render() { document.querySelectorAll("canvas[data-chart]").forEach(draw); }
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", render); else render();
+    // Draw again once the web font has loaded, so labels use the right font and are measured correctly.
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(render);
     window.addEventListener("resize", render);
 }());

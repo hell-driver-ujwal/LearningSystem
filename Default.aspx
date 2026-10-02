@@ -17,9 +17,9 @@
         </ul>
     </div>
     <figure class="hero-media">
-        <video controls preload="metadata" poster="Assets/video/inkwell-intro-poster.jpg" width="1280" height="720">
-            <source src="Assets/video/inkwell-intro.mp4" type="video/mp4" />
-            <track kind="captions" src="Assets/video/inkwell-intro.vtt" srclang="en" label="English" />
+        <video controls preload="metadata" poster="<%: LearningSystem.Helpers.UiHelper.AssetUrl("~/Assets/video/inkwell-intro-poster.jpg") %>" width="1280" height="720">
+            <source src="<%: LearningSystem.Helpers.UiHelper.AssetUrl("~/Assets/video/inkwell-intro.mp4") %>" type="video/mp4" />
+            <track kind="captions" src="<%: LearningSystem.Helpers.UiHelper.AssetUrl("~/Assets/video/inkwell-intro.vtt") %>" srclang="en" label="English" />
             Your browser cannot play this video. The tour shows how to choose a course, study a lesson and practise with a game.
         </video>
         <figcaption>A short tour: finding a course, studying a lesson, practising and tracking your progress. Captions available.</figcaption>

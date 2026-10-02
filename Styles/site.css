@@ -156,13 +156,11 @@ small { font-size: .875rem; }
 .sidebar-card .button { min-height: 38px; padding: 7px 16px; font-size: .92rem; background: var(--accent); border-color: var(--accent); }
 .sidebar-card .button:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
 
-/* Desktop: sidebar on the left, top bar, page and footer on the right */
+/* Desktop: the sidebar is fixed on the left and the page sits beside it.
+   (A fixed panel keeps the sticky top bar working; inside a CSS grid it would scroll away.) */
 @media (min-width: 961px) {
-    body.has-sidebar { display: grid; grid-template-columns: var(--sidebar-width) minmax(0, 1fr); grid-template-rows: auto 1fr auto; grid-template-areas: "side head" "side main" "side foot"; min-height: 100vh; }
-    .has-sidebar .site-header { grid-area: head; }
-    .has-sidebar .app-sidebar { grid-area: side; position: sticky; top: 0; height: 100vh; overflow-y: auto; scrollbar-width: thin; border-right: 1px solid rgba(207, 199, 227, .7); }
-    .has-sidebar .page-shell { grid-area: main; width: 100%; }
-    .has-sidebar .site-footer { grid-area: foot; }
+    body.has-sidebar { padding-left: var(--sidebar-width); }
+    .has-sidebar .app-sidebar { position: fixed; z-index: 55; left: 0; top: 0; bottom: 0; width: var(--sidebar-width); overflow-y: auto; scrollbar-width: thin; border-right: 1px solid rgba(207, 199, 227, .7); }
     .has-sidebar .header-inner .logo { display: none; }
     .has-sidebar .header-inner, .has-sidebar .page-shell, .has-sidebar .footer-inner, .has-sidebar .footer-bottom { max-width: 1240px; padding-inline: 36px; }
     /* Lesson and activity pages: a slim icon rail leaves more room for the learning content */
@@ -205,6 +203,11 @@ small { font-size: .875rem; }
 .hero-banner::after { content: ""; position: absolute; z-index: -1; right: 28px; bottom: 0; width: 210px; height: 150px; background: url("../Assets/images/study-desk.svg") no-repeat right bottom / contain; opacity: .95; }
 .hero-banner .actions { margin: 0; position: relative; }
 .hero-banner h1 { font-size: clamp(1.8rem, 1.4rem + 1.6vw, 2.4rem); }
+@media (min-width: 961px) and (max-width: 1200px) {
+    /* narrower desktops also lose width to the sidebar */
+    .hero-banner { padding-right: 190px; }
+    .hero-banner::after { width: 150px; height: 110px; right: 18px; }
+}
 
 /* Icon badge: a soft rounded square holding one icon */
 .icon-badge { display: inline-grid; place-items: center; width: 42px; height: 42px; border-radius: 13px; background: var(--card); color: var(--primary); box-shadow: var(--shadow); flex: none; }
@@ -441,8 +444,8 @@ td a { display: inline-block; margin: 3px 10px 3px 0; font-weight: 600; }
 .progress-row { display: flex; align-items: center; gap: 10px; font-size: .9rem; color: var(--ink-soft); }
 progress { appearance: none; -webkit-appearance: none; width: min(100%, 260px); height: 10px; border: 0; border-radius: var(--pill); background: #e9e4f6; overflow: hidden; accent-color: var(--primary); vertical-align: middle; }
 progress::-webkit-progress-bar { background: #e9e4f6; border-radius: var(--pill); }
-progress::-webkit-progress-value { background: linear-gradient(90deg, #8b73e0, var(--primary)); border-radius: var(--pill); }
-progress::-moz-progress-bar { background: linear-gradient(90deg, #8b73e0, var(--primary)); border-radius: var(--pill); }
+progress::-webkit-progress-value { background: linear-gradient(90deg, #7b62d6, var(--primary)); border-radius: var(--pill); }
+progress::-moz-progress-bar { background: linear-gradient(90deg, #7b62d6, var(--primary)); border-radius: var(--pill); }
 .progress-panel { background: var(--card); border: 1px solid rgba(207, 199, 227, .55); border-radius: var(--radius-lg); padding: 18px 24px; margin: 18px 0; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; box-shadow: var(--shadow); }
 .progress-panel progress { width: min(100%, 420px); height: 12px; }
 .course-card .progress-row { margin-top: auto; padding-top: 10px; }
@@ -453,11 +456,11 @@ progress::-moz-progress-bar { background: linear-gradient(90deg, #8b73e0, var(--
 .bar-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
 .bar-list li { margin: 0; display: grid; grid-template-columns: minmax(120px, 32%) minmax(0, 1fr) 54px; gap: 12px; align-items: center; font-size: .94rem; }
 .bar-list .bar { height: 14px; border-radius: var(--pill); background: #ece7f8; overflow: hidden; }
-.bar-list .bar span { display: block; height: 100%; background: linear-gradient(90deg, #a48ff0, var(--primary)); border-radius: var(--pill); }
-.bar-list li:nth-child(5n+2) .bar span { background: linear-gradient(90deg, #f3a6c1, var(--accent)); }
-.bar-list li:nth-child(5n+3) .bar span { background: linear-gradient(90deg, #f6cf7c, #b97a00); }
-.bar-list li:nth-child(5n+4) .bar span { background: linear-gradient(90deg, #9cc3f3, #2f66b0); }
-.bar-list li:nth-child(5n+5) .bar span { background: linear-gradient(90deg, #96d6b4, var(--green)); }
+.bar-list .bar span { display: block; height: 100%; background: linear-gradient(90deg, #7b62d6, var(--primary)); border-radius: var(--pill); }
+.bar-list li:nth-child(5n+2) .bar span { background: linear-gradient(90deg, #c2416f, var(--accent-dark)); }
+.bar-list li:nth-child(5n+3) .bar span { background: linear-gradient(90deg, #a86a00, var(--amber)); }
+.bar-list li:nth-child(5n+4) .bar span { background: linear-gradient(90deg, #2f6fb5, #24518a); }
+.bar-list li:nth-child(5n+5) .bar span { background: linear-gradient(90deg, #2f7f57, var(--green)); }
 .bar-list .num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 650; }
 
 /* ---------- Course page and outline ---------- */
@@ -816,7 +819,7 @@ legend { font-family: var(--serif); font-weight: 650; font-size: 1.1rem; padding
 }
 @media print {
     .site-header, .app-sidebar, .site-footer, .breadcrumb, .no-print, .actions, .skip-link { display: none !important; }
-    body, body.has-sidebar { display: block; background: #fff; }
+    body, body.has-sidebar { display: block; padding-left: 0; background: #fff; }
     .page-shell { padding: 0; }
 }
 

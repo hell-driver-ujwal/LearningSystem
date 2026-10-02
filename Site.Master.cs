@@ -110,13 +110,20 @@ namespace LearningSystem
                 phAccount.Controls.Add(new HyperLink { Text = "Join for free", NavigateUrl = "~/Account/Register.aspx", CssClass = "button" });
                 return;
             }
-            string name = Context.Session == null ? CurrentUserHelper.GetFullName() : Convert.ToString(Session["FullName"]);
-            SidebarFirstName = name.Trim().Split(' ')[0];
+            string name = Context.Session != null ? Convert.ToString(Session["FullName"]) : "";
+            // Error pages can run without session state; the name then comes from the database,
+            // which may itself be the reason for the error, so a failure must not break the page.
+            if (Context.Session == null)
+            {
+                try { name = CurrentUserHelper.GetFullName() ?? ""; }
+                catch (SqlException) { name = ""; }
+            }
+            SidebarFirstName = UiHelper.FirstName(name);
             SidebarInitial = UiHelper.Initial(name);
             SidebarRole = UiHelper.RoleLabel(role);
             phAccount.Controls.Add(new LiteralControl("<a class=\"user-chip\" href=\"" + ResolveUrl("~/Member/Profile.aspx") + "\" title=\"My profile\"><span class=\"avatar\" aria-hidden=\"true\">"
-                + HttpUtility.HtmlEncode(UiHelper.Initial(name)) + "</span><span><span class=\"name\">" + HttpUtility.HtmlEncode(name)
-                + "</span><span class=\"role-label\">" + HttpUtility.HtmlEncode(UiHelper.RoleLabel(role)) + "</span></span></a>"));
+                + HttpUtility.HtmlEncode(SidebarInitial) + "</span><span><span class=\"name\">" + HttpUtility.HtmlEncode(name)
+                + "</span><span class=\"role-label\">" + HttpUtility.HtmlEncode(SidebarRole) + "</span></span></a>"));
             phAccount.Controls.Add(new LiteralControl("<a href=\"" + ResolveUrl("~/Account/Logout.aspx") + "\">" + UiHelper.Icon("logout") + " Log out</a>"));
         }
 

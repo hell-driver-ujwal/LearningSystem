@@ -16,7 +16,7 @@ namespace LearningSystem.Learner
             try
             {
                 string name=Convert.ToString(Session["FullName"]);
-                litGreeting.Text="Welcome back, "+name.Split(' ')[0];
+                litGreeting.Text="Welcome back, "+UiHelper.FirstName(name);
                 HashSet<DateTime> days=EngagementHelper.ActiveDays(user);
                 int streak=EngagementHelper.Streak(days);
                 litStreak.Text=UiHelper.Plural(streak,"day");
