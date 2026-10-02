@@ -1,6 +1,6 @@
 <%@ Page Title="My dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="LearningSystem.Learner.Dashboard" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-<div class="page-header">
+<div class="page-header hero-banner">
     <div><h1><asp:Literal ID="litGreeting" runat="server" Mode="Encode" /></h1><p class="intro"><asp:Literal ID="litIntro" runat="server" Mode="Encode" /></p></div>
     <a class="button secondary" href="../Courses.aspx">Find a new course</a>
 </div>
@@ -27,5 +27,10 @@
 <section class="section" aria-labelledby="next-title">
     <div class="section-head"><div><h2 id="next-title">Suggested next courses</h2><p>Popular courses in the subjects you are studying.</p></div></div>
     <asp:PlaceHolder ID="phSuggested" runat="server" />
+</section>
+
+<section class="cta-band slim" aria-labelledby="cta-title">
+    <div><h2 id="cta-title">Ready for something new?</h2><p>Browse the catalogue by subject, or open a free preview lesson before you join a course.</p></div>
+    <div class="actions"><a class="button" href="../Courses.aspx">Browse courses <%= LearningSystem.Helpers.UiHelper.Icon("arrow-right") %></a></div>
 </section>
 </asp:Content>

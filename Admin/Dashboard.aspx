@@ -1,6 +1,6 @@
 <%@ Page Title="Admin dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="LearningSystem.Admin.Dashboard" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-<div class="page-header">
+<div class="page-header hero-banner">
     <div><h1>Admin dashboard</h1><p class="intro">An overview of accounts, courses and learning activity across Inkwell.</p></div>
     <div class="actions" style="margin:0"><a class="button" href="../Teacher/CourseEdit.aspx">Create a course</a><a class="button secondary" href="UserEdit.aspx">Add a user</a></div>
 </div>
@@ -21,6 +21,11 @@
 <section aria-labelledby="charts-title"><h2 id="charts-title">Charts</h2><div class="two-col"><asp:Literal ID="litCharts" runat="server" /></div></section>
 <section class="section" aria-labelledby="recent-title"><h2 id="recent-title">Newest accounts</h2>
     <div class="table-scroll" role="region" aria-label="Five newest accounts" tabindex="0"><asp:GridView ID="gvRecent" runat="server" AutoGenerateColumns="false" Caption="Five newest accounts" UseAccessibleHeader="true" EmptyDataText="No accounts yet."><Columns><asp:BoundField DataField="FullName" HeaderText="Name" HtmlEncode="true" /><asp:BoundField DataField="Role" HeaderText="Role" /><asp:BoundField DataField="Status" HeaderText="Status" /><asp:BoundField DataField="CreatedDate" HeaderText="Joined (UTC)" DataFormatString="{0:d MMM yyyy}" /></Columns></asp:GridView></div>
+</section>
+
+<section class="cta-band slim" aria-labelledby="cta-title">
+    <div><h2 id="cta-title">Review site analytics</h2><p>Page views counted from real visits, broken down by page and by role.</p></div>
+    <div class="actions"><a class="button" href="Analytics.aspx">Open analytics <%= LearningSystem.Helpers.UiHelper.Icon("arrow-right") %></a></div>
 </section>
 <script src="../Scripts/charts.js" defer></script>
 </asp:Content>

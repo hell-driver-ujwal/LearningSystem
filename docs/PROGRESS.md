@@ -355,3 +355,12 @@ Analytics repair build: full solution Debug MSBuild succeeded, exit code 0, no w
 - [x] Switched `Web.config` `LearningSystemDb` to `Initial Catalog=LearningSystemFinal`; corrected the Phase 17 Code/game fixed-value documentation in AGENTS.md and recorded the comparison/connection details in `docs/PHASE17-FINAL-DATABASE.md`.
 - [x] Full Debug MSBuild succeeded with 0 warnings and 0 errors.
 - [~] Browser runtime checks blocked by the environment: IIS Express registered the existing bindings and logged one HTTP 200 Home request, but browser navigation refused/timed out and a normal LocalDB startup returned error 50. No security settings, certificates, SQL instance configuration or old database files were changed. Manual UI checks remain documented in `docs/PHASE17-FINAL-DATABASE.md`.
+
+## 2026-10-02 - Pastel UI redesign (visual only)
+
+- [x] Shared design tokens and pastel restyle of every component in `Styles/site.css` (existing class names kept).
+- [x] Sidebar app shell for signed-in users (slim icon rail on `Member/` lesson and activity pages, pill row on phones); public pages keep the top bar.
+- [x] Dashboard hero banners, pastel stat cards and call-to-action strips (Learner, Lecturer, Admin); pastel chart bars.
+- [x] Build: MSBuild Debug, 0 errors, 0 warnings.
+- [x] Checks run: no horizontal overflow on 20 representative pages at 1366, 820 and 390px for visitor, learner, lecturer and admin; code lab Run and Reset; lesson next link; lecturer topic validator and Cancel postback; game preview start postback; admin role filter postback; skip link, focus outline and keyboard access to sidebar links; no JavaScript errors.
+- [~] Long builder/editor forms, certificate printing and every remaining page were not individually reviewed; see docs/UI-REDESIGN-NOTES.md.

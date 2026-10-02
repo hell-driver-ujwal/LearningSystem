@@ -65,3 +65,5 @@
 ## 2026-10-01 — Approved presentation/demo dataset
 User authorized additive data and reusable cover downloads only. Reused four active fictional teachers, four learners and the existing Admin; preserved other records. Added four ten-topic courses, all five activities and original four game templates. History uses existing shared helpers; paid records are explicitly offline test purchases under the current application contract, not real provider verification. No schema/application-feature changes. See DEMO-DATA.md and DEMO-ASSET-SOURCES.md.
 
+## 2026-10-02 - Pastel UI redesign (visual only)
+The team member on branch `sunil/ui-redesign` asked for a soft pastel look based on a reference image: lavender, cream, pink and blue surfaces, rounded cards, pill buttons and search, soft shadows, a left sidebar for signed-in users, dashboard banners and call-to-action strips. This replaces the earlier navy and rust palette and the earlier "no pill buttons" style rule. No features, schema, data, query strings, server-control IDs, validators or event handlers changed; logo and favicon colours are kept. Details in docs/UI-REDESIGN-NOTES.md.
