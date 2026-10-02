@@ -109,6 +109,7 @@
     <Content Include="Assets\icons\icon-192.png" />
     <Content Include="Assets\icons\icon-512.png" />
     <Content Include="Assets\images\social-card.png" />
+    <Content Include="Assets\images\study-desk.svg" />
     <Content Include="Assets\images\subjects\artificial-intelligence.jpg" />
     <Content Include="Assets\images\subjects\business.jpg" />
     <Content Include="Assets\images\subjects\cybersecurity.jpg" />
@@ -791,6 +792,7 @@
     <None Include="docs\presentation-manifest.json" />
     <None Include="docs\DEMO-DATA.md" />
     <None Include="docs\DEMO-ASSET-SOURCES.md" />
+    <None Include="docs\UI-REDESIGN-NOTES.md" />
     <Content Include="Uploads\Images\b28d45b0-2d45-4d51-9974-a196a3586011.jpg" />
     <Content Include="Uploads\Images\b28d45b0-2d45-4d51-9974-a196a3586012.jpg" />
     <Content Include="Uploads\Images\b28d45b0-2d45-4d51-9974-a196a3586013.jpg" />

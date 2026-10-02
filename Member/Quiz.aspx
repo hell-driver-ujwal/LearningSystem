@@ -15,5 +15,5 @@
 </asp:Panel>
 <asp:Literal ID="litFeedback" runat="server" />
 <div class="actions"><asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false" OnClick="Cancel" /><asp:HyperLink ID="lnkBack" runat="server" Text="Back to the course" /></div>
-<script src="<%= ResolveUrl("~/Scripts/quiz.js") %>"></script>
+<script src="<%: LearningSystem.Helpers.UiHelper.AssetUrl("~/Scripts/quiz.js") %>"></script>
 </asp:Content>

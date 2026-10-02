@@ -14,6 +14,24 @@ namespace LearningSystem
         protected string MainClass { get { return String.IsNullOrEmpty(MainClassName) ? "" : " " + MainClassName; } }
 
         private string CurrentPath { get { return Request.AppRelativeCurrentExecutionFilePath; } }
+
+        // Shown in the sidebar for signed-in users; filled while the account links are built.
+        protected string SidebarFirstName { get; private set; }
+        protected string SidebarInitial { get; private set; }
+        protected string SidebarRole { get; private set; }
+
+        // Body class: signed-in users get the sidebar layout. Lesson and activity pages use a slim
+        // icon-only sidebar so the learning content has more room.
+        protected string BodyClass
+        {
+            get
+            {
+                if (!pnlWorkspace.Visible) return "public";
+                bool memberPage = CurrentPath.StartsWith("~/Member/", StringComparison.OrdinalIgnoreCase);
+                bool accountPage = CurrentPath.EndsWith("/Profile.aspx", StringComparison.OrdinalIgnoreCase) || CurrentPath.EndsWith("/ChangePassword.aspx", StringComparison.OrdinalIgnoreCase);
+                return memberPage && !accountPage ? "has-sidebar is-rail" : "has-sidebar";
+            }
+        }
         private bool IsHome { get { return CurrentPath.Equals("~/Default.aspx", StringComparison.OrdinalIgnoreCase); } }
 
         // "Course catalogue | Inkwell"; the home page sets its own complete title.
@@ -93,6 +111,9 @@ namespace LearningSystem
                 return;
             }
             string name = Context.Session == null ? CurrentUserHelper.GetFullName() : Convert.ToString(Session["FullName"]);
+            SidebarFirstName = name.Trim().Split(' ')[0];
+            SidebarInitial = UiHelper.Initial(name);
+            SidebarRole = UiHelper.RoleLabel(role);
             phAccount.Controls.Add(new LiteralControl("<a class=\"user-chip\" href=\"" + ResolveUrl("~/Member/Profile.aspx") + "\" title=\"My profile\"><span class=\"avatar\" aria-hidden=\"true\">"
                 + HttpUtility.HtmlEncode(UiHelper.Initial(name)) + "</span><span><span class=\"name\">" + HttpUtility.HtmlEncode(name)
                 + "</span><span class=\"role-label\">" + HttpUtility.HtmlEncode(UiHelper.RoleLabel(role)) + "</span></span></a>"));
@@ -105,18 +126,18 @@ namespace LearningSystem
             pnlWorkspace.Visible = role != "";
             if (role == "Learner")
             {
-                AddLink(phWorkspace, "Overview", "~/Learner/Dashboard.aspx");
-                AddLink(phWorkspace, "My courses", "~/Learner/MyCourses.aspx");
-                AddLink(phWorkspace, "My results", "~/Learner/MyResults.aspx");
-                AddLink(phWorkspace, "Bookmarks", "~/Learner/MyBookmarks.aspx");
-                AddLink(phWorkspace, "Payments", "~/Learner/MyPayments.aspx");
+                AddLink(phWorkspace, "Overview", "~/Learner/Dashboard.aspx", 0, "home");
+                AddLink(phWorkspace, "My courses", "~/Learner/MyCourses.aspx", 0, "layers");
+                AddLink(phWorkspace, "My results", "~/Learner/MyResults.aspx", 0, "chart");
+                AddLink(phWorkspace, "Bookmarks", "~/Learner/MyBookmarks.aspx", 0, "bookmark");
+                AddLink(phWorkspace, "Payments", "~/Learner/MyPayments.aspx", 0, "wallet");
             }
             else if (role == "Teacher")
             {
-                AddLink(phWorkspace, "Overview", "~/Teacher/Dashboard.aspx");
-                AddLink(phWorkspace, "My courses", "~/Teacher/MyCourses.aspx");
-                AddLink(phWorkspace, "Create course", "~/Teacher/CourseEdit.aspx");
-                AddLink(phWorkspace, "Results", "~/Teacher/Results.aspx");
+                AddLink(phWorkspace, "Overview", "~/Teacher/Dashboard.aspx", 0, "home");
+                AddLink(phWorkspace, "My courses", "~/Teacher/MyCourses.aspx", 0, "layers");
+                AddLink(phWorkspace, "Create course", "~/Teacher/CourseEdit.aspx", 0, "plus");
+                AddLink(phWorkspace, "Results", "~/Teacher/Results.aspx", 0, "chart");
             }
             else if (role == "Admin")
             {
@@ -127,19 +148,19 @@ namespace LearningSystem
                     unread = Convert.ToInt32(DatabaseHelper.ExecuteScalar("SELECT COUNT(*) FROM dbo.ContactMessage WHERE IsRead=0", null));
                 }
                 catch (SqlException) { }
-                AddLink(phWorkspace, "Overview", "~/Admin/Dashboard.aspx");
-                AddLink(phWorkspace, "Users", "~/Admin/Users.aspx");
-                AddLink(phWorkspace, "Applications", "~/Admin/TeacherApplications.aspx", pending);
-                AddLink(phWorkspace, "All courses", "~/Admin/Courses.aspx");
-                AddLink(phWorkspace, "Activities", "~/Admin/Activities.aspx");
-                AddLink(phWorkspace, "Subjects", "~/Admin/Subjects.aspx");
-                AddLink(phWorkspace, "My courses", "~/Teacher/MyCourses.aspx");
-                AddLink(phWorkspace, "Messages", "~/Admin/Messages.aspx", unread);
-                AddLink(phWorkspace, "FAQs", "~/Admin/FAQ.aspx");
-                AddLink(phWorkspace, "Payments", "~/Admin/Payments.aspx");
-                AddLink(phWorkspace, "Analytics", "~/Admin/Analytics.aspx");
+                AddLink(phWorkspace, "Overview", "~/Admin/Dashboard.aspx", 0, "home");
+                AddLink(phWorkspace, "Users", "~/Admin/Users.aspx", 0, "users");
+                AddLink(phWorkspace, "Applications", "~/Admin/TeacherApplications.aspx", pending, "award");
+                AddLink(phWorkspace, "All courses", "~/Admin/Courses.aspx", 0, "book");
+                AddLink(phWorkspace, "Activities", "~/Admin/Activities.aspx", 0, "puzzle");
+                AddLink(phWorkspace, "Subjects", "~/Admin/Subjects.aspx", 0, "compass");
+                AddLink(phWorkspace, "My courses", "~/Teacher/MyCourses.aspx", 0, "layers");
+                AddLink(phWorkspace, "Messages", "~/Admin/Messages.aspx", unread, "mail");
+                AddLink(phWorkspace, "FAQs", "~/Admin/FAQ.aspx", 0, "help");
+                AddLink(phWorkspace, "Payments", "~/Admin/Payments.aspx", 0, "wallet");
+                AddLink(phWorkspace, "Analytics", "~/Admin/Analytics.aspx", 0, "chart");
             }
-            if (role != "") AddLink(phWorkspace, "Profile", "~/Member/Profile.aspx");
+            if (role != "") AddLink(phWorkspace, "Profile", "~/Member/Profile.aspx", 0, "user");
         }
 
         private void BuildFooter()
@@ -223,11 +244,14 @@ namespace LearningSystem
             if (!(" " + control.CssClass + " ").Contains(" " + name + " ")) control.CssClass = (control.CssClass + " " + name).Trim();
         }
 
-        private void AddLink(PlaceHolder target, string label, string url, int count = 0)
+        // Sidebar links pass an icon name; the label then sits in its own span so the slim sidebar can hide it visually.
+        private void AddLink(PlaceHolder target, string label, string url, int count = 0, string icon = null)
         {
             string path = url.Split('?')[0];
             bool current = path.Equals(CurrentPath, StringComparison.OrdinalIgnoreCase);
-            string html = "<a href=\"" + HttpUtility.HtmlAttributeEncode(ResolveUrl(url)) + "\"" + (current ? " aria-current=\"page\"" : "") + ">" + HttpUtility.HtmlEncode(label);
+            string html = "<a href=\"" + HttpUtility.HtmlAttributeEncode(ResolveUrl(url)) + "\"" + (current ? " aria-current=\"page\"" : "");
+            if (icon == null) html += ">" + HttpUtility.HtmlEncode(label);
+            else html += " title=\"" + HttpUtility.HtmlAttributeEncode(label) + "\">" + UiHelper.Icon(icon) + "<span class=\"nav-label\">" + HttpUtility.HtmlEncode(label) + "</span>";
             if (count > 0) html += "<span class=\"count\" aria-label=\"" + count + " waiting\">" + count + "</span>";
             target.Controls.Add(new LiteralControl(html + "</a>"));
         }
