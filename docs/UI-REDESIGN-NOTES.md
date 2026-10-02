@@ -44,6 +44,7 @@ Left out on purpose: cartoon characters, music content, fake media controls, inv
 - `Learner/`, `Teacher/` and `Admin/Dashboard.aspx`: `hero-banner` class on the page header and a call-to-action strip with an existing link.
 - `Error.aspx`, `AccessDenied.aspx`, `NotFound.aspx`: illustration colours.
 - New asset `Assets/images/study-desk.svg` (added to the project file).
+- `UiHelper.AssetUrl` adds `?v=<last-changed time>` to the stylesheet and script links (Site.Master, Quiz, PlayGame, Admin dashboard, lecturer Results). Browsers cache these files for 7 days, so without it a returning browser kept showing the old design.
 - The logo, favicon and web manifest keep the original Inkwell brand colours.
 
 ## Still worth a manual look

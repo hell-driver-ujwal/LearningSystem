@@ -18,7 +18,7 @@
     <link rel="manifest" href="<%: ResolveUrl("~/site.webmanifest") %>" />
     <link rel="preload" href="<%: ResolveUrl("~/Fonts/SourceSerif4-Variable.woff2") %>" as="font" type="font/woff2" crossorigin="anonymous" />
     <link rel="preload" href="<%: ResolveUrl("~/Fonts/SourceSans3-Variable.woff2") %>" as="font" type="font/woff2" crossorigin="anonymous" />
-    <link href="~/Styles/site.css" rel="stylesheet" runat="server" />
+    <link href="<%: LearningSystem.Helpers.UiHelper.AssetUrl("~/Styles/site.css") %>" rel="stylesheet" />
     <%-- Internal CSS: this block demonstrates the internal stylesheet type required by the assignment. --%>
     <style>
         .site-name .dot { color: #b0502a; }
@@ -138,7 +138,7 @@
         </div>
     </footer>
     <div id="shortcut-settings" hidden data-home="<%: ResolveUrl("~/Default.aspx") %>" data-courses="<%: ResolveUrl("~/Courses.aspx") %>" data-help="<%: ResolveUrl("~/Help.aspx") %>" data-dashboard="<%: LearningSystem.Helpers.CurrentUserHelper.IsAuthenticated() ? ResolveUrl(LearningSystem.Helpers.CurrentUserHelper.GetDashboardUrl()) : "" %>"></div>
-    <script src="<%: ResolveUrl("~/Scripts/site.js") %>" defer></script>
-    <script src="<%: ResolveUrl("~/Scripts/shortcuts.js") %>" defer></script>
+    <script src="<%: LearningSystem.Helpers.UiHelper.AssetUrl("~/Scripts/site.js") %>" defer></script>
+    <script src="<%: LearningSystem.Helpers.UiHelper.AssetUrl("~/Scripts/shortcuts.js") %>" defer></script>
 </body>
 </html>

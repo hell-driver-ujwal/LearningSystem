@@ -21,6 +21,15 @@ namespace LearningSystem.Helpers
             return String.IsNullOrWhiteSpace(value) ? fallback : value.Trim();
         }
 
+        // Address of a stylesheet or script with "?v=" and the file's last-changed time added.
+        // Browsers keep these files for 7 days (Web.config), so the stamp makes them download a new copy after every change.
+        public static string AssetUrl(string virtualPath)
+        {
+            string file = System.Web.Hosting.HostingEnvironment.MapPath(virtualPath);
+            string version = System.IO.File.Exists(file) ? System.IO.File.GetLastWriteTimeUtc(file).Ticks.ToString(CultureInfo.InvariantCulture) : "1";
+            return VirtualPathUtility.ToAbsolute(virtualPath) + "?v=" + version;
+        }
+
         // Returns an inline SVG that points at a symbol in the sprite rendered by Site.Master.
         public static string Icon(string name)
         {

@@ -27,5 +27,5 @@
     <div><h2 id="cta-title">Review site analytics</h2><p>Page views counted from real visits, broken down by page and by role.</p></div>
     <div class="actions"><a class="button" href="Analytics.aspx">Open analytics <%= LearningSystem.Helpers.UiHelper.Icon("arrow-right") %></a></div>
 </section>
-<script src="../Scripts/charts.js" defer></script>
+<script src="<%: LearningSystem.Helpers.UiHelper.AssetUrl("~/Scripts/charts.js") %>" defer></script>
 </asp:Content>
