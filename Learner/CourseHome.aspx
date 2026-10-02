@@ -23,7 +23,7 @@
             <h2 id="key-title" style="margin-top:0;font-size:1.05rem">Path key</h2>
             <ul class="includes">
                 <li><span class="node-icon" style="--c:var(--green);--e:var(--green-edge);width:28px;height:26px;border-bottom-width:3px;color:var(--on-bright)"><%= LearningSystem.Helpers.UiHelper.Icon("check") %></span>Done</li>
-                <li><span class="node-icon" style="--c:var(--role);--e:var(--role-edge);width:28px;height:26px;border-bottom-width:3px"></span>Up next</li>
+                <li><span class="node-icon" style="--c:var(--blue);--e:#1f6feb;width:28px;height:26px;border-bottom-width:3px"></span>Up next</li>
                 <li><span class="node-icon" style="width:28px;height:26px;border-bottom-width:3px"></span>Still to do (open any time)</li>
             </ul>
         </section>

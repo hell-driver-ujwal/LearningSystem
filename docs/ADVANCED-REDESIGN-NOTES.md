@@ -6,16 +6,16 @@ This replaces the pastel look described in `UI-REDESIGN-NOTES.md` with a dark, h
 
 | Area | What changed |
 | --- | --- |
-| Theme | Dark surfaces (`#0b0e1a` page, `#151a2e` cards) with bright accents. Every text pair passes WCAG AA (body text about 15:1, button labels at least 6.6:1). |
-| Type | Nunito (rounded, friendly; bundled in `Fonts/`, SIL OFL) for the whole interface. Source Serif 4 is kept for the printed certificate and Source Code Pro for code. Source Sans 3 was removed. |
-| Buttons | Chunky buttons with a pressable bottom edge that moves down when clicked. |
-| Role colours | Each role has its own accent so the three workspaces feel different: violet for learners, cyan for lecturers, gold for the admin (`body.role-*`). |
+| Theme | Plain, flat dark surfaces in the style of GitHub's and freeCodeCamp's dark themes (`#0d1117` page, `#151b23` cards, 1px borders). No gradients, glows or dot patterns. Green for actions, blue for links. Every text pair passes WCAG AA. |
+| Type | The operating system's own interface font (Segoe UI on Windows, San Francisco on Mac), as large platforms use, in normal weights. Source Serif 4 is kept for the printed certificate and Source Code Pro for code. |
+| Buttons | Flat buttons with small radii: green primary, grey secondary, red-outlined danger. |
+| Role colours | A small accent per role for the active menu item: green for learners, blue for lecturers, orange for the admin (`body.role-*`). |
 | Motion | Bobbing and blinking mascot, confetti, toasts, count-up numbers, card flips and shakes. Everything is switched off by `prefers-reduced-motion`. |
 | Sound | Short game sounds made with the Web Audio API (no files), with a mute button in the top bar. The setting is remembered in the browser. This was optional feature O14. |
 
 ## Inky the mascot
 
-`Helpers/MascotHelper.cs` draws Inky (an ink drop, matching the Inkwell logo) as inline SVG, so CSS can animate the eyes and arms. Each pose is the same body plus a face, arms and an optional prop: wave, cheer, think, read, point, sleep, oops, search, lock, trophy, fire and graduate. Inky appears in the sidebar, on dashboards, in the learning path, on the start and result screens of every activity, on the log-in pages and on the 404, 403 and error pages.
+`Helpers/MascotHelper.cs` draws Inky (a blue ink drop, matching the Inkwell logo) as inline SVG, so CSS can animate the eyes and arms. Each pose is the same body plus a face, arms and an optional prop: wave, cheer, think, read, point, sleep, oops, search, lock, trophy, fire and graduate. Inky appears in the sidebar, on dashboards, in the learning path, on the start and result screens of every activity, on the log-in pages and on the 404, 403 and error pages.
 
 ## Game layer (`Helpers/GamificationHelper.cs`)
 
@@ -48,9 +48,13 @@ The level-up celebration is shown once, when the dashboard shows a higher level 
 | Log in | A chooser page, then a portal page | The header goes straight to the learner portal, which has Learner, Lecturer and Admin tabs |
 | Learner dashboard | Stat tiles and lists | Player card (level, XP bar, streak, daily goal, badges), next quest, stats, courses, badge shelf |
 
+## More games
+
+38 new games, one per topic, each using a game type the topic did not have yet, so every course now mixes several kinds of game (77 games in a fresh database, up from 39). They are added by `Database/AddMoreGames.sql`, which is also run at the end of `CreateDatabase.sql`. Courses that learners had already finished got no new games, so finished courses and their certificates stay valid.
+
 ## Files
 
-- New: `Helpers/MascotHelper.cs`, `Helpers/GamificationHelper.cs`, `Helpers/GameUiHelper.cs`, `Scripts/fx.js`, `Fonts/Nunito-Variable.woff2`, `Fonts/OFL-Nunito.txt`.
+- New: `Helpers/MascotHelper.cs`, `Helpers/GamificationHelper.cs`, `Helpers/GameUiHelper.cs`, `Scripts/fx.js`, `Database/AddMoreGames.sql`.
 - Rewritten: `Styles/site.css`, `Scripts/games.js`, `Scripts/quiz.js`.
 - Changed markup: `Site.Master`, the learner, lecturer and admin dashboards, course home, lesson, quiz, game, scenario, log-in, register, home and error pages. `Scripts/charts.js` uses the theme's text colour.
 - Server changes are presentation only, except `Lesson.aspx.cs`, which now redirects to the next item after completion.

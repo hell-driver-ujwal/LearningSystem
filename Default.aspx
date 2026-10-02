@@ -19,7 +19,7 @@
     <div class="hero-side">
     <%= LearningSystem.Helpers.MascotHelper.Render("wave") %>
     <figure class="hero-media">
-        <video controls preload="metadata" poster="<%: LearningSystem.Helpers.UiHelper.AssetUrl("~/Assets/video/inkwell-intro-poster.jpg") %>" width="1280" height="720">
+        <video controls preload="none" poster="<%: LearningSystem.Helpers.UiHelper.AssetUrl("~/Assets/video/inkwell-intro-poster.jpg") %>" width="1280" height="720">
             <source src="<%: LearningSystem.Helpers.UiHelper.AssetUrl("~/Assets/video/inkwell-intro.mp4") %>" type="video/mp4" />
             <track kind="captions" src="<%: LearningSystem.Helpers.UiHelper.AssetUrl("~/Assets/video/inkwell-intro.vtt") %>" srclang="en" label="English" />
             Your browser cannot play this video. The tour shows how to choose a course, study a lesson and practise with a game.

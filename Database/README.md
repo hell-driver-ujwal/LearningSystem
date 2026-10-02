@@ -42,7 +42,7 @@ In PowerShell, call cmd so the path with spaces is passed correctly:
 cmd /c 'sqlcmd -S "(LocalDB)\MSSQLLocalDB" -E -b -l 30 -i Database\CreateDatabase.sql -v DataPath="%CD%\App_Data"'
 ```
 
-A successful run prints a summary row (12 users, 19 courses, 72 materials, 73 activities) followed by `LearningSystem detached successfully.` You can run it again at any time to reset the demo.
+A successful run prints a summary row (12 users, 19 courses, 72 materials, 73 activities; the extra games are added just after the checks, bringing activities to 111) followed by `LearningSystem detached successfully.` You can run it again at any time to reset the demo.
 
 If LocalDB reports that the instance does not exist, create and start it once:
 
@@ -61,12 +61,16 @@ Password hashes use PBKDF2 (`Rfc2898DeriveBytes`, SHA-256, 100,000 iterations, a
 - **8 subjects:** Programming, Cybersecurity, Artificial Intelligence, Mathematics and Data, Business, Science, English and Communication, Study Skills.
 - **19 courses:** 14 written by the six lecturers (2 or 3 each) and 4 authored by the admin. "Introduction to Ecosystems" is a draft. Three courses are paid (NPR 299 to 499).
 - **72 lesson materials:** formatted readings, diagrams, PDF handouts, narrated MP3 audio, captioned MP4 video and interactive code labs.
-- **73 activities:** quizzes, self-assessments, discussions, branching scenarios and all eight game types (Matching, Memory, Word scramble, Sort, Flashcards, Fill in the blank, True or false, Put in order).
+- **111 activities (77 games):** quizzes, self-assessments, discussions, branching scenarios and all eight game types (Matching, Memory, Word scramble, Sort, Flashcards, Fill in the blank, True or false, Put in order).
 - **Learner journeys:** enrolments, completed lessons, quiz and game attempts (including retakes), self-assessments, scenario outcomes, discussion posts with lecturer replies, bookmarks and two completed sandbox payments.
 - Activity dates are relative to the day the script is run, so dashboards and learning streaks look current.
 - Reviews and page analytics start empty on purpose: they are filled by real use, not invented.
 
 Media files live in `Uploads/` with GUID file names that match the `FilePath` and `CoverImagePath` values in the script. Keep the folder with the script when copying the project.
+
+## Extra games
+
+`AddMoreGames.sql` adds 38 more games (one new game type for each topic) to an existing database without touching anything else, and is safe to run again. The same block runs at the end of `CreateDatabase.sql`. Courses that learners have already finished get no new games, so finished courses stay at 100%.
 
 ## Integrity checks
 

@@ -374,3 +374,5 @@ Analytics repair build: full solution Debug MSBuild succeeded, exit code 0, no w
 - [x] Home tour video rebuilt in the dark design.
 - [x] Build 0 errors, 0 warnings; 65 automated browser checks passed (games end to end, layout at three widths, new flows); no JavaScript errors.
 - [~] Every page restyled through the shared stylesheet; lesser-used admin and builder forms were spot-checked rather than reviewed one by one.
+
+- [x] 2026-10-02 follow-up: flat dark restyle (no gradients, system font) and 38 extra games across 16 courses; fresh database builds with all checks passed (77 games).

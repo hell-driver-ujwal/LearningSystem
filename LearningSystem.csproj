@@ -123,8 +123,6 @@
     <Content Include="Assets\video\inkwell-intro.mp4" />
     <Content Include="Assets\video\inkwell-intro.vtt" />
     <Content Include="Fonts\OFL-SourceCodePro.txt" />
-    <Content Include="Fonts\Nunito-Variable.woff2" />
-    <Content Include="Fonts\OFL-Nunito.txt" />
     <Content Include="Fonts\OFL-SourceSerif4.txt" />
     <Content Include="Fonts\SourceCodePro-Regular.woff2" />
     <Content Include="Fonts\SourceSerif4-Variable-Italic.woff2" />
@@ -710,6 +708,7 @@
     <None Include="AGENTS.md" />
     <None Include="README.md" />
     <None Include="Database\CreateDatabase.sql" />
+    <None Include="Database\AddMoreGames.sql" />
     <None Include="Database\GenerateDemoHashes.ps1" />
     <None Include="Database\Phase15PaymentUpgrade.sql" />
     <None Include="Database\Phase17AnalyticsUpgrade.sql" />

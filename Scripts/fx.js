@@ -57,7 +57,7 @@
         document.body.appendChild(canvas);
         var ctx = canvas.getContext("2d");
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        var colours = ["#9d8cff", "#5ee39a", "#ffcb47", "#ff7cc0", "#5fd3f3", "#ff9a52"];
+        var colours = ["#4493f8", "#3fb950", "#d29922", "#f778ba", "#39c5cf", "#f0883e"];
         var pieces = [];
         for (var i = 0; i < (amount || 140); i++) {
             pieces.push({ x: canvas.width / 2 + (Math.random() - .5) * 200, y: canvas.height * .35, vx: (Math.random() - .5) * 14, vy: -Math.random() * 14 - 4,

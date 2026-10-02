@@ -2,7 +2,7 @@
 (function () {
     "use strict";
     // Bar colours from the dark site palette, each well above 3:1 against the card (WCAG non-text contrast).
-    var colours = ["#9d8cff", "#ff7cc0", "#ffcb47", "#5fd3f3", "#5ee39a"];
+    var colours = ["#4493f8", "#3fb950", "#d29922", "#f778ba", "#39c5cf"];
     // Label colour comes from the stylesheet so charts follow the theme.
     function ink() { return getComputedStyle(document.body).getPropertyValue("--ink").trim() || "#f2f4fc"; }
     // Bar with a rounded right end; browsers without roundRect get a plain rectangle.
@@ -21,7 +21,7 @@
         canvas.style.width = "100%"; canvas.style.height = height + "px";
         var ctx = canvas.getContext("2d");
         if (!ctx) return;
-        ctx.scale(ratio, ratio); ctx.font = "700 15px Nunito, Segoe UI, sans-serif";
+        ctx.scale(ratio, ratio); ctx.font = "600 14px Segoe UI, -apple-system, Arial, sans-serif";
         var max = Math.max.apply(null, data.values.concat([1]));
         data.labels.forEach(function (label, index) {
             var y = index * 56 + 20;
