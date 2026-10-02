@@ -1,6 +1,7 @@
 <%@ Page Title="Admin dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="LearningSystem.Admin.Dashboard" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 <div class="page-header hero-banner">
+    <%= LearningSystem.Helpers.MascotHelper.Render("point") %>
     <div><h1>Admin dashboard</h1><p class="intro">An overview of accounts, courses and learning activity across Inkwell.</p></div>
     <div class="actions" style="margin:0"><a class="button" href="../Teacher/CourseEdit.aspx">Create a course</a><a class="button secondary" href="UserEdit.aspx">Add a user</a></div>
 </div>

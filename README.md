@@ -11,7 +11,7 @@ Inkwell is an ASP.NET Web Forms learning platform built for the APU module CT050
 | Data access | ADO.NET with parameterised `SqlCommand` (no ORM) |
 | Sign-in | Forms Authentication with roles in the ticket; PBKDF2 password hashes |
 | Front end | HTML5, one external stylesheet (`Styles/site.css`), plain JavaScript in `Scripts/` |
-| Fonts | Source Serif 4, Source Sans 3 and Source Code Pro, bundled in `Fonts/` (SIL Open Font Licence) |
+| Fonts | Nunito (interface), Source Serif 4 (certificate) and Source Code Pro (code), bundled in `Fonts/` (SIL Open Font Licence) |
 | Payments | Built-in eSewa demo payment screen (no real money) |
 
 No CSS framework, JavaScript library or CDN is used, so the whole site, including checkout, works without internet access (only optional YouTube lessons need it).

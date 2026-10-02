@@ -16,6 +16,6 @@
             <li><a href="<%: ResolveUrl("~/Contact.aspx") %>">Contact us</a></li>
         </ul>
     </div>
-    <svg class="status-art" viewBox="0 0 200 220" width="260" aria-hidden="true" focusable="false"><path d="M100 10c-26 35-52 64-52 94a52 52 0 0 0 104 0c0-30-26-59-52-94z" fill="#ece6fd" stroke="#5a3fc0" stroke-width="4"/><circle cx="100" cy="112" r="30" fill="#fff" stroke="#b8336a" stroke-width="4"/><use href="#i-lock" x="82" y="94" width="36" height="36" stroke="#5a3fc0" fill="none" stroke-width="2"/><path d="M40 200h120" stroke="#cfc7e3" stroke-width="4" stroke-linecap="round"/></svg>
+    <%= LearningSystem.Helpers.MascotHelper.Render("lock") %>
 </div>
 </asp:Content>

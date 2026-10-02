@@ -177,7 +177,7 @@ namespace LearningSystem.Helpers
             list.Append("</ol>");
             string value=percent.ToString("0.##",System.Globalization.CultureInfo.InvariantCulture);
             string message=percent>=80m ? "Excellent work. You have a strong grasp of this topic." : percent>=50m ? "Good effort. Review the questions below, then try again to improve your score." : "Keep going. Re-read the lesson, then use the review below before your next try.";
-            return "<section class=\"result-panel\" aria-label=\"Your score\"><div class=\"score-ring\" style=\"--value:"+value+"\"><span>"+value+"%</span></div><div><h2>"+rightCount+" of "+questionCount+" questions correct</h2><p>"+message+"</p></div></section><h2>Answer review</h2>"+list;
+            return "<section class=\"result-panel\" aria-label=\"Your score\">"+GameUiHelper.ResultArt(percent,"Quiz")+"<div><h2>"+rightCount+" of "+questionCount+" questions correct</h2><p>"+message+"</p></div></section><h2>Answer review</h2>"+list;
         }
     }
 }

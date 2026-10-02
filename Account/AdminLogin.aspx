@@ -3,6 +3,7 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 <div class="auth-layout">
     <section class="auth-form" aria-labelledby="login-title">
+        <nav class="portal-tabs" aria-label="Choose how to log in"><a href="StudentLogin.aspx">Learner</a><a class="teacher" href="TeacherLogin.aspx">Lecturer</a><a class="admin" href="AdminLogin.aspx" aria-current="page">Admin</a></nav>
         <h1 id="login-title">Administrator log in</h1>
         <p class="muted">For Inkwell platform staff only.</p>
         <div class="form-card">
@@ -18,7 +19,7 @@
                 <asp:RequiredFieldValidator ID="rfvPassword" runat="server" ControlToValidate="txtPassword" ErrorMessage="Enter your password." CssClass="validation" Display="Dynamic" />
             </div>
             <div class="actions">
-                <asp:Button ID="btnLogin" runat="server" Text="Log in" OnClick="btnLogin_Click" />
+                <asp:Button ID="btnLogin" runat="server" Text="Log in" OnClick="btnLogin_Click" CssClass="large" />
                 <asp:HyperLink ID="lnkCancel" runat="server" NavigateUrl="~/Default.aspx" CssClass="button secondary" Text="Cancel" />
             </div>
             <p class="muted"><small>Five failed attempts lock an account for 15 minutes.</small></p>
@@ -26,6 +27,7 @@
         </div>
     </section>
     <aside class="auth-aside admin" aria-label="Administrator tools">
+        <%= LearningSystem.Helpers.MascotHelper.Render("point") %>
         <h2>Platform administration</h2>
         <ul>
             <li><%= LearningSystem.Helpers.UiHelper.Icon("users") %><span>Approve lecturer applications and manage accounts.</span></li>

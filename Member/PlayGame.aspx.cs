@@ -77,7 +77,7 @@ namespace LearningSystem.Member
         }
         private void ShowResult(decimal score,int seconds,string context)
         {
-            pnlResult.Visible=true;litResultContext.Text=context;string value=score.ToString("0.##",CultureInfo.InvariantCulture);litScore.Text=value+"%";litSeconds.Text="Finished in "+UiHelper.Plural(seconds,"second")+". "+(score>=80m ? "Great work." : score>=50m ? "Good effort. Play again to beat your score." : "Review the lesson, then try again.");litRing.Text="<div class=\"score-ring\" style=\"--value:"+value+"\"><span>"+value+"%</span></div>";btnStart.Text="Play again";
+            pnlResult.Visible=true;litResultContext.Text=context;string value=score.ToString("0.##",CultureInfo.InvariantCulture);litScore.Text=value+"%";litSeconds.Text="Finished in "+UiHelper.Plural(seconds,"second")+". "+(score>=80m ? "Great work." : score>=50m ? "Good effort. Play again to beat your score." : "Review the lesson, then try again.");litRing.Text=GameUiHelper.ResultArt(score,"Game");btnStart.Text="Play again";
         }
         private void ShowAttempt(int attempt)
         {

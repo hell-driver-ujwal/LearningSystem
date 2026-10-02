@@ -34,8 +34,8 @@ namespace LearningSystem.Member
                 if(!preview)
                 {
                     bool done=Convert.ToInt32(DatabaseHelper.ExecuteScalar("SELECT COUNT(*) FROM dbo.MaterialCompletion WHERE LearnerID=@user AND MaterialID=@id",new[] {new SqlParameter("@user",CurrentUserHelper.GetUserID().Value),new SqlParameter("@id",materialID)}))>0;
-                    litCompleted.Text=done ? "You have completed this lesson." : "Finished? Mark this lesson complete to update your progress.";
-                    btnComplete.Enabled=!done;if(done)btnComplete.Text="Completed";
+                    litCompleted.Text=done ? "Lesson complete. Nice work!" : "Finished reading? Complete it to earn "+GamificationHelper.LessonXp+" XP and move on.";
+                    btnComplete.Visible=!done;pnlFooter.CssClass=done ? "lesson-footer is-done" : "lesson-footer";
                 }
                 btnBookmark.Visible=!preview && CurrentUserHelper.GetRole()=="Learner";
                 if(btnBookmark.Visible){bool saved=BookmarkHelper.Exists(materialID);btnBookmark.Text=saved ? "Remove bookmark" : "Add bookmark";btnBookmark.OnClientClick=saved ? "return confirm('Remove this bookmark?');" : "";if(!IsPostBack)ViewState["BookmarkAdd"]=!saved;}
@@ -90,6 +90,17 @@ namespace LearningSystem.Member
                 break;
             }
         }
+        // After completing a lesson the learner goes straight to the next item in the course,
+        // or back to the course path when this was the last one.
+        private string NextAfterThis()
+        {
+            int courseID=Convert.ToInt32(DatabaseHelper.ExecuteScalar("SELECT t.CourseID FROM dbo.Material m JOIN dbo.Topic t ON t.TopicID=m.TopicID WHERE m.MaterialID=@id",new[] {new SqlParameter("@id",materialID)}));
+            DataTable items=ProgressHelper.PublishedItems(CurrentUserHelper.GetUserID().Value,courseID);
+            for(int i=0;i<items.Rows.Count-1;i++)
+                if((int)items.Rows[i]["ItemKind"]==0 && (int)items.Rows[i]["ItemID"]==materialID) return CourseHelper.ItemLink(items.Rows[i+1],true);
+            return "~/Learner/CourseHome.aspx?id="+courseID;
+        }
+
         protected void MarkComplete(object sender,EventArgs e)
         {
             if (!Page.IsValid) return;
@@ -106,7 +117,8 @@ namespace LearningSystem.Member
                     DatabaseHelper.ExecuteNonQuery(connection,transaction,"IF NOT EXISTS(SELECT 1 FROM dbo.MaterialCompletion WHERE LearnerID=@user AND MaterialID=@id) INSERT dbo.MaterialCompletion (LearnerID,MaterialID) VALUES (@user,@id)",new[] {new SqlParameter("@user",CurrentUserHelper.GetUserID().Value),new SqlParameter("@id",materialID)});
                     transaction.Commit();
                 }
-                MessageHelper.SetSuccess("Lesson completed. Your progress has been updated.");Response.Redirect("Lesson.aspx?id="+materialID);
+                MessageHelper.SetSuccess("Lesson complete! +"+GamificationHelper.LessonXp+" XP.");
+                Response.Redirect(NextAfterThis());
             }
             catch(SqlException) {MessageHelper.SetError("Completion could not be saved. Please try again.");}
         }

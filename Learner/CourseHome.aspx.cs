@@ -25,9 +25,21 @@ namespace LearningSystem.Learner
                 lnkNext.Visible=next!=null;
                 if(next!=null){lnkNext.Text="Continue: "+next["Title"];lnkNext.NavigateUrl=CourseHelper.ItemLink(next,true);}
                 ((SiteMaster)Master).Breadcrumb=new[] {new BreadcrumbItem{Text="Home",Url="~/Default.aspx"},new BreadcrumbItem{Text="My courses",Url="~/Learner/MyCourses.aspx"},new BreadcrumbItem{Text=Title}};
-                litProgress.Text=CourseHelper.Progress(user,id);CourseHelper.Outline(phOutline,id,true);
+                litProgress.Text=CourseHelper.Progress(user,id);
+                ShowPath(user,id,complete);
             }
             catch(SqlException) {Response.Redirect("~/Error.aspx");}
+        }
+
+        // The course as a learning path; the first unfinished item is marked as up next.
+        private void ShowPath(int user,int courseID,bool complete)
+        {
+            DataTable items=ProgressHelper.PublishedItems(user,courseID);
+            if(items.Rows.Count==0){phOutline.Controls.Add(new LiteralControl("<div class=\"empty-state\">"+MascotHelper.Render("sleep")+"<strong>Nothing here yet</strong><p>The lecturer has not published any lessons in this course yet.</p></div>"));return;}
+            int next=-1;
+            for(int i=0;i<items.Rows.Count && next<0;i++) if(!(bool)items.Rows[i]["Done"]) next=i;
+            phOutline.Controls.Add(new LiteralControl(GameUiHelper.Path(items,next)));
+            if(complete) phOutline.Controls.Add(new LiteralControl("<div class=\"path-done\" data-celebrate=\"small\">"+MascotHelper.Render("graduate")+"<h3>Course complete!</h3><p>You finished every lesson and activity. Your certificate is ready to print.</p><a class=\"button accent\" href=\"Certificate.aspx?id="+courseID+"\">Print certificate</a></div>"));
         }
     }
 }
